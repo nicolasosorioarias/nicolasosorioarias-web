@@ -18,6 +18,8 @@ const steps = (project: Project) => [
   { key: 'built', label: labels.built, text: project.built },
   { key: 'result', label: labels.result, text: project.result },
 ];
+const hasStack = (project: Project) => project.stack.length > 0;
+const isEnd = (project: Project, index: number) => !hasStack(project) && index === steps(project).length - 1;
 ---
 
 <section class="section projects" id="projects" aria-labelledby="projects-title">
@@ -45,9 +47,9 @@ const steps = (project: Project) => [
 
       <ol class="trace trace--row">
         {
-          steps(lead).map((step) => (
+          steps(lead).map((step, index) => (
             <li>
-              <span class="trace__node" aria-hidden="true" />
+              <span class:list={['trace__node', { 'trace__node--end': isEnd(lead, index) }]} aria-hidden="true" />
               <h4 class="label">{step.label}</h4>
               <p>
                 <Copy text={step.text} />
@@ -55,19 +57,21 @@ const steps = (project: Project) => [
             </li>
           ))
         }
-        <li>
-          <span class="trace__node trace__node--end" aria-hidden="true"></span>
-          <h4 class="label">{labels.stack}</h4>
-          <ul class="stack-list">
-            {
-              lead.stack.map((item) => (
-                <li>
-                  <Copy text={item} />
-                </li>
-              ))
-            }
-          </ul>
-        </li>
+        {
+          hasStack(lead) && (
+            <li>
+              <span class="trace__node trace__node--end" aria-hidden="true" />
+              <h4 class="label">{labels.stack}</h4>
+              <ul class="stack-list">
+                {lead.stack.map((item) => (
+                  <li>
+                    <Copy text={item} />
+                  </li>
+                ))}
+              </ul>
+            </li>
+          )
+        }
       </ol>
     </article>
 
@@ -90,26 +94,28 @@ const steps = (project: Project) => [
             </header>
 
             <ol class="trace trace--column">
-              {steps(project).map((step) => (
+              {steps(project).map((step, index) => (
                 <li>
-                  <span class="trace__node" aria-hidden="true" />
+                  <span class:list={['trace__node', { 'trace__node--end': isEnd(project, index) }]} aria-hidden="true" />
                   <h4 class="label">{step.label}</h4>
                   <p>
                     <Copy text={step.text} />
                   </p>
                 </li>
               ))}
-              <li>
-                <span class="trace__node trace__node--end" aria-hidden="true" />
-                <h4 class="label">{labels.stack}</h4>
-                <ul class="stack-list">
-                  {project.stack.map((item) => (
-                    <li>
-                      <Copy text={item} />
-                    </li>
-                  ))}
-                </ul>
-              </li>
+              {hasStack(project) && (
+                <li>
+                  <span class="trace__node trace__node--end" aria-hidden="true" />
+                  <h4 class="label">{labels.stack}</h4>
+                  <ul class="stack-list">
+                    {project.stack.map((item) => (
+                      <li>
+                        <Copy text={item} />
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              )}
             </ol>
           </article>
         ))

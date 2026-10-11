@@ -109,7 +109,7 @@
   },
   "projects": {
     "title": "Featured projects",
-    "intro": "Proof, not adjectives. Each case in four steps: the problem, what I built, the result and the stack.",
+    "intro": "Proof, not adjectives. Each case in three steps: the problem, what I built and the result.",
     "labels": {
       "problem": "Problem",
       "built": "What I built",
@@ -126,10 +126,7 @@
         "problem": "A B2B services company needed its website to generate qualified inbound leads.",
         "built": "End-to-end delivery of the corporate site (discovery, information architecture, design system and development) and an AI assistant built on Claude that answers visitors' questions from the site's own content and pre-drafts their WhatsApp message.",
         "result": "The assistant is active for every visitor and turns questions into pre-drafted WhatsApp leads, one tap away from contacting the business.",
-        "stack": [
-          "Claude (Anthropic API)",
-          "[PENDING: rest of stack]"
-        ],
+        "stack": [],
         "link": {
           "href": "https://serviciosinformaticos.com.co",
           "label": "serviciosinformaticos.com.co"
@@ -142,10 +139,7 @@
         "problem": "Instructors needed a faster way to build assessments targeted to a specific topic or class.",
         "built": "On my own initiative, a working AI feature powered by GPT that helps instructors generate questions from a topic or an existing question bank, improve their texts and get suggested grading feedback.",
         "result": "A working end-to-end demo inside a platform serving 100M+ users, built on my own initiative.",
-        "stack": [
-          "GPT (OpenAI API)",
-          "[PENDING: rest of stack]"
-        ],
+        "stack": [],
         "link": null
       },
       {
@@ -155,9 +149,7 @@
         "problem": "The business's original e-commerce site went down, taking its online sales with it.",
         "built": "A rebuilt e-commerce platform on new infrastructure, plus internal tooling and operational databases that automate the business's commercial processes.",
         "result": "Restored the business's online sales. Live at rositastore.co.",
-        "stack": [
-          "[PENDING]"
-        ],
+        "stack": [],
         "link": {
           "href": "https://rositastore.co",
           "label": "rositastore.co"
@@ -170,11 +162,7 @@
         "problem": "A Chilean gym chain wanted to expand customer retention.",
         "built": "A client-data-driven segmentation system with ML-based preference prediction, feeding a targeted-campaign system, alongside a full booking module and fingerprint access control.",
         "result": "ML-based segmentation feeding targeted retention campaigns.",
-        "stack": [
-          "Python",
-          "scikit-learn",
-          "[PENDING: rest of stack]"
-        ],
+        "stack": [],
         "link": null
       },
       {
@@ -184,9 +172,7 @@
         "problem": "A shipping-management platform needed a backend, a web back office and an iOS/Android app.",
         "built": "All three, as the only developer on the project.",
         "result": "Shipped in 30 days.",
-        "stack": [
-          "[PENDING]"
-        ],
+        "stack": [],
         "link": null
       }
     ]

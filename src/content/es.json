@@ -109,7 +109,7 @@
   },
   "projects": {
     "title": "Proyectos destacados",
-    "intro": "Pruebas, no adjetivos. Cada caso en cuatro pasos: el problema, qué construí, el resultado y el stack.",
+    "intro": "Pruebas, no adjetivos. Cada caso en tres pasos: el problema, qué construí y el resultado.",
     "labels": {
       "problem": "Problema",
       "built": "Qué construí",
@@ -126,10 +126,7 @@
         "problem": "Una empresa de servicios B2B necesitaba que su sitio web generara contactos calificados.",
         "built": "El sitio corporativo de punta a punta (descubrimiento, arquitectura de información, sistema de diseño y desarrollo) y un asistente de IA construido sobre Claude que responde las preguntas de los visitantes con el contenido del propio sitio y les deja redactado su mensaje de WhatsApp.",
         "result": "El asistente atiende a cada visitante y convierte sus preguntas en contactos de WhatsApp ya redactados, a un toque de escribirle al negocio.",
-        "stack": [
-          "Claude (Anthropic API)",
-          "[PENDING: resto del stack]"
-        ],
+        "stack": [],
         "link": {
           "href": "https://serviciosinformaticos.com.co",
           "label": "serviciosinformaticos.com.co"
@@ -142,10 +139,7 @@
         "problem": "Los docentes necesitaban una forma más rápida de crear evaluaciones enfocadas en un tema o una clase específica.",
         "built": "Por iniciativa propia, una funcionalidad de IA con GPT que ayuda a los docentes a generar preguntas a partir de un tema o de un banco de preguntas, mejorar sus textos y obtener sugerencias de retroalimentación para calificar.",
         "result": "Una demo funcional de punta a punta dentro de una plataforma con más de 100M de usuarios, construida por iniciativa propia.",
-        "stack": [
-          "GPT (OpenAI API)",
-          "[PENDING: resto del stack]"
-        ],
+        "stack": [],
         "link": null
       },
       {
@@ -155,9 +149,7 @@
         "problem": "El sitio de e-commerce original del negocio se cayó y con él sus ventas en línea.",
         "built": "Una plataforma de e-commerce reconstruida sobre nueva infraestructura, más herramientas internas y bases de datos operativas que automatizan los procesos comerciales del negocio.",
         "result": "Recuperó las ventas en línea del negocio. En producción en rositastore.co.",
-        "stack": [
-          "[PENDING]"
-        ],
+        "stack": [],
         "link": {
           "href": "https://rositastore.co",
           "label": "rositastore.co"
@@ -170,11 +162,7 @@
         "problem": "Una cadena de gimnasios chilena quería aumentar la retención de clientes.",
         "built": "Un sistema de segmentación basado en datos de clientes, con predicción de preferencias por ML, que alimenta un sistema de campañas dirigidas, junto con un módulo completo de reservas y control de acceso por huella.",
         "result": "Segmentación con ML que alimenta campañas de retención dirigidas.",
-        "stack": [
-          "Python",
-          "scikit-learn",
-          "[PENDING: resto del stack]"
-        ],
+        "stack": [],
         "link": null
       },
       {
@@ -184,9 +172,7 @@
         "problem": "Una plataforma de gestión de envíos necesitaba backend, backoffice web y app para iOS y Android.",
         "built": "Las tres piezas, como único desarrollador del proyecto.",
         "result": "Entregada en 30 días.",
-        "stack": [
-          "[PENDING]"
-        ],
+        "stack": [],
         "link": null
       }
     ]
