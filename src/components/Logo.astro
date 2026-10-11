@@ -1,0 +1,117 @@
+---
+// Header mark "A · Signal". On hover or keyboard focus of the parent link (.brand) a light
+// signal travels the N node to node (~600 ms) and each node pulses as it arrives.
+// Transform and opacity only; reduced motion keeps a static highlight.
+import { COLORS, NODES, PATH, STROKE } from '../lib/logo.mjs';
+
+// Segment lengths decide when the signal reaches each node (keyframe offsets).
+const lengths = NODES.slice(1).map((node, i) => Math.hypot(node.x - NODES[i].x, node.y - NODES[i].y));
+const total = lengths.reduce((sum, length) => sum + length, 0);
+const arrivals = lengths.reduce<number[]>((acc, length) => [...acc, (acc.at(-1) ?? 0) + length / total], [0]);
+const DURATION = 600;
+---
+
+<svg class="logo" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+  <path d={PATH} fill="none" stroke={COLORS.blue} stroke-width={STROKE} stroke-linecap="round" stroke-linejoin="round"></path>
+  {
+    NODES.map((node, i) => (
+      <circle
+        class="logo__node"
+        cx={node.x}
+        cy={node.y}
+        r={node.r}
+        fill={node.color}
+        stroke={COLORS.navy}
+        stroke-width="1.2"
+        style={`--arrive: ${Math.round(arrivals[i] * DURATION)}ms`}
+      />
+    ))
+  }
+  <g class="logo__signal">
+    <circle r="3.6" fill="#A9C4FF" opacity="0.35"></circle>
+    <circle r="1.7" fill="#F4F7FD"></circle>
+  </g>
+</svg>
+
+<style
+  define:vars={{
+    x0: `${NODES[0].x}px`,
+    y0: `${NODES[0].y}px`,
+    x1: `${NODES[1].x}px`,
+    y1: `${NODES[1].y}px`,
+    x2: `${NODES[2].x}px`,
+    y2: `${NODES[2].y}px`,
+    x3: `${NODES[3].x}px`,
+    y3: `${NODES[3].y}px`,
+    duration: `${DURATION}ms`,
+  }}
+>
+  .logo {
+    width: 26px;
+    height: 26px;
+    overflow: visible;
+  }
+
+  .logo__node {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .logo__signal {
+    opacity: 0;
+    transform: translate(var(--x0), var(--y0));
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.brand:hover) .logo__signal,
+    :global(.brand:focus-visible) .logo__signal {
+      animation: logo-travel var(--duration) cubic-bezier(0.45, 0, 0.55, 1) both;
+    }
+
+    :global(.brand:hover) .logo__node,
+    :global(.brand:focus-visible) .logo__node {
+      animation: logo-pulse 260ms ease-out both;
+      animation-delay: var(--arrive);
+    }
+  }
+
+  /* Reduced motion: no travel; the signal simply appears, lit, on the final node. */
+  @media (prefers-reduced-motion: reduce) {
+    :global(.brand:hover) .logo__signal,
+    :global(.brand:focus-visible) .logo__signal {
+      opacity: 1;
+      transform: translate(var(--x3), var(--y3));
+    }
+  }
+
+  /* 30% and 70% are where the signal reaches the 2nd and 3rd node: the segment
+     lengths 16, 21.3 and 16 units of the N (see `arrivals` above). */
+  @keyframes logo-travel {
+    0% {
+      opacity: 0;
+      transform: translate(var(--x0), var(--y0));
+    }
+    8% {
+      opacity: 1;
+    }
+    30% {
+      transform: translate(var(--x1), var(--y1));
+    }
+    70% {
+      transform: translate(var(--x2), var(--y2));
+    }
+    92% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translate(var(--x3), var(--y3));
+    }
+  }
+
+  @keyframes logo-pulse {
+    50% {
+      transform: scale(1.3);
+    }
+  }
+</style>

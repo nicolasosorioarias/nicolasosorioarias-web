@@ -7,6 +7,7 @@ import { mkdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import puppeteer from 'puppeteer-core';
 import sharp from 'sharp';
+import { markSvg } from '../src/lib/logo.mjs';
 
 const CHROME_CANDIDATES = [
   process.env.CHROME_PATH,
@@ -31,6 +32,7 @@ const sora = await dataUri('node_modules/@fontsource-variable/sora/files/sora-la
 const soraExt = await dataUri('node_modules/@fontsource-variable/sora/files/sora-latin-ext-wght-normal.woff2', 'font/woff2');
 const plex = await dataUri('node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2', 'font/woff2');
 
+const mark = markSvg({ size: 40 });
 const escape = (text) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 function page(t) {
@@ -52,7 +54,7 @@ function page(t) {
     .headline { margin-top: 30px; color: #F4F7FD; font-size: 44px; font-weight: 600; line-height: 1.08; letter-spacing: -0.03em; text-wrap: balance; }
     .key { color: #A9C4FF; }
     .site { position: absolute; left: 72px; bottom: 56px; display: flex; align-items: center; gap: 14px; color: #B8C6E0; font: 500 18px Plex; letter-spacing: .04em; }
-    .node { width: 12px; height: 12px; border-radius: 50%; background: #A9C4FF; box-shadow: 0 0 0 5px rgb(169 196 255 / .18); }
+    .site svg { display: block; }
   </style></head><body>
     <img src="${still}" alt="">
     <div class="shade"></div><div class="light"></div>
@@ -61,7 +63,7 @@ function page(t) {
       <p class="role">${escape(heroV2.role)}</p>
       <p class="headline">${escape(heroV2.headline.before)}<span class="key">${escape(heroV2.headline.highlight)}</span>${escape(heroV2.headline.after)}</p>
     </div>
-    <p class="site"><span class="node"></span>${SITE_LABEL}</p>
+    <p class="site">${mark}${SITE_LABEL}</p>
   </body></html>`;
 }
 

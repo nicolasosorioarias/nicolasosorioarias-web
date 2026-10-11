@@ -8,10 +8,10 @@ import path from 'node:path';
 import puppeteer from 'puppeteer-core';
 import sharp from 'sharp';
 
-// `url` is what gets captured. Servicios Informáticos is captured from its updated staging
-// build; the card still links to the public domain.
+// Always capture the public production domain the card links to, so screenshot and link match.
+// Never point this (or any link) at a staging URL.
 const SITES = [
-  { id: 'servicios-informaticos', url: '<private-preview-url>' },
+  { id: 'servicios-informaticos', url: 'https://serviciosinformaticos.com.co' },
   { id: 'rosita-store', url: 'https://rositastore.co' },
 ];
 const VIEWPORT = { width: 1280, height: 800 };
