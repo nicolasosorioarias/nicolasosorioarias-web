@@ -1,4 +1,7 @@
 ---
+// Floating capsule header: mark and name, section links with the active-section node,
+// EN/ES switch and a Contact button. Phones and narrow tablets get a Menu panel instead.
+import Icon from './Icon.astro';
 import Logo from './Logo.astro';
 import type { Content } from '../i18n';
 
@@ -7,40 +10,43 @@ interface Props {
 }
 
 const { t } = Astro.props;
-const { nav } = t;
+const { nav, hero } = t;
+// Contact lives in the button, so the inline links skip it; the phone menu keeps every section.
+const inlineItems = nav.items.filter((item) => item.id !== 'contact');
 ---
 
 <header class="site-header" data-header>
-  <div class="site-header__inner">
+  <div class="capsule">
     <a class="brand" href="#top" aria-label={nav.home}>
       <Logo />
-      <span>{t.hero.name}</span>
+      <span>{hero.name}</span>
     </a>
 
     <nav class="primary-nav" aria-label={nav.label} data-primary-nav>
       <ul>
-        {nav.items.map((item) => (
-          <li>
-            <a href={`#${item.id}`} data-nav-link={item.id}>
-              <span class="signal-link signal-link--quiet">{item.label}</span>
-            </a>
-          </li>
-        ))}
+        {
+          inlineItems.map((item) => (
+            <li>
+              <a href={`#${item.id}`} data-nav-link={item.id}>
+                <span class="signal-link signal-link--quiet">{item.label}</span>
+              </a>
+            </li>
+          ))
+        }
       </ul>
       <span class="nav-indicator" aria-hidden="true"></span>
     </nav>
 
-    <div class="site-header__end">
-      <a
-        class="lang"
-        href={nav.language.otherHref}
-        hreflang={nav.language.otherLang}
-        lang={nav.language.otherLang}
-      >
+    <div class="capsule__end">
+      <a class="lang" href={nav.language.otherHref} hreflang={nav.language.otherLang} lang={nav.language.otherLang}>
         <span class="lang__current" aria-hidden="true">{nav.language.current}</span>
-        <span class="lang__sep" aria-hidden="true">/</span>
         <span class="lang__other">{nav.language.other}</span>
         <span class="sr-only">, {nav.language.otherName}</span>
+      </a>
+
+      <a class="btn btn-primary cta" href="#contact" data-magnetic>
+        {hero.ctaContact}
+        <Icon name="arrow-right" />
       </a>
 
       <details class="menu">
@@ -50,11 +56,13 @@ const { nav } = t;
         </summary>
         <nav class="menu__panel" aria-label={nav.label}>
           <ul>
-            {nav.items.map((item) => (
-              <li>
-                <a href={`#${item.id}`}>{item.label}</a>
-              </li>
-            ))}
+            {
+              nav.items.map((item) => (
+                <li>
+                  <a href={`#${item.id}`}>{item.label}</a>
+                </li>
+              ))
+            }
           </ul>
         </nav>
       </details>
@@ -65,41 +73,41 @@ const { nav } = t;
 <style>
   .site-header {
     position: fixed;
-    inset: 0 0 auto;
+    inset: 16px 0 auto;
     z-index: 50;
-    height: var(--header-h);
-    border-bottom: 1px solid transparent;
-    transition:
-      background-color var(--dur-base) ease,
-      border-color var(--dur-base) ease;
+    padding-inline: 16px;
+    pointer-events: none;
   }
 
-  .site-header:global(.is-scrolled) {
-    background: var(--night);
-    border-bottom-color: var(--line);
-  }
-
-  /* Over the hero footage: translucent navy glass. 75% navy keeps every link above
-     4.5:1 even over the brightest highlight, and the blur calms what shows through. */
-  .site-header:global(.is-over-hero) {
-    background: rgb(10 18 34 / 0.75);
-    border-bottom-color: rgb(91 140 255 / 0.16);
-    -webkit-backdrop-filter: blur(14px) saturate(1.2);
-    backdrop-filter: blur(14px) saturate(1.2);
-  }
-
-  .site-header:global(.is-over-hero) .primary-nav a {
-    color: var(--text);
-  }
-
-  .site-header__inner {
+  .capsule {
+    pointer-events: auto;
     display: flex;
     align-items: center;
-    gap: 24px;
-    height: 100%;
-    max-width: calc(var(--container) + 2 * var(--gutter) + 96px);
+    gap: 20px;
+    width: min(1180px, 100%);
+    height: 60px;
     margin-inline: auto;
-    padding-inline: var(--gutter);
+    padding: 0 9px 0 22px;
+    border: 1px solid rgb(91 140 255 / 0.28);
+    border-radius: 999px;
+    /* 75% navy keeps every link above 4.5:1 over the brightest footage; blur calms what shows through. */
+    background: rgb(10 18 34 / 0.75);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    backdrop-filter: blur(16px) saturate(1.2);
+    box-shadow:
+      inset 0 1px 0 rgb(169 196 255 / 0.14),
+      0 18px 40px -18px rgb(0 0 0 / 0.8);
+    transition:
+      height 400ms var(--ease-out),
+      background-color 400ms ease,
+      border-color 400ms ease;
+  }
+
+  /* Past the hero: a little shorter and nearly opaque, so page text never shows through. */
+  .site-header:global(.is-scrolled) .capsule {
+    height: 52px;
+    background: rgb(10 18 34 / 0.94);
+    border-color: rgb(91 140 255 / 0.22);
   }
 
   .brand {
@@ -112,18 +120,40 @@ const { nav } = t;
     letter-spacing: -0.01em;
     text-decoration: none;
     white-space: nowrap;
+    border-radius: 999px;
   }
 
   .primary-nav {
     position: relative;
-    margin-inline-start: auto;
+    margin-inline: auto;
+  }
+
+  .primary-nav ul {
+    display: flex;
+    gap: 2px;
+    list-style: none;
+  }
+
+  .primary-nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0 12px;
+    border-radius: 999px;
+    color: var(--text);
+    font-size: var(--fs-small);
+    text-decoration: none;
+  }
+
+  .primary-nav a:global([aria-current='location']) {
+    color: #fff;
   }
 
   /* A node that slides under the section being read. */
   .nav-indicator {
     position: absolute;
     left: 0;
-    bottom: 2px;
+    bottom: -2px;
     width: 6px;
     height: 6px;
     margin-left: -3px;
@@ -137,70 +167,69 @@ const { nav } = t;
       opacity 300ms ease;
   }
 
-  .primary-nav a:global([aria-current='location']) {
-    color: var(--text);
-  }
-
-  .primary-nav ul {
-    display: flex;
-    gap: 4px;
-    list-style: none;
-  }
-
-  .primary-nav a {
-    display: inline-flex;
-    align-items: center;
-    min-height: 40px;
-    padding: 0 12px;
-    border-radius: 6px;
-    color: var(--text-2);
-    font-size: var(--fs-small);
-    text-decoration: none;
-  }
-
-  .primary-nav a:hover {
-    color: var(--text);
-  }
-
-  .site-header__end {
+  .capsule__end {
     display: flex;
     align-items: center;
     gap: 8px;
   }
 
+  /* EN/ES switch: the current language sits in the lit half. */
   .lang {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    min-height: 40px;
-    padding: 0 12px;
-    border: 1px solid var(--line);
-    border-radius: 6px;
+    padding: 3px;
+    border: 1px solid rgb(91 140 255 / 0.28);
+    border-radius: 999px;
     font-family: var(--font-mono);
-    font-size: var(--fs-label);
+    font-size: 0.75rem;
     font-weight: 500;
     letter-spacing: 0.08em;
     text-decoration: none;
+    transition: border-color var(--dur-fast) ease;
+  }
+
+  .lang span:not(.sr-only) {
+    display: inline-flex;
+    align-items: center;
+    min-height: 34px;
+    padding: 0 10px;
+    border-radius: 999px;
   }
 
   .lang__current {
+    background: rgb(91 140 255 / 0.24);
     color: var(--text);
-  }
-
-  .lang__sep {
-    color: var(--line-strong);
   }
 
   .lang__other {
     color: var(--label);
+    transition: color var(--dur-fast) ease;
   }
 
-  .lang:hover {
+  .lang:hover,
+  .lang:focus-visible {
     border-color: var(--accent);
   }
 
-  .lang:hover .lang__other {
+  .lang:hover .lang__other,
+  .lang:focus-visible .lang__other {
     color: var(--text);
+  }
+
+  .cta {
+    min-height: 42px;
+    padding: 0 18px;
+    border-radius: 999px;
+    font-size: var(--fs-small);
+  }
+
+  .cta :global(svg) {
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+
+  .cta:hover :global(svg),
+  .cta:focus-visible :global(svg) {
+    transform: translateX(3px);
   }
 
   .menu {
@@ -213,11 +242,12 @@ const { nav } = t;
     align-items: center;
     gap: 10px;
     min-height: 40px;
-    padding: 0 12px;
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    color: var(--text);
+    padding: 0 14px;
+    border-radius: 999px;
+    background: var(--accent);
+    color: var(--night);
     font-size: var(--fs-small);
+    font-weight: 600;
     cursor: pointer;
     list-style: none;
   }
@@ -227,10 +257,9 @@ const { nav } = t;
   }
 
   .menu__icon {
-    position: relative;
     width: 14px;
     height: 8px;
-    border-block: 1.5px solid var(--key);
+    border-block: 1.5px solid var(--night);
     transition: transform var(--dur-fast) ease;
   }
 
@@ -240,14 +269,14 @@ const { nav } = t;
 
   .menu__panel {
     position: absolute;
-    top: calc(100% + 10px);
-    right: 0;
-    min-width: 220px;
+    top: calc(100% + 16px);
+    right: -9px;
+    width: min(320px, calc(100vw - 32px));
     padding: 8px;
-    border: 1px solid var(--line-strong);
-    border-radius: 8px;
+    border: 1px solid rgb(91 140 255 / 0.28);
+    border-radius: 20px;
     background: var(--night-raised);
-    box-shadow: 0 12px 24px -10px rgb(0 0 0 / 0.55);
+    box-shadow: 0 18px 40px -18px rgb(0 0 0 / 0.8);
   }
 
   .menu__panel ul {
@@ -257,23 +286,26 @@ const { nav } = t;
   .menu__panel a {
     display: flex;
     align-items: center;
-    min-height: 44px;
-    padding: 0 12px;
-    border-radius: 6px;
+    min-height: 46px;
+    padding: 0 14px;
+    border-radius: 12px;
     color: var(--text);
     text-decoration: none;
   }
 
-  .menu__panel a:hover {
+  .menu__panel a:hover,
+  .menu__panel a:focus-visible {
     background: rgb(91 140 255 / 0.12);
   }
 
-  @media (max-width: 959px) {
-    .primary-nav {
+  /* Below 1080px the five links no longer fit next to the brand and actions. */
+  @media (max-width: 1079px) {
+    .primary-nav,
+    .cta {
       display: none;
     }
 
-    .site-header__end {
+    .capsule__end {
       margin-inline-start: auto;
     }
 
@@ -282,9 +314,32 @@ const { nav } = t;
     }
   }
 
-  @media (max-width: 380px) {
-    .brand span {
+  @media (max-width: 480px) {
+    .site-header {
+      inset: 10px 0 auto;
+      padding-inline: 10px;
+    }
+
+    .capsule {
+      height: 54px;
+      gap: 10px;
+      padding: 0 7px 0 14px;
+    }
+
+    .brand {
+      gap: 8px;
       font-size: 0.9375rem;
+    }
+
+    .lang span:not(.sr-only) {
+      min-height: 32px;
+      padding: 0 8px;
+    }
+  }
+
+  @media (max-width: 359px) {
+    .brand span {
+      display: none;
     }
   }
 </style>
@@ -295,13 +350,11 @@ const { nav } = t;
 
   if (header) {
     let ticking = false;
-    // Glass while the header sits over the hero footage, the clean solid bar after it.
+    // Glass over the hero footage; shorter and nearly opaque once the hero is behind.
     const hero = document.querySelector<HTMLElement>('[data-hs], [data-hero]');
     const update = () => {
-      const heroEnd = hero ? hero.offsetTop + hero.offsetHeight - header.offsetHeight : 0;
-      const overHero = window.scrollY < heroEnd;
-      header.classList.toggle('is-over-hero', overHero);
-      header.classList.toggle('is-scrolled', !overHero && window.scrollY > 24);
+      const heroEnd = hero ? hero.offsetTop + hero.offsetHeight - header.offsetHeight - 16 : 0;
+      header.classList.toggle('is-scrolled', window.scrollY > Math.max(24, heroEnd));
       ticking = false;
     };
     update();
@@ -332,6 +385,9 @@ const { nav } = t;
       sections.forEach((section, index) => {
         if (section.getBoundingClientRect().top <= probe) active = index;
       });
+      // In the closing section no inline link is active (Contact is the button).
+      const contact = document.getElementById('contact');
+      if (contact && contact.getBoundingClientRect().top <= probe) active = -1;
       navLinks.forEach((link, index) => {
         if (index === active) link.setAttribute('aria-current', 'location');
         else link.removeAttribute('aria-current');
@@ -352,7 +408,7 @@ const { nav } = t;
   }
 
   if (menu) {
-    // Close the mobile menu after choosing a section, on Escape, or on an outside click.
+    // Close the menu after choosing a section, on Escape, or on an outside click.
     menu.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => (menu.open = false)));
     menu.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && menu.open) {

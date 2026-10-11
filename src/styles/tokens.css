@@ -40,7 +40,8 @@
   --gutter: clamp(20px, 5vw, 48px);
   --section-space: clamp(5.5rem, 4rem + 7vw, 10rem);
   --container: 1160px;
-  --header-h: 64px;
+  /* Floating capsule: 16px offset + 60px bar. */
+  --header-h: 76px;
 
   /* Motion */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
