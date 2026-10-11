@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Header from './Header.astro';
-import Hero from './Hero.astro';
+import HeroSequence from './HeroSequence.astro';
 import Numbers from './Numbers.astro';
 import Projects from './Projects.astro';
 import Experience from './Experience.astro';
@@ -22,7 +22,7 @@ const t = getContent(locale);
 <Base locale={locale} t={t}>
   <Header t={t} />
   <main id="main" tabindex="-1">
-    <Hero t={t} />
+    <HeroSequence t={t} />
     {/* The signal line: runs from the hero to the contact close; each section heading is a node on it. */}
     <div class="flow" data-flow>
       <span class="flow__fill" aria-hidden="true" data-flow-fill></span>

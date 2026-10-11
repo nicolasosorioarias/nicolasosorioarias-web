@@ -1,0 +1,457 @@
+---
+// Hero v2: a scroll-driven image sequence from assets/hero/hero.mp4 (see scripts/extract-frames.mjs).
+// With html.seq (motion allowed, capable device) the section is ~300vh with a sticky stage;
+// otherwise it renders the static close-up with the same text.
+import Icon from './Icon.astro';
+import frames from '../content/hero-frames.json';
+import { CV_FILES, type Content } from '../i18n';
+
+interface Props {
+  t: Content;
+}
+
+const { t } = Astro.props;
+const { hero, heroV2 } = t;
+const { desktop, mobile } = frames.variants;
+---
+
+<section class="hs" id="top" aria-labelledby="hero-name" data-hs>
+  <div class="hs__stage">
+    <div class="hs__media">
+      <picture class="hs__still">
+        <source media="(max-width: 759px)" type="image/avif" srcset={`${mobile.still}.avif`} />
+        <source media="(max-width: 759px)" type="image/webp" srcset={`${mobile.still}.webp`} />
+        <source type="image/avif" srcset={`${desktop.still}.avif`} />
+        <img src={`${desktop.still}.webp`} width={desktop.width} height={desktop.height} alt={heroV2.stillAlt} decoding="async" />
+      </picture>
+      <canvas class="hs__canvas" role="img" aria-label={heroV2.sequenceLabel} data-hs-canvas></canvas>
+      <span class="hs__scrim" aria-hidden="true"></span>
+      <span class="hs__fade" aria-hidden="true"></span>
+      <span class="hs__grain" aria-hidden="true"></span>
+      <svg class="hs__link" aria-hidden="true" data-hs-link>
+        <line data-hs-link-line></line>
+        <circle r="5" data-hs-link-node></circle>
+      </svg>
+    </div>
+
+    <div class="hs__copy">
+      <div class="hs__intro" data-hs-intro>
+        <h1 id="hero-name">{hero.name}</h1>
+        <p class="hs__role label">{heroV2.role}</p>
+        <p class="hs__headline">
+          {heroV2.headline.before}<span class="key">{heroV2.headline.highlight.split(' ').map((word, index) => (<>{index > 0 && ' '}<span class="nowrap">{word}</span></>))}</span>{heroV2.headline.after}
+        </p>
+        <div class="hs__actions">
+          <a class="btn btn-primary" href="#projects">
+            {hero.ctaProjects}
+            <Icon name="arrow-down" />
+          </a>
+          <div class="cv-group" role="group" aria-label={hero.cvLabel}>
+            <span class="cv-group__label" aria-hidden="true">
+              <Icon name="download" />
+              {hero.cvLabel}
+            </span>
+            <a href={CV_FILES.en} download hreflang="en">{hero.cvEn}<span class="sr-only">, {hero.cvEnName}</span></a>
+            <a href={CV_FILES.es} download hreflang="es">{hero.cvEs}<span class="sr-only">, {hero.cvEsName}</span></a>
+          </div>
+          <a class="btn btn-ghost" href="#contact">{hero.ctaContact}</a>
+        </div>
+      </div>
+
+      <div class="hs__outro">
+        <p class="hs__opening">
+          {hero.opening.before}<span class="key">{hero.opening.highlight}</span>{hero.opening.after}
+        </p>
+        <ul class="hs__diff" aria-label={hero.differentiatorsLabel}>
+          {
+            hero.differentiators.map((item, index) => (
+              <li>
+                {index > 0 && <span class="diamond" aria-hidden="true" />}
+                {item}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ---------- Shared ---------- */
+  .hs {
+    --s1: 1;
+    --s2: 1;
+    --scrim: 1;
+    --end: 0;
+    position: relative;
+    background: var(--night);
+  }
+
+  .hs__stage {
+    position: relative;
+    min-height: 100svh;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hs__media {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-color: var(--night);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 80% 45%;
+  }
+
+  .hs__still,
+  .hs__still img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .hs__still img {
+    object-fit: cover;
+    object-position: 10% 45%;
+  }
+
+  .hs__canvas {
+    display: none;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Navy scrim that keeps the left column at AA contrast over the footage. */
+  .hs__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      rgb(10 18 34 / 0.94) 0%,
+      rgb(10 18 34 / 0.82) 30%,
+      rgb(10 18 34 / 0.35) 52%,
+      rgb(10 18 34 / 0) 68%
+    );
+    opacity: var(--scrim);
+  }
+
+  /* Bottom fade: the footage releases into the page ground. */
+  .hs__fade {
+    position: absolute;
+    inset: auto 0 0;
+    height: 34%;
+    background: linear-gradient(180deg, rgb(10 18 34 / 0), rgb(10 18 34 / 0.85) 70%, var(--night));
+  }
+
+  /* Very light film grain so the 720p source reads as a style. */
+  .hs__grain {
+    position: absolute;
+    inset: 0;
+    opacity: 0.09;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+
+  .hs__link {
+    display: none;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .hs__link line {
+    stroke: var(--accent);
+    stroke-width: 1;
+  }
+
+  .hs__link circle {
+    fill: var(--key);
+  }
+
+  .hs__copy {
+    position: relative;
+    display: grid;
+    align-content: center;
+    gap: clamp(2.5rem, 6vh, 4rem);
+    min-height: 100svh;
+    max-width: calc(var(--container) + 2 * var(--gutter));
+    margin-inline: auto;
+    padding: calc(var(--header-h) + 32px) var(--gutter) 64px var(--flow-pad);
+  }
+
+  .hs__intro {
+    max-width: 42rem;
+  }
+
+  /* The outro shares the frame with the close-up, so it stays in the left third. */
+  .hs__outro {
+    max-width: 28rem;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 1.4rem + 2.2vw, 3.25rem);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+  }
+
+  .hs__role {
+    margin-top: 0.85rem;
+    letter-spacing: 0.16em;
+  }
+
+  .hs__headline {
+    margin-top: 1.5rem;
+    color: var(--text);
+    font-size: clamp(2.25rem, 1.3rem + 3vw, 3.75rem);
+    font-weight: 600;
+    line-height: 1.04;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  .key {
+    color: var(--key);
+  }
+
+  .nowrap {
+    white-space: nowrap;
+  }
+
+  .hs__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 2.25rem;
+  }
+
+  .hs__opening {
+    max-width: 30em;
+    color: var(--text);
+    font-size: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+    font-weight: 400;
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+  }
+
+  .hs__diff {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    margin-top: 1.5rem;
+    list-style: none;
+    color: var(--text-2);
+    font-family: var(--font-mono);
+    font-size: var(--fs-label);
+    letter-spacing: 0.04em;
+  }
+
+  .hs__diff li {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  /* ---------- Sequence mode (html.seq) ---------- */
+  :global(html.seq) .hs {
+    --s2: 0;
+    height: 300vh;
+  }
+
+  :global(html.seq) .hs__stage {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    min-height: 0;
+  }
+
+  :global(html.seq) .hs__still {
+    display: none;
+  }
+
+  /* First frame as a poster until the canvas paints. */
+  :global(html.seq) .hs__media {
+    background-image: image-set(
+      url('/assets/hero/desktop/000.avif') type('image/avif'),
+      url('/assets/hero/desktop/000.webp') type('image/webp')
+    );
+  }
+
+  :global(html.seq) .hs__canvas,
+  :global(html.seq) .hs__link {
+    display: block;
+  }
+
+  :global(html.seq) .hs__fade {
+    opacity: var(--end);
+  }
+
+  :global(html.seq) .hs__copy {
+    display: block;
+    height: 100svh;
+    min-height: 0;
+  }
+
+  :global(html.seq) .hs__intro,
+  :global(html.seq) .hs__outro {
+    position: absolute;
+    left: var(--flow-pad);
+    right: var(--gutter);
+  }
+
+  :global(html.seq) .hs__intro {
+    top: 50%;
+    opacity: var(--s1);
+    transform: translateY(calc(-50% + (var(--s1) - 1) * 72px));
+  }
+
+  :global(html.seq) .hs__outro {
+    top: 24%;
+    opacity: var(--s2);
+    transform: translateY(calc((1 - var(--s2)) * 28px));
+  }
+
+  :global(html.seq) .hs:global(.is-intro-off) .hs__intro,
+  :global(html.seq) .hs:not(:global(.is-outro-on)) .hs__outro {
+    pointer-events: none;
+  }
+
+  /* ---------- Phones: footage on top, text stacked below ---------- */
+  @media (max-width: 759px) {
+    .hs__stage {
+      display: grid;
+      grid-template-rows: 56svh auto;
+    }
+
+    .hs__media {
+      position: relative;
+      inset: auto;
+      z-index: 0;
+      grid-row: 1;
+      background-position: 50% 40%;
+    }
+
+    .hs__still img {
+      object-position: 50% 40%;
+    }
+
+    .hs__scrim {
+      display: none;
+    }
+
+    .hs__fade {
+      height: 40%;
+      opacity: 1;
+    }
+
+    .hs__link {
+      display: none;
+    }
+
+    .hs__copy {
+      grid-row: 2;
+      align-content: start;
+      width: 100%;
+      min-height: 0;
+      margin: -2.5rem 0 0;
+      padding: 0 var(--gutter) 48px;
+    }
+
+    .hs__intro,
+    .hs__outro {
+      max-width: none;
+    }
+
+    .hs__headline {
+      margin-top: 1rem;
+      font-size: clamp(1.75rem, 1rem + 4.2vw, 2.25rem);
+    }
+
+    .hs__actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin-top: 1.5rem;
+    }
+
+    .hs__actions .cv-group {
+      grid-column: 1 / -1;
+      order: 3;
+    }
+
+    .hs__actions .btn {
+      padding: 0 12px;
+    }
+
+    .cv-group__label {
+      flex: 1;
+      justify-content: center;
+    }
+
+    .hs__opening {
+      font-size: 1.125rem;
+    }
+
+    .hs__diff {
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .hs__diff .diamond {
+      display: none;
+    }
+
+    :global(html.seq) .hs {
+      height: 220vh;
+    }
+
+    :global(html.seq) .hs__media {
+      background-image: image-set(
+        url('/assets/hero/mobile/000.avif') type('image/avif'),
+        url('/assets/hero/mobile/000.webp') type('image/webp')
+      );
+    }
+
+    :global(html.seq) .hs__link {
+      display: none;
+    }
+
+    :global(html.seq) .hs__fade {
+      opacity: 1;
+    }
+
+    :global(html.seq) .hs__stage {
+      grid-template-rows: 56svh minmax(0, 1fr);
+    }
+
+    :global(html.seq) .hs__copy {
+      position: relative;
+      height: auto;
+    }
+
+    :global(html.seq) .hs__intro,
+    :global(html.seq) .hs__outro {
+      left: var(--gutter);
+      right: var(--gutter);
+    }
+
+    :global(html.seq) .hs__intro {
+      top: 0;
+      transform: translateY(calc((var(--s1) - 1) * 40px));
+    }
+
+    :global(html.seq) .hs__outro {
+      top: 0.5rem;
+    }
+  }
+</style>
+
+<script>
+  import { initHeroSequence } from '../scripts/hero-sequence';
+
+  const section = document.querySelector<HTMLElement>('[data-hs]');
+  if (section) initHeroSequence(section);
+</script>

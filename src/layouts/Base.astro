@@ -50,6 +50,8 @@ const person = {
     <link rel="preload" href={soraLatin} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={plexMono400} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={plexMono500} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" as="image" href="/assets/hero/desktop/000.avif" type="image/avif" media="(min-width: 760px)" fetchpriority="high" />
+    <link rel="preload" as="image" href="/assets/hero/mobile/000.avif" type="image/avif" media="(max-width: 759px)" fetchpriority="high" />
 
     <meta property="og:type" content="profile" />
     <meta property="og:title" content={t.meta.title} />
@@ -61,9 +63,16 @@ const person = {
 
     <script is:inline>
       // Enable entrance motion only when the visitor allows it. Content stays visible otherwise.
-      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        document.documentElement.classList.add('motion');
-      }
+      // The scroll-driven hero sequence also needs a capable device and no data saver;
+      // everyone else gets the static close-up. Set before first paint to avoid layout shift.
+      (function () {
+        var root = document.documentElement;
+        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var connection = navigator.connection;
+        var lowPower = (navigator.hardwareConcurrency || 4) <= 2 || (connection && connection.saveData);
+        if (!reduce) root.classList.add('motion');
+        if (!reduce && !lowPower) root.classList.add('seq');
+      })();
     </script>
     <script type="application/ld+json" set:html={JSON.stringify(person)} />
   </head>

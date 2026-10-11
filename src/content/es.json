@@ -11,12 +11,30 @@
     "menu": "Menú",
     "home": "Nicolás Osorio, volver al inicio",
     "items": [
-      { "id": "numbers", "label": "En cifras" },
-      { "id": "projects", "label": "Proyectos" },
-      { "id": "experience", "label": "Experiencia" },
-      { "id": "how-i-work", "label": "Cómo trabajo" },
-      { "id": "stack", "label": "Stack" },
-      { "id": "contact", "label": "Contacto" }
+      {
+        "id": "numbers",
+        "label": "En cifras"
+      },
+      {
+        "id": "projects",
+        "label": "Proyectos"
+      },
+      {
+        "id": "experience",
+        "label": "Experiencia"
+      },
+      {
+        "id": "how-i-work",
+        "label": "Cómo trabajo"
+      },
+      {
+        "id": "stack",
+        "label": "Stack"
+      },
+      {
+        "id": "contact",
+        "label": "Contacto"
+      }
     ],
     "railTop": "Inicio",
     "language": {
@@ -45,16 +63,46 @@
     "cvEsName": "Descargar CV en español (PDF)",
     "ctaContact": "Contacto",
     "differentiatorsLabel": "Diferenciadores",
-    "differentiators": ["Funcionalidades de producto con IA", "Performance a escala", "Accesible desde el diseño"]
+    "differentiators": [
+      "Funcionalidades de producto con IA",
+      "Performance a escala",
+      "Accesible desde el diseño"
+    ]
+  },
+  "heroV2": {
+    "role": "Senior Full-Stack & AI Product Engineer",
+    "headline": {
+      "before": "Diseño, construyo y lidero ",
+      "highlight": "productos con IA",
+      "after": " de punta a punta"
+    },
+    "stillAlt": "Nicolás Osorio en primer plano, rodeado por una red luminosa de nodos conectados",
+    "sequenceLabel": "Retrato en video: la cámara se acerca a Nicolás mientras partículas azules se conectan en una red de nodos"
   },
   "numbers": {
     "title": "En cifras",
     "context": "Durante más de 5 años en Blackboard Anthology construí para una plataforma educativa y contribuí a proyectos de punta a punta en evaluación y autoría de contenido.",
     "items": [
-      { "value": 7, "suffix": "+", "label": "años construyendo producto" },
-      { "value": 100, "suffix": "M+", "label": "usuarios en la plataforma" },
-      { "value": 50, "suffix": "+", "label": "proyectos de punta a punta" },
-      { "value": 70, "suffix": "", "label": "países" }
+      {
+        "value": 7,
+        "suffix": "+",
+        "label": "años construyendo producto"
+      },
+      {
+        "value": 100,
+        "suffix": "M+",
+        "label": "usuarios en la plataforma"
+      },
+      {
+        "value": 50,
+        "suffix": "+",
+        "label": "proyectos de punta a punta"
+      },
+      {
+        "value": 70,
+        "suffix": "",
+        "label": "países"
+      }
     ]
   },
   "projects": {
@@ -76,8 +124,14 @@
         "problem": "Una empresa de servicios B2B necesitaba que su sitio web generara contactos calificados.",
         "built": "El sitio corporativo de punta a punta (descubrimiento, arquitectura de información, sistema de diseño y desarrollo) y un asistente de IA construido sobre Claude que responde las preguntas de los visitantes con el contenido del propio sitio y les deja redactado su mensaje de WhatsApp.",
         "result": "El asistente atiende a cada visitante y convierte sus preguntas en contactos de WhatsApp ya redactados, a un toque de escribirle al negocio.",
-        "stack": ["Claude (Anthropic API)", "[PENDING: resto del stack]"],
-        "link": { "href": "https://serviciosinformaticos.com.co", "label": "serviciosinformaticos.com.co" }
+        "stack": [
+          "Claude (Anthropic API)",
+          "[PENDING: resto del stack]"
+        ],
+        "link": {
+          "href": "https://serviciosinformaticos.com.co",
+          "label": "serviciosinformaticos.com.co"
+        }
       },
       {
         "id": "assessment-ai",
@@ -86,7 +140,10 @@
         "problem": "Los docentes necesitaban una forma más rápida de crear evaluaciones enfocadas en un tema o una clase específica.",
         "built": "Por iniciativa propia, una funcionalidad de IA con GPT que ayuda a los docentes a generar preguntas a partir de un tema o de un banco de preguntas, mejorar sus textos y obtener sugerencias de retroalimentación para calificar.",
         "result": "Una demo funcional de punta a punta dentro de una plataforma con más de 100M de usuarios, construida por iniciativa propia.",
-        "stack": ["GPT (OpenAI API)", "[PENDING: resto del stack]"],
+        "stack": [
+          "GPT (OpenAI API)",
+          "[PENDING: resto del stack]"
+        ],
         "link": null
       },
       {
@@ -96,8 +153,13 @@
         "problem": "El sitio de e-commerce original del negocio se cayó y con él sus ventas en línea.",
         "built": "Una plataforma de e-commerce reconstruida sobre nueva infraestructura, más herramientas internas y bases de datos operativas que automatizan los procesos comerciales del negocio.",
         "result": "Recuperó las ventas en línea del negocio. En producción en rositastore.co.",
-        "stack": ["[PENDING]"],
-        "link": { "href": "https://rositastore.co", "label": "rositastore.co" }
+        "stack": [
+          "[PENDING]"
+        ],
+        "link": {
+          "href": "https://rositastore.co",
+          "label": "rositastore.co"
+        }
       },
       {
         "id": "sportlife",
@@ -106,7 +168,11 @@
         "problem": "Una cadena de gimnasios chilena quería aumentar la retención de clientes.",
         "built": "Un sistema de segmentación basado en datos de clientes, con predicción de preferencias por ML, que alimenta un sistema de campañas dirigidas, junto con un módulo completo de reservas y control de acceso por huella.",
         "result": "Segmentación con ML que alimenta campañas de retención dirigidas.",
-        "stack": ["Python", "scikit-learn", "[PENDING: resto del stack]"],
+        "stack": [
+          "Python",
+          "scikit-learn",
+          "[PENDING: resto del stack]"
+        ],
         "link": null
       },
       {
@@ -116,7 +182,9 @@
         "problem": "Una plataforma de gestión de envíos necesitaba backend, backoffice web y app para iOS y Android.",
         "built": "Las tres piezas, como único desarrollador del proyecto.",
         "result": "Entregada en [PENDING: 30 o 70] días.",
-        "stack": ["[PENDING]"],
+        "stack": [
+          "[PENDING]"
+        ],
         "link": null
       }
     ]
@@ -181,7 +249,17 @@
   },
   "stack": {
     "title": "Stack",
-    "items": ["React", "Vue", "Node.js", "TypeScript", "Java", "Python", "Ruby on Rails", "AWS", "Claude Code"]
+    "items": [
+      "React",
+      "Vue",
+      "Node.js",
+      "TypeScript",
+      "Java",
+      "Python",
+      "Ruby on Rails",
+      "AWS",
+      "Claude Code"
+    ]
   },
   "contact": {
     "title": "Contacto",

@@ -1,0 +1,25 @@
+{
+  "source": "assets/hero/hero.mp4",
+  "avifQuality": 50,
+  "webpQuality": 68,
+  "variants": {
+    "desktop": {
+      "count": 120,
+      "width": 1280,
+      "height": 720,
+      "path": "/assets/hero/desktop/",
+      "still": "/assets/hero/still-desktop",
+      "avifBytes": 2325903,
+      "webpBytes": 2568748
+    },
+    "mobile": {
+      "count": 60,
+      "width": 480,
+      "height": 600,
+      "path": "/assets/hero/mobile/",
+      "still": "/assets/hero/still-mobile",
+      "avifBytes": 642698,
+      "webpBytes": 683714
+    }
+  }
+}
