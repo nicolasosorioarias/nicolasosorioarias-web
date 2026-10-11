@@ -11,8 +11,8 @@ export function getContent(locale: Locale): Content {
 }
 
 export const CV_FILES = {
-  en: '/assets/cv/Nicolas_Osorio_CV_General_EN.pdf',
-  es: '/assets/cv/Nicolas_Osorio_CV_General_ES.pdf',
+  en: '/assets/cv/Nicolas_Osorio_CV_General_EN_Web.pdf',
+  es: '/assets/cv/Nicolas_Osorio_CV_General_ES_Web.pdf',
 } as const;
 
 export const PORTRAIT = {

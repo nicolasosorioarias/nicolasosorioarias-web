@@ -80,6 +80,19 @@ const { nav } = t;
     border-bottom-color: var(--line);
   }
 
+  /* Over the hero footage: translucent navy glass. 75% navy keeps every link above
+     4.5:1 even over the brightest highlight, and the blur calms what shows through. */
+  .site-header:global(.is-over-hero) {
+    background: rgb(10 18 34 / 0.75);
+    border-bottom-color: rgb(91 140 255 / 0.16);
+    -webkit-backdrop-filter: blur(14px) saturate(1.2);
+    backdrop-filter: blur(14px) saturate(1.2);
+  }
+
+  .site-header:global(.is-over-hero) .primary-nav a {
+    color: var(--text);
+  }
+
   .site-header__inner {
     display: flex;
     align-items: center;
@@ -267,8 +280,13 @@ const { nav } = t;
 
   if (header) {
     let ticking = false;
+    // Glass while the header sits over the hero footage, the clean solid bar after it.
+    const hero = document.querySelector<HTMLElement>('[data-hs], [data-hero]');
     const update = () => {
-      header.classList.toggle('is-scrolled', window.scrollY > 24);
+      const heroEnd = hero ? hero.offsetTop + hero.offsetHeight - header.offsetHeight : 0;
+      const overHero = window.scrollY < heroEnd;
+      header.classList.toggle('is-over-hero', overHero);
+      header.classList.toggle('is-scrolled', !overHero && window.scrollY > 24);
       ticking = false;
     };
     update();

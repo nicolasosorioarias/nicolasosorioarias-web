@@ -9,10 +9,9 @@ dist/
 # Private brand source material (not part of the site)
 assets/Fotos Reales/
 assets/CV/
+assets/Web CV/
 assets/Marca personal*.pdf
 
-# Downloadable CVs still contain a phone number; commit the web versions once they exist (see docs/PROJECT.md)
-public/assets/cv/*.pdf
 
 # Local tooling
 .claude/
