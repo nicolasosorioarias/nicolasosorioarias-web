@@ -57,4 +57,4 @@ npx wrangler deploy --dry-run    # validate the Cloudflare config
 
 ## License
 
-Code: [MIT](LICENSE). Content, copy, photos, video, frames, CVs and the logo: © Nicolás Osorio Arias, all rights reserved (see [LICENSE](LICENSE)).
+Code: [MIT](LICENSE). Content, copy, photos, video, frames, CVs and the logo: © Nicolás Osorio Arias, all rights reserved (see [CONTENT-LICENSE.md](CONTENT-LICENSE.md)).
