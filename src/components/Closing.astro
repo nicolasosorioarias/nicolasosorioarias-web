@@ -15,6 +15,9 @@ const [user, domain] = contact.email.split('@');
 const splitAt = contact.linkedinDisplay.lastIndexOf('/') + 1;
 const linkedinHead = contact.linkedinDisplay.slice(0, splitAt);
 const linkedinTail = contact.linkedinDisplay.slice(splitAt);
+const githubSplit = contact.githubDisplay.lastIndexOf('/') + 1;
+const githubHead = contact.githubDisplay.slice(0, githubSplit);
+const githubTail = contact.githubDisplay.slice(githubSplit);
 ---
 
 <section class="section closing" id="contact" aria-labelledby="contact-title" data-closing>
@@ -43,6 +46,14 @@ const linkedinTail = contact.linkedinDisplay.slice(splitAt);
         <dd>
           <a class="big signal-link" href={contact.linkedinHref} target="_blank" rel="noopener">
             {linkedinHead}<wbr /><span class="nowrap">{linkedinTail}<Icon name="arrow-up-right" class="big__arrow" /></span><span class="sr-only"> ({projects.labels.external})</span>
+          </a>
+        </dd>
+      </div>
+      <div class="row">
+        <dt><span class="row__icon" aria-hidden="true"><Icon name="github" /></span><span class="label">{contact.github}</span></dt>
+        <dd>
+          <a class="big signal-link" href={contact.githubHref} target="_blank" rel="noopener">
+            {githubHead}<wbr /><span class="nowrap">{githubTail}<Icon name="arrow-up-right" class="big__arrow" /></span><span class="sr-only"> ({projects.labels.external})</span>
           </a>
         </dd>
       </div>

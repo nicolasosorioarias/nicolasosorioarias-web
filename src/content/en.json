@@ -279,6 +279,9 @@
     "linkedinHref": "https://www.linkedin.com/in/nicolas-osorio-arias",
     "cvTitle": "CV",
     "linkedinDisplay": "linkedin.com/in/nicolas-osorio-arias",
+    "github": "GitHub",
+    "githubHref": "https://github.com/nicolasosorioarias",
+    "githubDisplay": "github.com/nicolasosorioarias",
     "cvDownload": "Download",
     "timeLabel": "Local time in Bogotá",
     "timeZoneLabel": "UTC−5"
