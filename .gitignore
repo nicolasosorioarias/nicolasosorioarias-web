@@ -16,3 +16,6 @@ assets/Marca personal*.pdf
 
 # Local tooling
 .claude/
+
+# Separate local repository created next to the project (not part of the site)
+nicolasosorioarias-web/
