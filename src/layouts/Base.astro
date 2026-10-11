@@ -64,8 +64,6 @@ const person = {
     <link rel="preload" href={soraLatin} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={plexMono400} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={plexMono500} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" as="image" href={`${heroFrames.variants.desktop.path}000.avif`} type="image/avif" media="(min-width: 760px)" fetchpriority="high" />
-    <link rel="preload" as="image" href={`${heroFrames.variants.mobile.path}000.avif`} type="image/avif" media="(max-width: 759px)" fetchpriority="high" />
 
     <link rel="sitemap" href="/sitemap.xml" />
 
@@ -89,7 +87,19 @@ const person = {
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:image:alt" content={t.meta.ogImageAlt} />
 
-    <script is:inline>
+    <script
+      is:inline
+      define:vars={{
+        heroImages: notFound
+          ? null
+          : Object.fromEntries(
+              Object.entries(heroFrames.variants).map(([name, variant]) => [
+                name,
+                { frame: `${variant.path}000.avif`, still: `${variant.still}.avif`, width: variant.width },
+              ]),
+            ),
+      }}
+    >
       // Enable entrance motion only when the visitor allows it. Content stays visible otherwise.
       // The scroll-driven hero sequence also needs a capable device and no data saver;
       // everyone else gets the static close-up. Set before first paint to avoid layout shift.
@@ -97,9 +107,35 @@ const person = {
         var root = document.documentElement;
         var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         var connection = navigator.connection;
-        var lowPower = (navigator.hardwareConcurrency || 4) <= 2 || (connection && connection.saveData);
+        var phone = window.matchMedia('(max-width: 759px)').matches;
+        var slow = connection && /^(slow-2g|2g|3g)$/.test(connection.effectiveType || '');
+        // Data saver anywhere, 2-core devices, and phones on slow connections get the static close-up.
+        var lowPower = (navigator.hardwareConcurrency || 4) <= 2 || (connection && connection.saveData) || (phone && slow);
+        var sequence = !reduce && !lowPower;
         if (!reduce) root.classList.add('motion');
-        if (!reduce && !lowPower) root.classList.add('seq');
+        if (sequence) root.classList.add('seq');
+
+        // Preload only the one hero image this visitor will see first: frame 0 of the chosen set,
+        // or the static close-up. The 2560 set is for high-DPR desktops on fast, non-metered links.
+        if (!heroImages) return;
+        var hiDpr = (window.devicePixelRatio || 1) >= 1.5 && window.innerWidth >= 1024;
+        var metered = (connection && connection.saveData) || slow;
+        var set = phone ? 'mobile' : hiDpr && !metered ? 'desktop2x' : 'desktop';
+        var link = document.createElement('link');
+        link.rel = 'preload';
+        link.as = 'image';
+        link.type = 'image/avif';
+        if (sequence) {
+          link.href = heroImages[set].frame;
+        } else if (phone) {
+          link.href = heroImages.mobile.still;
+        } else {
+          // Same candidates as the still <picture>, so the browser reuses the preload instead of fetching twice.
+          link.setAttribute('imagesrcset', heroImages.desktop.still + ' ' + heroImages.desktop.width + 'w, ' + heroImages.desktop2x.still + ' ' + heroImages.desktop2x.width + 'w');
+          link.setAttribute('imagesizes', '100vw');
+        }
+        link.setAttribute('fetchpriority', 'high');
+        document.head.appendChild(link);
       })();
     </script>
     {!notFound && <script type="application/ld+json" set:html={JSON.stringify(person)} />}

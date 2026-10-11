@@ -12,7 +12,7 @@ interface Props {
 
 const { t } = Astro.props;
 const { hero, heroV2 } = t;
-const { desktop, mobile } = frames.variants;
+const { desktop, desktop2x, mobile } = frames.variants;
 const poster = (variant: typeof desktop) =>
   `image-set(url('${variant.path}000.avif') type('image/avif'), url('${variant.path}000.webp') type('image/webp'))`;
 ---
@@ -22,15 +22,24 @@ const poster = (variant: typeof desktop) =>
   id="top"
   aria-labelledby="hero-name"
   data-hs
-  style={`--poster-desktop: ${poster(desktop)}; --poster-mobile: ${poster(mobile)};`}
+  style={`--poster-desktop: ${poster(desktop)}; --poster-desktop2x: ${poster(desktop2x)}; --poster-mobile: ${poster(mobile)};`}
 >
   <div class="hs__stage">
     <div class="hs__media">
       <picture class="hs__still">
         <source media="(max-width: 759px)" type="image/avif" srcset={`${mobile.still}.avif`} />
         <source media="(max-width: 759px)" type="image/webp" srcset={`${mobile.still}.webp`} />
-        <source type="image/avif" srcset={`${desktop.still}.avif`} />
-        <img src={`${desktop.still}.webp`} width={desktop.width} height={desktop.height} alt={heroV2.stillAlt} decoding="async" />
+        <source type="image/avif" srcset={`${desktop.still}.avif ${desktop.width}w, ${desktop2x.still}.avif ${desktop2x.width}w`} sizes="100vw" />
+        <img
+          src={`${desktop.still}.webp`}
+          srcset={`${desktop.still}.webp ${desktop.width}w, ${desktop2x.still}.webp ${desktop2x.width}w`}
+          sizes="100vw"
+          width={desktop.width}
+          height={desktop.height}
+          alt={heroV2.stillAlt}
+          loading="lazy"
+          decoding="async"
+        />
       </picture>
       <canvas class="hs__canvas" role="img" aria-label={heroV2.sequenceLabel} data-hs-canvas></canvas>
       <span class="hs__scrim" aria-hidden="true"></span>
@@ -153,13 +162,13 @@ const poster = (variant: typeof desktop) =>
     background: linear-gradient(180deg, rgb(10 18 34 / 0), rgb(10 18 34 / 0.85) 70%, var(--night));
   }
 
-  /* Very light film grain so the 720p source reads as a style. */
+  /* Fine, light film grain: a finishing texture over the footage, not a veil. */
   .hs__grain {
     position: absolute;
     inset: 0;
-    opacity: 0.09;
+    opacity: 0.06;
     mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.25' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     pointer-events: none;
   }
 
@@ -284,6 +293,12 @@ const poster = (variant: typeof desktop) =>
   /* First frame as a poster until the canvas paints. */
   :global(html.seq) .hs__media {
     background-image: var(--poster-desktop);
+  }
+
+  @media (min-width: 1024px) and (min-resolution: 1.5dppx) {
+    :global(html.seq) .hs__media {
+      background-image: var(--poster-desktop2x);
+    }
   }
 
   :global(html.seq) .hs__canvas,

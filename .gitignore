@@ -17,3 +17,6 @@ assets/Marca personal*.pdf
 # Local tooling
 .claude/
 
+
+# Upscaled hero masters (regenerable with npm run frames)
+.cache/

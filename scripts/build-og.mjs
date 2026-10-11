@@ -27,7 +27,7 @@ const SITE_LABEL = 'nicolasosorioarias.com';
 
 const dataUri = async (file, type) => `data:${type};base64,${(await readFile(file)).toString('base64')}`;
 const frames = JSON.parse(await readFile('src/content/hero-frames.json', 'utf8'));
-const still = await dataUri(path.join('public', `${frames.variants.desktop.still}.webp`), 'image/webp');
+const still = await dataUri(path.join('public', `${frames.variants.desktop2x.still}.webp`), 'image/webp');
 const sora = await dataUri('node_modules/@fontsource-variable/sora/files/sora-latin-wght-normal.woff2', 'font/woff2');
 const soraExt = await dataUri('node_modules/@fontsource-variable/sora/files/sora-latin-ext-wght-normal.woff2', 'font/woff2');
 const plex = await dataUri('node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2', 'font/woff2');

@@ -1,26 +1,44 @@
 {
   "source": "assets/hero/hero.mp4",
-  "version": "d3dac1b9f5",
-  "avifQuality": 50,
-  "webpQuality": 68,
+  "version": "677c3e6e9d",
+  "master": {
+    "every": 2,
+    "width": 2560,
+    "height": 1440,
+    "model": "realesrgan-x4plus",
+    "blend": 0.65
+  },
+  "webpQuality": 70,
   "variants": {
+    "desktop2x": {
+      "count": 120,
+      "width": 2560,
+      "height": 1440,
+      "avifQuality": 62,
+      "path": "/assets/hero/677c3e6e9d/desktop2x/",
+      "still": "/assets/hero/677c3e6e9d/still-desktop2x",
+      "avifBytes": 8139106,
+      "webpBytes": 7118558
+    },
     "desktop": {
       "count": 120,
-      "width": 1280,
-      "height": 720,
-      "path": "/assets/hero/d3dac1b9f5/desktop/",
-      "still": "/assets/hero/d3dac1b9f5/still-desktop",
-      "avifBytes": 2325903,
-      "webpBytes": 2568748
+      "width": 1920,
+      "height": 1080,
+      "avifQuality": 62,
+      "path": "/assets/hero/677c3e6e9d/desktop/",
+      "still": "/assets/hero/677c3e6e9d/still-desktop",
+      "avifBytes": 5896148,
+      "webpBytes": 4923408
     },
     "mobile": {
       "count": 60,
-      "width": 480,
-      "height": 600,
-      "path": "/assets/hero/d3dac1b9f5/mobile/",
-      "still": "/assets/hero/d3dac1b9f5/still-mobile",
-      "avifBytes": 642698,
-      "webpBytes": 683714
+      "width": 800,
+      "height": 1000,
+      "avifQuality": 58,
+      "path": "/assets/hero/677c3e6e9d/mobile/",
+      "still": "/assets/hero/677c3e6e9d/still-mobile",
+      "avifBytes": 1805249,
+      "webpBytes": 1591188
     }
   }
 }

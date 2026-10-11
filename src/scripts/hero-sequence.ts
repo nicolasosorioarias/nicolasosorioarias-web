@@ -11,10 +11,19 @@ import manifest from '../content/hero-frames.json';
 
 type Variant = (typeof manifest.variants)['desktop'];
 
-// Node in the clip's final network that the page's signal line grows from
-// (source-frame pixels, desktop variant).
-const LINK_ANCHOR = { x: 335, y: 485 };
-const MAX_ZOOM = 0.12;
+// Node in the clip's final network that the page's signal line grows from,
+// as a fraction of the frame (source pixel 335, 485 of 1280 × 720).
+const LINK_ANCHOR = { x: 335 / 1280, y: 485 / 720 };
+// A light push-in on top of the camera move; kept small so frames are never magnified past their resolution.
+const MAX_ZOOM = 0.05;
+
+/** Desktop gets the 2560 set only on high-DPR screens with a fast, non-metered connection. */
+function desktopVariant(): Variant {
+  const connection = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+  const slow = connection?.saveData === true || ['slow-2g', '2g', '3g'].includes(connection?.effectiveType ?? '');
+  const hiDpr = (window.devicePixelRatio || 1) >= 1.5 && window.innerWidth >= 1024;
+  return hiDpr && !slow ? manifest.variants.desktop2x : manifest.variants.desktop;
+}
 const CONCURRENCY = 4;
 
 const smooth = (from: number, to: number, value: number) => {
@@ -107,7 +116,7 @@ export function initHeroSequence(section: HTMLElement) {
   async function setup() {
     generation++;
     const gen = generation;
-    variant = phone.matches ? manifest.variants.mobile : manifest.variants.desktop;
+    variant = phone.matches ? manifest.variants.mobile : desktopVariant();
     frames = new Array(variant.count).fill(null);
     queue = [];
     inFlight = 0;
@@ -152,8 +161,9 @@ export function initHeroSequence(section: HTMLElement) {
   }
 
   function resizeCanvas() {
-    // The frames are at most 1280px wide, so a higher pixel ratio only costs memory.
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    // Phones render the 800 px frames at up to 2x; desktop canvases stop at 1.5x, where the
+    // 1920/2560 frames already map about one-to-one.
+    const dpr = Math.min(window.devicePixelRatio || 1, phone.matches ? 2 : 1.5);
     const box = canvas!.getBoundingClientRect();
     canvas!.width = Math.round(box.width * dpr);
     canvas!.height = Math.round(box.height * dpr);
@@ -216,8 +226,8 @@ export function initHeroSequence(section: HTMLElement) {
     // Grow the page's signal line out of the video's final network.
     if (linkLine && linkNode && !phone.matches) {
       const ratio = canvas!.getBoundingClientRect().width / cw;
-      const ax = (dx + LINK_ANCHOR.x * scale) * ratio;
-      const ay = (dy + LINK_ANCHOR.y * scale) * ratio;
+      const ax = (dx + LINK_ANCHOR.x * variant.width * scale) * ratio;
+      const ay = (dy + LINK_ANCHOR.y * variant.height * scale) * ratio;
       const bx = flowLineX() ?? ax;
       const by = stage!.getBoundingClientRect().height;
       const length = Math.hypot(bx - ax, by - ay);
