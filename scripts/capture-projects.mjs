@@ -8,10 +8,11 @@ import path from 'node:path';
 import puppeteer from 'puppeteer-core';
 import sharp from 'sharp';
 
-// Always capture the public production domain the card links to, so screenshot and link match.
-// Never point this (or any link) at a staging URL.
+// `url` is only where the screenshot is taken; the card always links to the production domain
+// (set in src/content/*.json). Servicios Informáticos is captured from its staging build, which holds
+// the updated design under review (Nicolás' decision, 2026-10-11). Staging is never linked.
 const SITES = [
-  { id: 'servicios-informaticos', url: 'https://serviciosinformaticos.com.co' },
+  { id: 'servicios-informaticos', url: '<private-preview-url>' },
   { id: 'rosita-store', url: 'https://rositastore.co' },
 ];
 const VIEWPORT = { width: 1280, height: 800 };
@@ -40,6 +41,9 @@ for (const site of SITES) {
   const page = await browser.newPage();
   await page.setViewport(VIEWPORT);
   await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+  // Block the hosting toolbar that staging deploys inject ("Powered by Netlify"); it is not part of the design.
+  await page.setRequestInterception(true);
+  page.on('request', (request) => (request.url().includes('/.netlify/scripts/') ? request.abort() : request.continue()));
   try {
     await page.goto(site.url, { waitUntil: 'networkidle2', timeout: 60000 });
   } catch (error) {
@@ -56,16 +60,6 @@ for (const site of SITES) {
     await new Promise((resolve) => setTimeout(resolve, 150));
   }
   await page.evaluate(() => window.scrollTo(0, 0));
-  // Hide hosting badges that staging builds inject (not part of the client's site).
-  await page.evaluate(() => {
-    document.querySelectorAll('a, div, aside').forEach((node) => {
-      const el = node;
-      const style = getComputedStyle(el);
-      if ((style.position === 'fixed' || style.position === 'sticky') && /powered by netlify/i.test(el.textContent ?? '')) {
-        el.style.display = 'none';
-      }
-    });
-  });
   await new Promise((resolve) => setTimeout(resolve, 1200));
 
   const height = Math.min(total, MAX_HEIGHT);
