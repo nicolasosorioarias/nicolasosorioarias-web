@@ -9,10 +9,10 @@ import puppeteer from 'puppeteer-core';
 import sharp from 'sharp';
 
 // `url` is only where the screenshot is taken; the card always links to the production domain
-// (set in src/content/*.json). Servicios Informáticos is captured from its staging build, which holds
-// the updated design under review (Nicolás' decision, 2026-10-11). Staging is never linked.
+// (set in src/content/*.json). SI_CAPTURE_URL can point the capture at another build of the same
+// site (for example a pre-release preview); it is read from the environment and never committed.
 const SITES = [
-  { id: 'servicios-informaticos', url: '<private-preview-url>' },
+  { id: 'servicios-informaticos', url: process.env.SI_CAPTURE_URL || 'https://serviciosinformaticos.com.co' },
   { id: 'rosita-store', url: 'https://rositastore.co' },
 ];
 const VIEWPORT = { width: 1280, height: 800 };
@@ -41,7 +41,7 @@ for (const site of SITES) {
   const page = await browser.newPage();
   await page.setViewport(VIEWPORT);
   await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
-  // Block the hosting toolbar that staging deploys inject ("Powered by Netlify"); it is not part of the design.
+  // Block the hosting toolbar that preview deploys inject ("Powered by Netlify"); it is not part of the design.
   await page.setRequestInterception(true);
   page.on('request', (request) => (request.url().includes('/.netlify/scripts/') ? request.abort() : request.continue()));
   try {

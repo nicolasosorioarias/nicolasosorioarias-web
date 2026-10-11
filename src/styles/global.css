@@ -441,7 +441,7 @@ a:hover {
   border-radius: 0;
 }
 
-/* Visible gap in the copy, see docs/PROJECT.md. */
+/* Visible gap in the copy (npm run check:pending lists them). */
 mark.pending {
   padding: 0.05em 0.35em;
   border: 1px dashed rgb(169 196 255 / 0.55);

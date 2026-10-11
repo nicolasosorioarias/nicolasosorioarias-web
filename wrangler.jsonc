@@ -1,5 +1,5 @@
 // Cloudflare Worker with static assets: serves the Astro build in ./dist (no Worker script yet).
-// Deploy: npm run build && npx wrangler deploy. See docs/PROJECT.md › Hosting.
+// Deploy: npm run build && npx wrangler deploy.
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "nicolasosorioarias",
