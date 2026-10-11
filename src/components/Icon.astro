@@ -1,7 +1,20 @@
 ---
 // Interface icons, one stroke weight, drawn on a 24px grid.
 interface Props {
-  name: 'arrow-down' | 'arrow-up-right' | 'arrow-up' | 'arrow-right' | 'download' | 'mail' | 'copy' | 'check' | 'linkedin';
+  name:
+    | 'arrow-down'
+    | 'arrow-up-right'
+    | 'arrow-up'
+    | 'arrow-right'
+    | 'pin'
+    | 'globe'
+    | 'languages'
+    | 'dumbbell'
+    | 'headphones'
+    | 'bowl'
+    | 'sun'
+    | 'moon'
+    | 'file' | 'download' | 'mail' | 'copy' | 'check' | 'linkedin';
   class?: string;
 }
 
@@ -11,6 +24,15 @@ const paths: Record<Props['name'], string> = {
   'arrow-down': 'M12 5v14M6 13l6 6 6-6',
   'arrow-up': 'M12 19V5M6 11l6-6 6 6',
   'arrow-right': 'M5 12h14M13 6l6 6-6 6',
+  pin: 'M12 21s-6.5-5.7-6.5-11a6.5 6.5 0 0 1 13 0c0 5.3-6.5 11-6.5 11zM12 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z',
+  globe: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM3.6 9h16.8M3.6 15h16.8M12 3c2.4 2.6 3.6 5.6 3.6 9s-1.2 6.4-3.6 9c-2.4-2.6-3.6-5.6-3.6-9S9.6 5.6 12 3z',
+  languages: 'M4 5h10v8H9l-3.5 3v-3H4zM14 9h6v8h-1.5v3L15 17h-4v-2.5',
+  dumbbell: 'M2.5 10v4M5.5 7.5v9M18.5 7.5v9M21.5 10v4M5.5 12h13',
+  headphones: 'M4 16v-4a8 8 0 0 1 16 0v4M4 15.5h3.5V21H4zM16.5 15.5H20V21h-3.5z',
+  bowl: 'M3 11.5h18a9 9 0 0 1-18 0zM8 8c0-1.6 1.2-2 1.2-3.6M12 8c0-1.6 1.2-2 1.2-3.6M16 8c0-1.6 1.2-2 1.2-3.6',
+  sun: 'M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM12 2.5v2M12 19.5v2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M2.5 12h2M19.5 12h2M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4',
+  moon: 'M20 14.6A8 8 0 1 1 9.4 4a6.5 6.5 0 0 0 10.6 10.6z',
+  file: 'M14 3H6.5v18h11V6.5zM14 3v3.5h3.5M9 13h6M9 16.5h6',
   'arrow-up-right': 'M7 17 17 7M8 7h9v9',
   download: 'M12 4v11M7 10.5 12 15.5l5-5M5 20h14',
   mail: 'M4 6h16v12H4zM4 7l8 6 8-6',

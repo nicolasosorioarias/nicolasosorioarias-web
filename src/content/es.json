@@ -14,8 +14,8 @@
     "home": "Nicolás Osorio, volver al inicio",
     "items": [
       {
-        "id": "numbers",
-        "label": "En cifras"
+        "id": "about",
+        "label": "Sobre mí"
       },
       {
         "id": "projects",
@@ -82,7 +82,7 @@
     "sequenceLabel": "Retrato en video: la cámara se acerca a Nicolás mientras partículas azules se conectan en una red de nodos"
   },
   "numbers": {
-    "title": "En cifras",
+    "title": "Sobre mí",
     "context": "Durante más de 5 años en Blackboard Anthology construí para una plataforma educativa y contribuí a proyectos de punta a punta en evaluación y autoría de contenido.",
     "items": [
       {
@@ -105,6 +105,12 @@
         "suffix": "",
         "label": "países atendidos"
       }
+    ],
+    "lead": "Ingeniero de software senior full-stack que lleva productos con IA de la idea a producción, con experiencia probada a escala de más de 100M de usuarios.",
+    "facts": [
+      "Desde Bogotá, Colombia",
+      "Disponible para remoto internacional",
+      "Inglés y español"
     ]
   },
   "projects": {
@@ -159,10 +165,7 @@
         "built": "Una plataforma de e-commerce reconstruida sobre nueva infraestructura, más herramientas internas y bases de datos operativas que automatizan los procesos comerciales del negocio.",
         "result": "Recuperó las ventas en línea del negocio.",
         "stack": [],
-        "link": {
-          "href": "https://rositastore.co",
-          "label": "rositastore.co"
-        },
+        "link": null,
         "period": "2026",
         "image": null
       },
@@ -281,9 +284,16 @@
     "timeZoneLabel": "UTC−5"
   },
   "footer": {
-    "outside": "Fuera del código: entreno en el gimnasio, la música y la cocina saludable.",
     "built": "Hecho con Astro · Alojado en Cloudflare · Lighthouse 100 en accesibilidad",
     "rights": "© 2026 Nicolás Osorio",
-    "top": "Volver arriba"
+    "top": "Volver arriba",
+    "outsideTitle": "Fuera del código",
+    "hobbies": [
+      "Entreno en el gimnasio",
+      "Música",
+      "Cocina saludable"
+    ],
+    "dayLabel": "De día en Bogotá",
+    "nightLabel": "De noche en Bogotá"
   }
 }

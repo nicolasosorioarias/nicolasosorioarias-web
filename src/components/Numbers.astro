@@ -1,4 +1,6 @@
 ---
+// "About": the positioning line, three quick facts, then the numbers that back them.
+import Icon from './Icon.astro';
 import type { Content } from '../i18n';
 
 interface Props {
@@ -7,14 +9,33 @@ interface Props {
 
 const { t } = Astro.props;
 const { numbers } = t;
+const factIcons = ['pin', 'globe', 'languages'] as const;
 ---
 
-<section class="section numbers" id="numbers" aria-labelledby="numbers-title">
+<section class="section numbers" id="about" aria-labelledby="about-title">
   <div class="container">
     <div class="section-head" data-reveal>
       <span class="flow-node" aria-hidden="true" data-flow-node></span>
-      <h2 id="numbers-title">{numbers.title}</h2>
-      <p>{numbers.context}</p>
+      <h2 id="about-title">{numbers.title}</h2>
+    </div>
+
+    <div class="about" data-reveal>
+      <p class="about__lead">{numbers.lead}</p>
+      <div class="about__side">
+        <ul class="facts">
+          {
+            numbers.facts.map((fact, index) => (
+              <li>
+                <span class="facts__icon" aria-hidden="true">
+                  <Icon name={factIcons[index] ?? 'pin'} />
+                </span>
+                {fact}
+              </li>
+            ))
+          }
+        </ul>
+        <p class="about__context">{numbers.context}</p>
+      </div>
     </div>
 
     <ol class="readout" data-readout>
@@ -35,6 +56,72 @@ const { numbers } = t;
 </section>
 
 <style>
+  .about {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: clamp(2rem, 1.5rem + 3vw, 5rem);
+    align-items: start;
+    margin-bottom: clamp(3.5rem, 3rem + 3vw, 6rem);
+  }
+
+  .about__lead {
+    color: var(--text);
+    font-size: clamp(1.6rem, 1.15rem + 1.9vw, 2.6rem);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  .about__side {
+    display: grid;
+    gap: 1.5rem;
+    padding-top: 0.4rem;
+  }
+
+  .facts {
+    display: grid;
+    gap: 0.75rem;
+    list-style: none;
+  }
+
+  .facts li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--text);
+    font-size: var(--fs-body);
+  }
+
+  .facts__icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    color: var(--key);
+    background: rgb(91 140 255 / 0.08);
+  }
+
+  .facts__icon :global(svg) {
+    width: 19px;
+    height: 19px;
+  }
+
+  .about__context {
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+    color: var(--text-2);
+  }
+
+  @media (max-width: 860px) {
+    .about {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
   .readout {
     position: relative;
     display: grid;

@@ -14,8 +14,8 @@
     "home": "Nicolás Osorio, back to top",
     "items": [
       {
-        "id": "numbers",
-        "label": "In numbers"
+        "id": "about",
+        "label": "About"
       },
       {
         "id": "projects",
@@ -82,7 +82,7 @@
     "sequenceLabel": "Video portrait: the camera moves in on Nicolás while blue particles connect into a network of nodes"
   },
   "numbers": {
-    "title": "In numbers",
+    "title": "About",
     "context": "For 5+ years at Blackboard Anthology, I built for a learning platform, contributing to end-to-end projects in assessment and content authoring.",
     "items": [
       {
@@ -105,6 +105,12 @@
         "suffix": "",
         "label": "countries served"
       }
+    ],
+    "lead": "A senior full-stack engineer who takes AI-powered products from idea to production, with experience proven at the scale of 100M+ users.",
+    "facts": [
+      "Based in Bogotá, Colombia",
+      "Open to international remote",
+      "English and Spanish"
     ]
   },
   "projects": {
@@ -159,10 +165,7 @@
         "built": "A rebuilt e-commerce platform on new infrastructure, plus internal tooling and operational databases that automate the business's commercial processes.",
         "result": "Restored the business's online sales.",
         "stack": [],
-        "link": {
-          "href": "https://rositastore.co",
-          "label": "rositastore.co"
-        },
+        "link": null,
         "period": "2026",
         "image": null
       },
@@ -281,9 +284,16 @@
     "timeZoneLabel": "UTC−5"
   },
   "footer": {
-    "outside": "Outside of code: training at the gym, music and healthy cooking.",
     "built": "Built with Astro · Hosted on Cloudflare · Lighthouse 100 accessibility",
     "rights": "© 2026 Nicolás Osorio",
-    "top": "Back to top"
+    "top": "Back to top",
+    "outsideTitle": "Outside of code",
+    "hobbies": [
+      "Training at the gym",
+      "Music",
+      "Healthy cooking"
+    ],
+    "dayLabel": "Daytime in Bogotá",
+    "nightLabel": "Nighttime in Bogotá"
   }
 }

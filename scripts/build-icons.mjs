@@ -35,7 +35,8 @@ function ico(images) {
 
 await mkdir('public/icons', { recursive: true });
 
-const tile = markSvg({ background: true });
+// Favicons and app icons use the bolder icon geometry; the header keeps the finer mark.
+const tile = markSvg({ background: true, icon: true });
 await writeFile('public/favicon.svg', `${tile}\n`);
 
 await writeFile(
@@ -47,12 +48,12 @@ await writeFile(
 );
 
 // iOS rounds the corners itself, so the touch icon is a full-bleed tile.
-await writeFile('public/apple-touch-icon.png', await png(markSvg({ fullBleed: true, scale: 0.72 }), 180));
+await writeFile('public/apple-touch-icon.png', await png(markSvg({ fullBleed: true, scale: 0.7, icon: true }), 180));
 
 for (const size of [192, 512]) {
-  await writeFile(`public/icons/icon-${size}.png`, await png(markSvg({ background: true, radius: 7 }), size));
+  await writeFile(`public/icons/icon-${size}.png`, await png(tile, size));
   // Maskable: the mark stays inside the 80% safe zone of any mask shape.
-  await writeFile(`public/icons/maskable-${size}.png`, await png(markSvg({ fullBleed: true, scale: 0.58 }), size));
+  await writeFile(`public/icons/maskable-${size}.png`, await png(markSvg({ fullBleed: true, scale: 0.62, icon: true }), size));
 }
 
 console.log('Icons written to public/');

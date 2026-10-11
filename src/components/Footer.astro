@@ -1,7 +1,8 @@
 ---
-// Colophon under the closing section: local time in Bogotá, a human note, the build line
-// and a back-to-top that sends a pulse up the Trace line.
+// Colophon: live local time in Bogotá, what Nicolás does outside of code, the build line and
+// a back-to-top that sends a pulse up the Trace line. A large outline of the N closes the brand.
 import Icon from './Icon.astro';
+import { ICON_NODES } from '../lib/logo.mjs';
 import type { Content } from '../i18n';
 
 interface Props {
@@ -9,25 +10,60 @@ interface Props {
 }
 
 const { t } = Astro.props;
-const { footer, contact, meta } = t;
+const { footer, contact, meta, hero } = t;
+const hobbyIcons = ['dumbbell', 'headphones', 'bowl'] as const;
+const nPath = `M${ICON_NODES.map((node) => `${node.x} ${node.y}`).join(' L')}`;
 ---
 
 <footer class="colophon">
+  <svg class="colophon__mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+    <path d={nPath} fill="none" stroke="currentColor" stroke-width="0.35" stroke-linecap="round" stroke-linejoin="round"></path>
+    {ICON_NODES.map((node, i) => <circle cx={node.x} cy={node.y} r="1.6" class:list={{ hazel: i === ICON_NODES.length - 1 }} />)}
+  </svg>
+
   <div class="container colophon__inner">
-    <p class="clock">
-      <span class="label">{contact.timeLabel}</span>
-      <span class="clock__value">
+    <section class="card clock" aria-labelledby="clock-title">
+      <h2 class="label" id="clock-title">{contact.timeLabel}</h2>
+      <p class="clock__value">
+        <span class="clock__icon" aria-hidden="true" data-clock-icon hidden>
+          <Icon name="sun" class="clock__sun" />
+          <Icon name="moon" class="clock__moon" />
+        </span>
         <time data-clock data-locale={meta.lang} hidden></time>
         <span class="clock__zone">{contact.timeZoneLabel}</span>
-      </span>
-    </p>
-    <p class="colophon__outside">{footer.outside}</p>
-    <div class="colophon__meta">
+      </p>
+      <p class="clock__phase" data-clock-phase data-day={footer.dayLabel} data-night={footer.nightLabel} hidden></p>
+    </section>
+
+    <section class="card outside" aria-labelledby="outside-title">
+      <h2 class="label" id="outside-title">{footer.outsideTitle}</h2>
+      <ul class="hobbies">
+        {
+          footer.hobbies.map((hobby, index) => (
+            <li class={`hobby hobby--${hobbyIcons[index] ?? 'bowl'}`}>
+              <span class="hobby__icon" aria-hidden="true">
+                <Icon name={hobbyIcons[index] ?? 'bowl'} />
+              </span>
+              <span class="hobby__label">{hobby}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <div class="bar">
+      <p class="bar__brand">
+        <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+          <path d={nPath} fill="none" stroke="#5B8CFF" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"></path>
+          {ICON_NODES.map((node) => <circle cx={node.x} cy={node.y} r={node.r} fill={node.color} />)}
+        </svg>
+        <span>{hero.name}</span>
+      </p>
       <p>{footer.built}</p>
       <p>{footer.rights}</p>
-      <a class="colophon__top" href="#top" data-to-top>
+      <a class="bar__top" href="#top" data-to-top>
+        <span>{footer.top}</span>
         <Icon name="arrow-up" />
-        <span class="signal-link">{footer.top}</span>
       </a>
     </div>
   </div>
@@ -35,53 +71,214 @@ const { footer, contact, meta } = t;
 
 <style>
   .colophon {
-    padding-block: 2.5rem 3rem;
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(3rem, 2.5rem + 2vw, 4.5rem) 2rem;
     border-top: 1px solid var(--line);
+    background:
+      radial-gradient(60% 120% at 100% 100%, rgb(91 140 255 / 0.1), transparent 60%),
+      radial-gradient(40% 80% at 0% 0%, rgb(140 92 255 / 0.06), transparent 70%);
+  }
+
+  /* Large outline of the N: the brand closes the page. */
+  .colophon__mark {
+    position: absolute;
+    top: -8%;
+    right: -6%;
+    width: clamp(320px, 34vw, 560px);
+    height: auto;
+    color: rgb(91 140 255 / 0.13);
+    pointer-events: none;
+  }
+
+  .colophon__mark circle {
+    fill: var(--night);
+    stroke: rgb(91 140 255 / 0.22);
+    stroke-width: 0.35;
+  }
+
+  .colophon__mark circle.hazel {
+    stroke: rgb(157 186 106 / 0.45);
   }
 
   .colophon__inner {
+    position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
-    gap: 1.5rem 3rem;
-    align-items: start;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 1.25rem;
   }
 
-  .clock {
+  .card {
     display: grid;
-    gap: 0.4rem;
+    align-content: start;
+    gap: 1rem;
+    padding: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: rgb(14 26 49 / 0.94);
   }
 
-  .clock .label {
+  .card h2.label {
+    margin: 0;
     font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    line-height: 1.6;
   }
 
+  /* Clock */
   .clock__value {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 10px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
     color: var(--text);
     font-family: var(--font-mono);
-    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem);
+    font-size: clamp(2.25rem, 1.6rem + 2.4vw, 3.5rem);
     font-weight: 500;
+    line-height: 1;
     font-variant-numeric: tabular-nums;
   }
 
+  .clock__icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 52px;
+    height: 52px;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    background: rgb(91 140 255 / 0.08);
+    color: var(--key);
+  }
+
+  .clock__icon[hidden] {
+    display: none;
+  }
+
+  .clock__icon :global(svg) {
+    width: 24px;
+    height: 24px;
+  }
+
+  .clock__icon[data-phase='day'] :global(.clock__moon),
+  .clock__icon[data-phase='night'] :global(.clock__sun) {
+    display: none;
+  }
+
+  .clock__icon[data-phase='day'] {
+    color: #f1d58a;
+  }
+
   .clock__zone {
+    align-self: flex-end;
+    padding-bottom: 0.35em;
     color: var(--text-2);
     font-size: var(--fs-label);
   }
 
-  .colophon__outside {
-    max-width: 34em;
+  .clock__phase {
     color: var(--text-2);
+    font-size: var(--fs-small);
   }
 
-  .colophon__meta {
+  /* Outside of code */
+  .hobbies {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+    list-style: none;
+  }
+
+  .hobby {
+    display: grid;
+    justify-items: start;
+    gap: 0.9rem;
+    padding: 1rem;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: rgb(10 18 34 / 0.6);
+    color: var(--text);
+    transition:
+      border-color 300ms ease,
+      background-color 300ms ease;
+  }
+
+  .hobby__icon {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    background: rgb(91 140 255 / 0.1);
+    color: var(--key);
+  }
+
+  .hobby__icon :global(svg) {
+    width: 26px;
+    height: 26px;
+  }
+
+  .hobby__label {
+    font-size: var(--fs-small);
+    line-height: 1.35;
+  }
+
+  .hobby:hover {
+    border-color: var(--accent);
+    background: rgb(91 140 255 / 0.08);
+  }
+
+  /* Each icon moves like its activity: the bar lifts, the headphones bob, the bowl steams. */
+  @media (prefers-reduced-motion: no-preference) {
+    .hobby:hover .hobby__icon :global(svg) {
+      animation: var(--hobby-motion) 900ms var(--ease-out) both;
+    }
+  }
+
+  .hobby--dumbbell {
+    --hobby-motion: hobby-lift;
+  }
+
+  .hobby--headphones {
+    --hobby-motion: hobby-bob;
+  }
+
+  .hobby--bowl {
+    --hobby-motion: hobby-steam;
+  }
+
+  @keyframes hobby-lift {
+    40% {
+      transform: translateY(-5px) rotate(-6deg);
+    }
+    70% {
+      transform: translateY(-2px) rotate(3deg);
+    }
+  }
+
+  @keyframes hobby-bob {
+    25% {
+      transform: rotate(-10deg);
+    }
+    60% {
+      transform: rotate(8deg);
+    }
+  }
+
+  @keyframes hobby-steam {
+    45% {
+      transform: translateY(-3px) scale(1.08);
+    }
+  }
+
+  /* Bottom bar */
+  .bar {
     grid-column: 1 / -1;
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
     align-items: center;
-    gap: 0.5rem 1.75rem;
+    gap: 0.75rem 1.75rem;
+    margin-top: clamp(1.5rem, 1rem + 1.5vw, 2.5rem);
     padding-top: 1.5rem;
     border-top: 1px solid var(--line);
     color: var(--text-2);
@@ -89,34 +286,111 @@ const { footer, contact, meta } = t;
     font-size: var(--fs-label);
   }
 
-  .colophon__top {
+  .bar__brand {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    min-height: 44px;
-    margin-inline-start: auto;
-    color: var(--key);
-    text-decoration: none;
-    white-space: nowrap;
+    gap: 10px;
+    color: var(--text);
+    font-family: var(--font-display);
+    font-size: var(--fs-body);
+    font-weight: 600;
   }
 
-  .colophon__top :global(svg) {
-    width: 15px;
-    height: 15px;
+  .bar__brand svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .bar__top {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    margin-inline-start: auto;
+    padding: 0 7px 0 16px;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    color: var(--text);
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      border-color var(--dur-fast) ease,
+      background-color var(--dur-fast) ease;
+  }
+
+  .bar__top :global(svg) {
+    width: 30px;
+    height: 30px;
+    padding: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--night);
     transition: transform var(--dur-base) var(--ease-out);
   }
 
-  .colophon__top:hover :global(svg),
-  .colophon__top:focus-visible :global(svg) {
+  .bar__top:hover,
+  .bar__top:focus-visible {
+    border-color: var(--accent);
+    background: rgb(91 140 255 / 0.1);
+  }
+
+  .bar__top:hover :global(svg),
+  .bar__top:focus-visible :global(svg) {
     transform: translateY(-3px);
   }
 
-  @media (max-width: 760px) {
+  @media (max-width: 1100px) {
+    .bar {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+    }
+
+    .bar > p:nth-of-type(2) {
+      grid-row: 2;
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 860px) {
     .colophon__inner {
       grid-template-columns: minmax(0, 1fr);
     }
 
-    .colophon__top {
+    .colophon__mark {
+      display: none;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .hobbies {
+      gap: 0.5rem;
+    }
+
+    .hobby {
+      justify-items: center;
+      gap: 0.6rem;
+      padding: 0.85rem 0.5rem;
+      text-align: center;
+    }
+
+    .hobby__icon {
+      width: 44px;
+      height: 44px;
+    }
+
+    .hobby__label {
+      font-size: 0.8125rem;
+    }
+
+    .bar {
+      grid-template-columns: minmax(0, 1fr);
+      justify-items: start;
+    }
+
+    .bar > p:nth-of-type(2) {
+      grid-row: auto;
+    }
+
+    .bar__top {
       margin-inline-start: 0;
     }
   }
@@ -125,22 +399,28 @@ const { footer, contact, meta } = t;
 <script>
   import { motionAllowed } from '../scripts/pointer';
 
-  // Live local time in Bogotá (no live region: it would announce every minute).
+  // Live local time in Bogotá, with a sun or moon for the time of day.
+  // No live region: it would announce every minute.
   const clock = document.querySelector<HTMLTimeElement>('[data-clock]');
+  const icon = document.querySelector<HTMLElement>('[data-clock-icon]');
+  const phase = document.querySelector<HTMLElement>('[data-clock-phase]');
   if (clock) {
-    const format = new Intl.DateTimeFormat(clock.dataset.locale === 'es' ? 'es-CO' : 'en-US', {
-      timeZone: 'America/Bogota',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-    });
+    const locale = clock.dataset.locale === 'es' ? 'es-CO' : 'en-US';
+    const time = new Intl.DateTimeFormat(locale, { timeZone: 'America/Bogota', hour: '2-digit', minute: '2-digit', hour12: false });
+    const hour = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Bogota', hour: 'numeric', hour12: false });
     const tick = () => {
       const now = new Date();
-      clock.textContent = format.format(now);
+      clock.textContent = time.format(now);
       clock.dateTime = now.toISOString();
+      const h = Number(hour.format(now)) % 24;
+      const isDay = h >= 6 && h < 18;
+      if (icon) icon.dataset.phase = isDay ? 'day' : 'night';
+      if (phase) phase.textContent = (isDay ? phase.dataset.day : phase.dataset.night) ?? '';
     };
     tick();
     clock.hidden = false;
+    if (icon) icon.hidden = false;
+    if (phase) phase.hidden = false;
     window.setTimeout(
       () => {
         tick();
