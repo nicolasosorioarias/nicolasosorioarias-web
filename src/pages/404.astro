@@ -1,0 +1,96 @@
+---
+// Not found: served by Cloudflare Pages for any unknown path (/404.html). Bilingual, because the
+// visitor may come from either locale. The signal line ends at a disconnected node.
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { getContent } from '../i18n';
+import { ICON_NODES, COLORS } from '../lib/logo.mjs';
+
+const t = getContent('en');
+const nPath = `M${ICON_NODES.map((node) => `${node.x} ${node.y}`).join(' L')}`;
+---
+
+<Base locale="en" t={t} notFound title="Page not found · Nicolás Osorio">
+  <main id="main" class="lost" tabindex="-1">
+    <svg class="lost__mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+      <path d={nPath} fill="none" stroke={COLORS.blue} stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3 3"></path>
+      {ICON_NODES.map((node, i) => <circle cx={node.x} cy={node.y} r={node.r * 0.7} fill={i === ICON_NODES.length - 1 ? 'none' : COLORS.blue} stroke={i === ICON_NODES.length - 1 ? COLORS.hazel : 'none'} stroke-width="1" />)}
+    </svg>
+
+    <p class="lost__code" aria-hidden="true">404</p>
+    <h1>This node isn't on the network.</h1>
+    <p class="lost__body">The page you're looking for doesn't exist or has moved.</p>
+    <p class="lost__body lost__body--es" lang="es">La página que buscas no existe o cambió de lugar.</p>
+
+    <div class="lost__actions">
+      <a class="btn btn-primary" href="/" data-magnetic>
+        <Icon name="arrow-left" />
+        Back to home
+      </a>
+      <a class="btn btn-ghost" href="/es/" lang="es" hreflang="es">Ir al inicio en español</a>
+    </div>
+  </main>
+</Base>
+
+<style>
+  .lost {
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 1rem;
+    min-height: 100svh;
+    padding: 3rem var(--gutter);
+    text-align: center;
+    background: radial-gradient(50% 50% at 50% 40%, rgb(91 140 255 / 0.12), transparent 70%);
+  }
+
+  .lost:focus {
+    outline: none;
+  }
+
+  .lost__mark {
+    width: clamp(88px, 12vw, 128px);
+    height: auto;
+    margin-bottom: 0.5rem;
+  }
+
+  .lost__code {
+    color: var(--label);
+    font-family: var(--font-mono);
+    font-size: var(--fs-label);
+    font-weight: 500;
+    letter-spacing: 0.3em;
+  }
+
+  h1 {
+    max-width: 16em;
+    font-size: clamp(2rem, 1.4rem + 3vw, 3.5rem);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+  }
+
+  .lost__body {
+    max-width: 34em;
+    color: var(--text-2);
+    font-size: var(--fs-lead);
+  }
+
+  .lost__body--es {
+    margin-top: -0.5rem;
+    font-size: var(--fs-body);
+  }
+
+  .lost__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 1.25rem;
+  }
+</style>
+
+<script>
+  import { initMagnetic } from '../scripts/pointer';
+
+  initMagnetic();
+</script>

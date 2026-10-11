@@ -12,9 +12,12 @@ import heroFrames from '../content/hero-frames.json';
 interface Props {
   locale: Locale;
   t: Content;
+  /** Error pages: no canonical, alternates or structured data, and kept out of search results. */
+  notFound?: boolean;
+  title?: string;
 }
 
-const { locale, t } = Astro.props;
+const { locale, t, notFound = false, title } = Astro.props;
 const site = Astro.site ?? new URL('https://nicolasosorioarias.com');
 const enUrl = new URL('/', site).href;
 const esUrl = new URL('/es/', site).href;
@@ -40,13 +43,20 @@ const person = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{t.meta.title}</title>
+    <title>{title ?? t.meta.title}</title>
+    {notFound && <meta name="robots" content="noindex" />}
     <meta name="description" content={t.meta.description} />
     <meta name="theme-color" content="#0A1222" />
-    <link rel="canonical" href={canonical} />
-    <link rel="alternate" hreflang="en" href={enUrl} />
-    <link rel="alternate" hreflang="es" href={esUrl} />
-    <link rel="alternate" hreflang="x-default" href={enUrl} />
+    {
+      !notFound && (
+        <>
+          <link rel="canonical" href={canonical} />
+          <link rel="alternate" hreflang="en" href={enUrl} />
+          <link rel="alternate" hreflang="es" href={esUrl} />
+          <link rel="alternate" hreflang="x-default" href={enUrl} />
+        </>
+      )
+    }
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -92,7 +102,7 @@ const person = {
         if (!reduce && !lowPower) root.classList.add('seq');
       })();
     </script>
-    <script type="application/ld+json" set:html={JSON.stringify(person)} />
+    {!notFound && <script type="application/ld+json" set:html={JSON.stringify(person)} />}
   </head>
   <body>
     <a class="skip-link" href="#main">{t.nav.skip}</a>
