@@ -1,8 +1,10 @@
 // Extracts the hero v2 image sequence from assets/hero/hero.mp4.
 // Usage: npm run frames            (requires ffmpeg on PATH)
 //
-// Output: public/assets/hero/{desktop,mobile}/NNN.{avif,webp}, a static
+// Output: public/assets/hero/<version>/{desktop,mobile}/NNN.{avif,webp}, a static
 // close-up for reduced motion, and src/content/hero-frames.json (manifest).
+// <version> is a hash of the source clip and the encode settings, so the frames
+// can be served with a one-year immutable cache: new frames get a new folder.
 //
 // The colour grade and vignette are baked into the frames: they hide the
 // softness of the 720p source, calm the large out-of-focus particles at the
@@ -10,13 +12,14 @@
 // because grain inside the frames would multiply their weight.
 
 import { spawnSync } from 'node:child_process';
-import { mkdir, mkdtemp, readdir, rm, stat, writeFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { mkdir, mkdtemp, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import sharp from 'sharp';
 
 const SOURCE = 'assets/hero/hero.mp4';
-const OUT_DIR = 'public/assets/hero';
+const HERO_DIR = 'public/assets/hero';
 const MANIFEST = 'src/content/hero-frames.json';
 const AVIF_QUALITY = 50;
 const WEBP_QUALITY = 68;
@@ -59,12 +62,23 @@ async function folderSize(dir) {
   return sizes.reduce((total, size) => total + size, 0);
 }
 
-const manifest = { source: SOURCE, avifQuality: AVIF_QUALITY, webpQuality: WEBP_QUALITY, variants: {} };
+const version = createHash('sha256')
+  .update(await readFile(SOURCE))
+  .update(JSON.stringify({ AVIF_QUALITY, WEBP_QUALITY, GRADE, VARIANTS }))
+  .digest('hex')
+  .slice(0, 10);
+const OUT_DIR = path.join(HERO_DIR, version);
+const BASE_URL = `/assets/hero/${version}`;
+
+// Drop older versions; only the current one ships.
+await rm(HERO_DIR, { recursive: true, force: true });
+await mkdir(OUT_DIR, { recursive: true });
+
+const manifest = { source: SOURCE, version, avifQuality: AVIF_QUALITY, webpQuality: WEBP_QUALITY, variants: {} };
 
 for (const variant of VARIANTS) {
   const tmp = await mkdtemp(path.join(os.tmpdir(), `hero-${variant.name}-`));
   const outDir = path.join(OUT_DIR, variant.name);
-  await rm(outDir, { recursive: true, force: true });
   await mkdir(outDir, { recursive: true });
 
   const filter = [`select='not(mod(n\\,${variant.every}))'`, ...variant.filters, GRADE].join(',');
@@ -91,8 +105,8 @@ for (const variant of VARIANTS) {
     count: frames.length,
     width: variant.width,
     height: variant.height,
-    path: `/assets/hero/${variant.name}/`,
-    still: `/assets/hero/still-${variant.name}`,
+    path: `${BASE_URL}/${variant.name}/`,
+    still: `${BASE_URL}/still-${variant.name}`,
     avifBytes,
     webpBytes,
   };

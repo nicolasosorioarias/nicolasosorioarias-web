@@ -1,5 +1,6 @@
 {
   "source": "assets/hero/hero.mp4",
+  "version": "d3dac1b9f5",
   "avifQuality": 50,
   "webpQuality": 68,
   "variants": {
@@ -7,8 +8,8 @@
       "count": 120,
       "width": 1280,
       "height": 720,
-      "path": "/assets/hero/desktop/",
-      "still": "/assets/hero/still-desktop",
+      "path": "/assets/hero/d3dac1b9f5/desktop/",
+      "still": "/assets/hero/d3dac1b9f5/still-desktop",
       "avifBytes": 2325903,
       "webpBytes": 2568748
     },
@@ -16,8 +17,8 @@
       "count": 60,
       "width": 480,
       "height": 600,
-      "path": "/assets/hero/mobile/",
-      "still": "/assets/hero/still-mobile",
+      "path": "/assets/hero/d3dac1b9f5/mobile/",
+      "still": "/assets/hero/d3dac1b9f5/still-mobile",
       "avifBytes": 642698,
       "webpBytes": 683714
     }

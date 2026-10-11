@@ -1,7 +1,7 @@
 import { defineConfig } from 'astro/config';
 
-// Netlify subdomain until the custom domain is connected (see docs/PROJECT.md).
-const SITE_URL = process.env.SITE_URL ?? 'https://nicolas-osorio.netlify.app';
+// Canonical origin (Cloudflare Pages custom domain). Override with SITE_URL for previews.
+const SITE_URL = process.env.SITE_URL ?? 'https://nicolasosorioarias.com';
 
 export default defineConfig({
   site: SITE_URL,

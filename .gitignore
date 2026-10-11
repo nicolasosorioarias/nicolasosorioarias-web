@@ -1,7 +1,8 @@
 node_modules/
 dist/
 .astro/
-.netlify/
+.wrangler/
+.dev.vars
 .env
 .env.*
 .impeccable/

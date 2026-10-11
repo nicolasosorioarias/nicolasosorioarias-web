@@ -3,7 +3,9 @@
     "lang": "es",
     "locale": "es_CO",
     "title": "Nicolás Osorio · Senior Software Engineer, Full-Stack & AI Product",
-    "description": "Llevo productos de la idea a producción, diseñándolos, construyéndolos y liderándolos de punta a punta, e incorporo IA donde crea valor real para el negocio y para las personas que los usan."
+    "description": "Llevo productos de la idea a producción, diseñándolos, construyéndolos y liderándolos de punta a punta, e incorporo IA donde crea valor real para el negocio y para las personas que los usan.",
+    "ogImageAlt": "Nicolás Osorio, Senior Full-Stack & AI Product Engineer: diseño, construyo y lidero productos con IA de punta a punta",
+    "alternateLocale": "en_US"
   },
   "nav": {
     "skip": "Saltar al contenido",
@@ -181,7 +183,7 @@
         "org": "Fusepong",
         "problem": "Una plataforma de gestión de envíos necesitaba backend, backoffice web y app para iOS y Android.",
         "built": "Las tres piezas, como único desarrollador del proyecto.",
-        "result": "Entregada en [PENDING: 30 o 70] días.",
+        "result": "Entregada en 30 días.",
         "stack": [
           "[PENDING]"
         ],

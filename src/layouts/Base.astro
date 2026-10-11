@@ -7,7 +7,7 @@ import soraLatin from '@fontsource-variable/sora/files/sora-latin-wght-normal.wo
 import plexMono400 from '@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2?url';
 import plexMono500 from '@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2?url';
 import type { Content, Locale } from '../i18n';
-import { PORTRAIT } from '../i18n';
+import heroFrames from '../content/hero-frames.json';
 
 interface Props {
   locale: Locale;
@@ -15,11 +15,12 @@ interface Props {
 }
 
 const { locale, t } = Astro.props;
-const site = Astro.site ?? new URL('https://nicolas-osorio.netlify.app');
+const site = Astro.site ?? new URL('https://nicolasosorioarias.com');
 const enUrl = new URL('/', site).href;
 const esUrl = new URL('/es/', site).href;
 const canonical = locale === 'en' ? enUrl : esUrl;
-const ogImage = new URL(PORTRAIT.square, site).href;
+// 1200x630 share image built by scripts/build-og.mjs from the hero close-up.
+const ogImage = new URL(`/og/og-${locale}.jpg`, site).href;
 
 const person = {
   '@context': 'https://schema.org',
@@ -50,16 +51,30 @@ const person = {
     <link rel="preload" href={soraLatin} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={plexMono400} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={plexMono500} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" as="image" href="/assets/hero/desktop/000.avif" type="image/avif" media="(min-width: 760px)" fetchpriority="high" />
-    <link rel="preload" as="image" href="/assets/hero/mobile/000.avif" type="image/avif" media="(max-width: 759px)" fetchpriority="high" />
+    <link rel="preload" as="image" href={`${heroFrames.variants.desktop.path}000.avif`} type="image/avif" media="(min-width: 760px)" fetchpriority="high" />
+    <link rel="preload" as="image" href={`${heroFrames.variants.mobile.path}000.avif`} type="image/avif" media="(max-width: 759px)" fetchpriority="high" />
+
+    <link rel="sitemap" href="/sitemap.xml" />
 
     <meta property="og:type" content="profile" />
+    <meta property="og:site_name" content="Nicolás Osorio" />
     <meta property="og:title" content={t.meta.title} />
     <meta property="og:description" content={t.meta.description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={t.meta.ogImageAlt} />
     <meta property="og:locale" content={t.meta.locale} />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:locale:alternate" content={t.meta.alternateLocale} />
+    <meta property="profile:first_name" content="Nicolás" />
+    <meta property="profile:last_name" content="Osorio Arias" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={t.meta.title} />
+    <meta name="twitter:description" content={t.meta.description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={t.meta.ogImageAlt} />
 
     <script is:inline>
       // Enable entrance motion only when the visitor allows it. Content stays visible otherwise.

@@ -13,9 +13,17 @@ interface Props {
 const { t } = Astro.props;
 const { hero, heroV2 } = t;
 const { desktop, mobile } = frames.variants;
+const poster = (variant: typeof desktop) =>
+  `image-set(url('${variant.path}000.avif') type('image/avif'), url('${variant.path}000.webp') type('image/webp'))`;
 ---
 
-<section class="hs" id="top" aria-labelledby="hero-name" data-hs>
+<section
+  class="hs"
+  id="top"
+  aria-labelledby="hero-name"
+  data-hs
+  style={`--poster-desktop: ${poster(desktop)}; --poster-mobile: ${poster(mobile)};`}
+>
   <div class="hs__stage">
     <div class="hs__media">
       <picture class="hs__still">
@@ -275,10 +283,7 @@ const { desktop, mobile } = frames.variants;
 
   /* First frame as a poster until the canvas paints. */
   :global(html.seq) .hs__media {
-    background-image: image-set(
-      url('/assets/hero/desktop/000.avif') type('image/avif'),
-      url('/assets/hero/desktop/000.webp') type('image/webp')
-    );
+    background-image: var(--poster-desktop);
   }
 
   :global(html.seq) .hs__canvas,
@@ -409,10 +414,7 @@ const { desktop, mobile } = frames.variants;
     }
 
     :global(html.seq) .hs__media {
-      background-image: image-set(
-        url('/assets/hero/mobile/000.avif') type('image/avif'),
-        url('/assets/hero/mobile/000.webp') type('image/webp')
-      );
+      background-image: var(--poster-mobile);
     }
 
     :global(html.seq) .hs__link {
