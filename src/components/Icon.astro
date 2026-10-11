@@ -1,0 +1,34 @@
+---
+// Interface icons, one stroke weight, drawn on a 24px grid.
+interface Props {
+  name: 'arrow-down' | 'arrow-up-right' | 'arrow-up' | 'download' | 'mail' | 'copy' | 'check' | 'linkedin';
+  class?: string;
+}
+
+const { name, class: className } = Astro.props;
+
+const paths: Record<Props['name'], string> = {
+  'arrow-down': 'M12 5v14M6 13l6 6 6-6',
+  'arrow-up': 'M12 19V5M6 11l6-6 6 6',
+  'arrow-up-right': 'M7 17 17 7M8 7h9v9',
+  download: 'M12 4v11M7 10.5 12 15.5l5-5M5 20h14',
+  mail: 'M4 6h16v12H4zM4 7l8 6 8-6',
+  copy: 'M9 9h10v10H9zM5 15V5h10',
+  check: 'M5 12.5 10 17.5 19 7',
+  linkedin: 'M5 9.5v9.5M5 5.5v.01M10 19v-9.5M10 13.5c0-2.5 1.6-4 3.7-4 2.2 0 3.3 1.4 3.3 4V19',
+};
+---
+
+<svg
+  class={className}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.7"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  focusable="false"
+>
+  <path d={paths[name]}></path>
+</svg>

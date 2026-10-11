@@ -1,0 +1,326 @@
+---
+import Copy from './Copy.astro';
+import Icon from './Icon.astro';
+import type { Content } from '../i18n';
+
+interface Props {
+  t: Content;
+}
+
+const { t } = Astro.props;
+const { projects } = t;
+const [lead, ...rest] = projects.items;
+const { labels } = projects;
+type Project = (typeof projects.items)[number];
+
+const steps = (project: Project) => [
+  { key: 'problem', label: labels.problem, text: project.problem },
+  { key: 'built', label: labels.built, text: project.built },
+  { key: 'result', label: labels.result, text: project.result },
+];
+---
+
+<section class="section projects" id="projects" aria-labelledby="projects-title">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <span class="flow-node" aria-hidden="true" data-flow-node></span>
+      <h2 id="projects-title">{projects.title}</h2>
+      <p>{projects.intro}</p>
+    </div>
+
+    <article class="case case--lead corners" aria-labelledby={`case-${lead.id}`} data-reveal>
+      <header class="case__head">
+        <h3 id={`case-${lead.id}`}>{lead.title}</h3>
+        <p class="case__org label">{lead.org}</p>
+        {
+          lead.link && (
+            <a class="case__link" href={lead.link.href} target="_blank" rel="noopener">
+              {lead.link.label}
+              <Icon name="arrow-up-right" />
+              <span class="sr-only">({labels.external})</span>
+            </a>
+          )
+        }
+      </header>
+
+      <ol class="trace trace--row">
+        {
+          steps(lead).map((step) => (
+            <li>
+              <span class="trace__node" aria-hidden="true" />
+              <h4 class="label">{step.label}</h4>
+              <p>
+                <Copy text={step.text} />
+              </p>
+            </li>
+          ))
+        }
+        <li>
+          <span class="trace__node trace__node--end" aria-hidden="true"></span>
+          <h4 class="label">{labels.stack}</h4>
+          <ul class="stack-list">
+            {
+              lead.stack.map((item) => (
+                <li>
+                  <Copy text={item} />
+                </li>
+              ))
+            }
+          </ul>
+        </li>
+      </ol>
+    </article>
+
+    <div class="cases">
+      {
+        rest.map((project) => (
+          <article class="case" aria-labelledby={`case-${project.id}`} data-reveal>
+            <header class="case__head">
+              <h3 id={`case-${project.id}`}>{project.title}</h3>
+              <p class="case__org label">{project.org}</p>
+              {project.link ? (
+                <a class="case__link" href={project.link.href} target="_blank" rel="noopener">
+                  {project.link.label}
+                  <Icon name="arrow-up-right" />
+                  <span class="sr-only">({labels.external})</span>
+                </a>
+              ) : (
+                project.id === 'assessment-ai' && <p class="case__note">{labels.private}</p>
+              )}
+            </header>
+
+            <ol class="trace trace--column">
+              {steps(project).map((step) => (
+                <li>
+                  <span class="trace__node" aria-hidden="true" />
+                  <h4 class="label">{step.label}</h4>
+                  <p>
+                    <Copy text={step.text} />
+                  </p>
+                </li>
+              ))}
+              <li>
+                <span class="trace__node trace__node--end" aria-hidden="true" />
+                <h4 class="label">{labels.stack}</h4>
+                <ul class="stack-list">
+                  {project.stack.map((item) => (
+                    <li>
+                      <Copy text={item} />
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            </ol>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .case h3 {
+    font-size: var(--fs-h3);
+  }
+
+  .case__head {
+    display: grid;
+    align-content: start;
+    justify-items: start;
+    gap: 0.75rem;
+  }
+
+  .case__org {
+    font-size: 0.75rem;
+  }
+
+  .case__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    font-family: var(--font-mono);
+    font-size: var(--fs-small);
+  }
+
+  .case__link :global(svg) {
+    width: 16px;
+    height: 16px;
+  }
+
+  .case__note {
+    color: var(--text-2);
+    font-family: var(--font-mono);
+    font-size: var(--fs-label);
+  }
+
+  /* Lead case: framed, steps run horizontally along one signal line. */
+  .case--lead {
+    display: grid;
+    gap: clamp(2rem, 1.5rem + 2vw, 3rem);
+    padding: clamp(1.5rem, 1rem + 2.5vw, 3rem);
+    border: 1px solid var(--line);
+    background: linear-gradient(160deg, rgb(91 140 255 / 0.07), transparent 55%);
+  }
+
+  .case--lead h3 {
+    font-size: clamp(1.6rem, 1.2rem + 1.8vw, 2.5rem);
+  }
+
+  .trace {
+    list-style: none;
+  }
+
+  .trace > li {
+    position: relative;
+    display: grid;
+    gap: 0.6rem;
+    align-content: start;
+  }
+
+  .trace h4 {
+    margin: 0;
+    font-size: 0.75rem;
+  }
+
+  .trace p {
+    color: var(--text-2);
+    overflow-wrap: break-word;
+  }
+
+  .trace__node {
+    width: 11px;
+    height: 11px;
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    background: var(--night);
+  }
+
+  .trace__node--end {
+    border-color: var(--key);
+    background: var(--key);
+  }
+
+  .trace--row {
+    --row-gap: clamp(1.5rem, 1rem + 1.5vw, 2.5rem);
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.5rem var(--row-gap);
+  }
+
+  .trace--row > li::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 0;
+    right: calc(-1 * var(--row-gap));
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent), rgb(91 140 255 / 0.25));
+  }
+
+  .trace--row > li:nth-child(2n)::before {
+    right: 0;
+  }
+
+  @media (min-width: 1360px) {
+    .trace--row {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .trace--row > li:nth-child(2n)::before {
+      right: calc(-1 * var(--row-gap));
+    }
+
+    .trace--row > li:last-child::before {
+      right: 0;
+    }
+  }
+
+  .trace--row .trace__node {
+    position: relative;
+    margin-bottom: 0.6rem;
+    box-shadow: 0 0 0 5px var(--night);
+  }
+
+  /* Other cases: title column and a vertical trace. */
+  .cases {
+    margin-top: clamp(1rem, 0.5rem + 2vw, 2rem);
+  }
+
+  .cases .case {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    gap: clamp(1.5rem, 1rem + 3vw, 4.5rem);
+    padding-block: clamp(2.5rem, 2rem + 2vw, 3.5rem);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .trace--column {
+    position: relative;
+    display: grid;
+    gap: 1.6rem;
+    padding-left: 30px;
+  }
+
+  .trace--column::before {
+    content: '';
+    position: absolute;
+    top: 6px;
+    bottom: 6px;
+    left: 5px;
+    width: 1px;
+    background: linear-gradient(180deg, var(--accent), var(--line));
+  }
+
+  .trace--column .trace__node {
+    position: absolute;
+    top: 3px;
+    left: -30px;
+  }
+
+  .stack-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    list-style: none;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: var(--fs-small);
+  }
+
+  @media (max-width: 900px) {
+    .cases .case {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .trace--row {
+      grid-template-columns: minmax(0, 1fr);
+      padding-left: 30px;
+    }
+
+    .trace--row > li::before,
+    .trace--row > li:nth-child(2n)::before {
+      top: 14px;
+      bottom: -2.5rem;
+      left: -25px;
+      right: auto;
+      width: 1px;
+      height: auto;
+      background: var(--accent);
+    }
+
+    .trace--row > li:last-child::before {
+      display: none;
+    }
+
+    .trace--row .trace__node {
+      position: absolute;
+      top: 3px;
+      left: -30px;
+      margin: 0;
+    }
+  }
+</style>

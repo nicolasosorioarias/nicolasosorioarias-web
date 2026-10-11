@@ -1,0 +1,285 @@
+---
+import Icon from './Icon.astro';
+import { CV_FILES, PORTRAIT, type Content } from '../i18n';
+
+interface Props {
+  t: Content;
+}
+
+const { t } = Astro.props;
+const { hero } = t;
+---
+
+<section class="hero" id="top" aria-labelledby="hero-name" data-hero>
+  <canvas class="hero__canvas" aria-hidden="true" data-hero-canvas></canvas>
+
+  <div class="hero__inner">
+    <div class="portrait" data-portrait>
+      <span class="portrait__halo" aria-hidden="true"></span>
+      <span class="portrait__orbit portrait__orbit--1" aria-hidden="true"></span>
+      <span class="portrait__orbit portrait__orbit--2" aria-hidden="true"></span>
+      <span class="portrait__orbit portrait__orbit--3" aria-hidden="true"></span>
+      <picture>
+        <source
+          type="image/avif"
+          srcset={`${PORTRAIT.avif[480]} 480w, ${PORTRAIT.avif[960]} 960w`}
+          sizes="(max-width: 700px) 240px, 380px"
+        />
+        <source
+          type="image/webp"
+          srcset={`${PORTRAIT.webp[480]} 480w, ${PORTRAIT.webp[960]} 960w`}
+          sizes="(max-width: 700px) 240px, 380px"
+        />
+        <img
+          src={PORTRAIT.webp[480]}
+          width="960"
+          height="960"
+          alt={hero.portraitAlt}
+          fetchpriority="high"
+          decoding="async"
+        />
+      </picture>
+    </div>
+
+    <div class="hero__copy" data-hero-copy>
+      <h1 id="hero-name">{hero.name}</h1>
+      <p class="hero__role label">{hero.role}</p>
+      <p class="hero__opening">
+        {hero.opening.before}<span class="key">{hero.opening.highlight}</span>{hero.opening.after}
+      </p>
+
+      <div class="hero__actions">
+        <a class="btn btn-primary" href="#projects">
+          {hero.ctaProjects}
+          <Icon name="arrow-down" />
+        </a>
+        <div class="cv-group" role="group" aria-label={hero.cvLabel}>
+          <span class="cv-group__label" aria-hidden="true">
+            <Icon name="download" />
+            {hero.cvLabel}
+          </span>
+          <a href={CV_FILES.en} download hreflang="en">{hero.cvEn}<span class="sr-only">, {hero.cvEnName}</span></a>
+          <a href={CV_FILES.es} download hreflang="es">{hero.cvEs}<span class="sr-only">, {hero.cvEsName}</span></a>
+        </div>
+        <a class="btn btn-ghost" href="#contact">{hero.ctaContact}</a>
+      </div>
+
+      <ul class="hero__diff" aria-label={hero.differentiatorsLabel}>
+        {
+          hero.differentiators.map((item, index) => (
+            <li>
+              {index > 0 && <span class="diamond" aria-hidden="true" />}
+              {item}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 100svh;
+    padding: calc(var(--header-h) + clamp(16px, 4vh, 48px)) var(--gutter) clamp(40px, 7vh, 72px);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero__canvas {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .hero__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(1.75rem, 4vh, 2.75rem);
+    width: 100%;
+    max-width: 56rem;
+    text-align: center;
+  }
+
+  /* Portrait with the banner's concentric orbits. */
+  .portrait {
+    --size: clamp(196px, 31vh, 360px);
+    position: relative;
+    width: min(var(--size), 62vw);
+    aspect-ratio: 1;
+  }
+
+  .portrait__halo {
+    position: absolute;
+    inset: -34%;
+    border-radius: 50%;
+    background:
+      radial-gradient(closest-side, rgb(91 140 255 / 0.2), transparent 70%),
+      radial-gradient(closest-side at 60% 40%, var(--halo), transparent 75%);
+    z-index: -1;
+  }
+
+  .portrait__orbit {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid var(--line-strong);
+    pointer-events: none;
+  }
+
+  .portrait__orbit--1 {
+    inset: -12%;
+    border-color: rgb(91 140 255 / 0.32);
+  }
+
+  .portrait__orbit--2 {
+    inset: -26%;
+    border-style: dashed;
+    border-color: rgb(91 140 255 / 0.26);
+  }
+
+  .portrait__orbit--3 {
+    inset: -44%;
+    border-color: rgb(91 140 255 / 0.1);
+  }
+
+  .portrait img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: opacity var(--dur-slow) var(--ease-out);
+    -webkit-mask-image: radial-gradient(
+      circle at var(--lx, 50%) var(--ly, 50%),
+      transparent calc(var(--lr, 0px) * 0.6),
+      #000 var(--lr, 0px)
+    );
+    mask-image: radial-gradient(
+      circle at var(--lx, 50%) var(--ly, 50%),
+      transparent calc(var(--lr, 0px) * 0.6),
+      #000 var(--lr, 0px)
+    );
+  }
+
+  /* With motion allowed, the photo waits for the dots to converge, then resolves. */
+  :global(html.motion) .portrait:not(:global(.is-revealed)) img {
+    opacity: 0;
+    animation: reveal-fallback 0s linear 4s forwards;
+  }
+
+  .hero__copy {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  h1 {
+    font-size: var(--fs-display);
+    letter-spacing: -0.035em;
+    line-height: 1;
+  }
+
+  .hero__role {
+    margin-top: 1rem;
+    font-size: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+    letter-spacing: 0.16em;
+  }
+
+  .hero__opening {
+    max-width: 32.5em;
+    margin-top: 1.5rem;
+    color: var(--text-2);
+    font-size: var(--fs-lead);
+    line-height: 1.55;
+  }
+
+  .key {
+    color: var(--key);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 2rem;
+  }
+
+  .hero__diff {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 16px;
+    margin-top: 1.75rem;
+    list-style: none;
+    color: var(--text-2);
+    font-family: var(--font-mono);
+    font-size: var(--fs-label);
+    letter-spacing: 0.04em;
+  }
+
+  .hero__diff li {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  @media (max-width: 560px) {
+    .hero__inner {
+      gap: 1.25rem;
+    }
+
+    .portrait {
+      --size: clamp(168px, 24vh, 300px);
+    }
+
+    .hero__opening {
+      margin-top: 1.1rem;
+      font-size: 1.0625rem;
+    }
+
+    .hero__actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      width: 100%;
+      max-width: 360px;
+      margin-top: 1.5rem;
+    }
+
+    .hero__actions .cv-group {
+      grid-column: 1 / -1;
+      order: 3;
+    }
+
+    .hero__actions .btn {
+      padding: 0 12px;
+    }
+
+    .cv-group__label {
+      flex: 1;
+      justify-content: center;
+    }
+
+    .hero__diff {
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .hero__diff .diamond {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  import { initNodePortrait } from '../scripts/node-portrait';
+
+  const hero = document.querySelector<HTMLElement>('[data-hero]');
+  if (hero) initNodePortrait(hero);
+</script>

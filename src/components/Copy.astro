@@ -1,0 +1,11 @@
+---
+import { splitPending } from '../i18n';
+
+interface Props {
+  text: string;
+}
+
+const parts = splitPending(Astro.props.text);
+---
+
+{parts.map((part) => (part.pending ? <mark class="pending">{part.text}</mark> : part.text))}

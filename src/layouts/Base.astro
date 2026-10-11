@@ -1,0 +1,74 @@
+---
+import '@fontsource-variable/sora/wght.css';
+import '@fontsource/ibm-plex-mono/latin-400.css';
+import '@fontsource/ibm-plex-mono/latin-500.css';
+import '../styles/global.css';
+import soraLatin from '@fontsource-variable/sora/files/sora-latin-wght-normal.woff2?url';
+import plexMono400 from '@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2?url';
+import plexMono500 from '@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2?url';
+import type { Content, Locale } from '../i18n';
+import { PORTRAIT } from '../i18n';
+
+interface Props {
+  locale: Locale;
+  t: Content;
+}
+
+const { locale, t } = Astro.props;
+const site = Astro.site ?? new URL('https://nicolas-osorio.netlify.app');
+const enUrl = new URL('/', site).href;
+const esUrl = new URL('/es/', site).href;
+const canonical = locale === 'en' ? enUrl : esUrl;
+const ogImage = new URL(PORTRAIT.square, site).href;
+
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Nicolás Osorio Arias',
+  jobTitle: 'Senior Software Engineer, Full-Stack & AI Product',
+  url: canonical,
+  image: ogImage,
+  email: `mailto:${t.contact.email}`,
+  sameAs: [t.contact.linkedinHref],
+  knowsAbout: t.stack.items,
+};
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{t.meta.title}</title>
+    <meta name="description" content={t.meta.description} />
+    <meta name="theme-color" content="#0A1222" />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="en" href={enUrl} />
+    <link rel="alternate" hreflang="es" href={esUrl} />
+    <link rel="alternate" hreflang="x-default" href={enUrl} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href={soraLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={plexMono400} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={plexMono500} as="font" type="font/woff2" crossorigin />
+
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content={t.meta.title} />
+    <meta property="og:description" content={t.meta.description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content={t.meta.locale} />
+    <meta name="twitter:card" content="summary" />
+
+    <script is:inline>
+      // Enable entrance motion only when the visitor allows it. Content stays visible otherwise.
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('motion');
+      }
+    </script>
+    <script type="application/ld+json" set:html={JSON.stringify(person)} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{t.nav.skip}</a>
+    <slot />
+  </body>
+</html>

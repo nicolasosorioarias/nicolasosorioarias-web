@@ -1,0 +1,90 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from './Header.astro';
+import Hero from './Hero.astro';
+import Numbers from './Numbers.astro';
+import Projects from './Projects.astro';
+import Experience from './Experience.astro';
+import HowIWork from './HowIWork.astro';
+import Stack from './Stack.astro';
+import Contact from './Contact.astro';
+import Footer from './Footer.astro';
+import { getContent, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getContent(locale);
+---
+
+<Base locale={locale} t={t}>
+  <Header t={t} />
+  <main id="main" tabindex="-1">
+    <Hero t={t} />
+    {/* The signal line: runs from the hero to the contact close; each section heading is a node on it. */}
+    <div class="flow" data-flow>
+      <span class="flow__fill" aria-hidden="true" data-flow-fill></span>
+      <Numbers t={t} />
+      <Projects t={t} />
+      <Experience t={t} />
+      <HowIWork t={t} />
+      <Stack t={t} />
+      <Contact t={t} />
+    </div>
+  </main>
+  <Footer t={t} />
+</Base>
+
+<style>
+  main:focus {
+    outline: none;
+  }
+</style>
+
+<script>
+  // Reveal sections once as they enter the viewport. Without motion or JS, content is simply visible.
+  if (document.documentElement.classList.contains('motion')) {
+    const targets = document.querySelectorAll<HTMLElement>('[data-reveal]');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-in');
+            observer.unobserve(entry.target);
+          }
+        }
+      },
+      { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+    );
+    targets.forEach((target) => observer.observe(target));
+  }
+
+  // Fill the signal line down to the reading position and light every node it has reached.
+  const flow = document.querySelector<HTMLElement>('[data-flow]');
+  const fill = flow?.querySelector<HTMLElement>('[data-flow-fill]');
+  if (flow && fill) {
+    const nodes = Array.from(flow.querySelectorAll<HTMLElement>('[data-flow-node]'));
+    let ticking = false;
+    const update = () => {
+      const box = flow.getBoundingClientRect();
+      const reach = window.innerHeight * 0.55 - box.top;
+      const progress = Math.min(1, Math.max(0, reach / box.height));
+      fill.style.setProperty('--progress', progress.toFixed(4));
+      for (const node of nodes) {
+        node.classList.toggle('is-lit', node.getBoundingClientRect().top - box.top <= reach);
+      }
+      ticking = false;
+    };
+    const schedule = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    };
+    update();
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule, { passive: true });
+  }
+</script>

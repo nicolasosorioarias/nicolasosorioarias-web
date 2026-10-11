@@ -1,0 +1,203 @@
+{
+  "meta": {
+    "lang": "es",
+    "locale": "es_CO",
+    "title": "Nicolás Osorio · Senior Software Engineer, Full-Stack & AI Product",
+    "description": "Llevo productos de la idea a producción, diseñándolos, construyéndolos y liderándolos de punta a punta, e incorporo IA donde crea valor real para el negocio y para las personas que los usan."
+  },
+  "nav": {
+    "skip": "Saltar al contenido",
+    "label": "Secciones",
+    "menu": "Menú",
+    "home": "Nicolás Osorio, volver al inicio",
+    "items": [
+      { "id": "numbers", "label": "En cifras" },
+      { "id": "projects", "label": "Proyectos" },
+      { "id": "experience", "label": "Experiencia" },
+      { "id": "how-i-work", "label": "Cómo trabajo" },
+      { "id": "stack", "label": "Stack" },
+      { "id": "contact", "label": "Contacto" }
+    ],
+    "railTop": "Inicio",
+    "language": {
+      "label": "Idioma",
+      "current": "ES",
+      "other": "EN",
+      "otherHref": "/",
+      "otherLang": "en",
+      "otherName": "Read in English"
+    }
+  },
+  "hero": {
+    "name": "Nicolás Osorio",
+    "role": "Senior Full-Stack & AI Product Engineer",
+    "opening": {
+      "before": "Llevo productos de la idea a producción, diseñándolos, construyéndolos y liderándolos de punta a punta, e ",
+      "highlight": "incorporo IA donde crea valor real",
+      "after": " para el negocio y para las personas que los usan."
+    },
+    "portraitAlt": "Retrato de Nicolás Osorio",
+    "ctaProjects": "Ver proyectos",
+    "cvLabel": "Descargar CV",
+    "cvEn": "EN",
+    "cvEnName": "Descargar CV en inglés (PDF)",
+    "cvEs": "ES",
+    "cvEsName": "Descargar CV en español (PDF)",
+    "ctaContact": "Contacto",
+    "differentiatorsLabel": "Diferenciadores",
+    "differentiators": ["Funcionalidades de producto con IA", "Performance a escala", "Accesible desde el diseño"]
+  },
+  "numbers": {
+    "title": "En cifras",
+    "context": "Durante más de 5 años en Blackboard Anthology construí para una plataforma educativa y contribuí a proyectos de punta a punta en evaluación y autoría de contenido.",
+    "items": [
+      { "value": 7, "suffix": "+", "label": "años construyendo producto" },
+      { "value": 100, "suffix": "M+", "label": "usuarios en la plataforma" },
+      { "value": 50, "suffix": "+", "label": "proyectos de punta a punta" },
+      { "value": 70, "suffix": "", "label": "países" }
+    ]
+  },
+  "projects": {
+    "title": "Proyectos destacados",
+    "intro": "Pruebas, no adjetivos. Cada caso en cuatro pasos: el problema, qué construí, el resultado y el stack.",
+    "labels": {
+      "problem": "Problema",
+      "built": "Qué construí",
+      "result": "Resultado",
+      "stack": "Stack",
+      "external": "se abre en una pestaña nueva",
+      "private": "Demo interna, sin enlace público"
+    },
+    "items": [
+      {
+        "id": "servicios-informaticos",
+        "title": "Asistente de IA para Servicios Informáticos",
+        "org": "Freelance",
+        "problem": "Una empresa de servicios B2B necesitaba que su sitio web generara contactos calificados.",
+        "built": "El sitio corporativo de punta a punta (descubrimiento, arquitectura de información, sistema de diseño y desarrollo) y un asistente de IA construido sobre Claude que responde las preguntas de los visitantes con el contenido del propio sitio y les deja redactado su mensaje de WhatsApp.",
+        "result": "El asistente atiende a cada visitante y convierte sus preguntas en contactos de WhatsApp ya redactados, a un toque de escribirle al negocio.",
+        "stack": ["Claude (Anthropic API)", "[PENDING: resto del stack]"],
+        "link": { "href": "https://serviciosinformaticos.com.co", "label": "serviciosinformaticos.com.co" }
+      },
+      {
+        "id": "assessment-ai",
+        "title": "Autoría de evaluaciones asistida por IA",
+        "org": "Blackboard Anthology · Prototipo",
+        "problem": "Los docentes necesitaban una forma más rápida de crear evaluaciones enfocadas en un tema o una clase específica.",
+        "built": "Por iniciativa propia, una funcionalidad de IA con GPT que ayuda a los docentes a generar preguntas a partir de un tema o de un banco de preguntas, mejorar sus textos y obtener sugerencias de retroalimentación para calificar.",
+        "result": "Una demo funcional de punta a punta dentro de una plataforma con más de 100M de usuarios, construida por iniciativa propia.",
+        "stack": ["GPT (OpenAI API)", "[PENDING: resto del stack]"],
+        "link": null
+      },
+      {
+        "id": "rosita-store",
+        "title": "Plataforma de Rosita Store",
+        "org": "Freelance",
+        "problem": "El sitio de e-commerce original del negocio se cayó y con él sus ventas en línea.",
+        "built": "Una plataforma de e-commerce reconstruida sobre nueva infraestructura, más herramientas internas y bases de datos operativas que automatizan los procesos comerciales del negocio.",
+        "result": "Recuperó las ventas en línea del negocio. En producción en rositastore.co.",
+        "stack": ["[PENDING]"],
+        "link": { "href": "https://rositastore.co", "label": "rositastore.co" }
+      },
+      {
+        "id": "sportlife",
+        "title": "Segmentación con ML para Sportlife",
+        "org": "Fusepong",
+        "problem": "Una cadena de gimnasios chilena quería aumentar la retención de clientes.",
+        "built": "Un sistema de segmentación basado en datos de clientes, con predicción de preferencias por ML, que alimenta un sistema de campañas dirigidas, junto con un módulo completo de reservas y control de acceso por huella.",
+        "result": "Segmentación con ML que alimenta campañas de retención dirigidas.",
+        "stack": ["Python", "scikit-learn", "[PENDING: resto del stack]"],
+        "link": null
+      },
+      {
+        "id": "easymail",
+        "title": "Easymail, como único desarrollador",
+        "org": "Fusepong",
+        "problem": "Una plataforma de gestión de envíos necesitaba backend, backoffice web y app para iOS y Android.",
+        "built": "Las tres piezas, como único desarrollador del proyecto.",
+        "result": "Entregada en [PENDING: 30 o 70] días.",
+        "stack": ["[PENDING]"],
+        "link": null
+      }
+    ]
+  },
+  "experience": {
+    "title": "Experiencia",
+    "items": [
+      {
+        "period": "may 2026 – hoy",
+        "org": "Freelance",
+        "role": "Full-Stack & AI Developer · Consultor técnico",
+        "current": true,
+        "points": [
+          "Construí y lancé un asistente de IA (Claude) para el sitio de Servicios Informáticos que responde con el contenido del propio sitio y deja redactado el mensaje de WhatsApp.",
+          "Reconstruí la plataforma de e-commerce de Rosita Store sobre nueva infraestructura tras la caída del sitio original, y construí las herramientas internas que automatizan sus procesos comerciales.",
+          "Uso herramientas agénticas de programación con IA (Claude Code) en todo el ciclo del proyecto: especificación, implementación, revisión y documentación."
+        ]
+      },
+      {
+        "period": "dic 2020 – may 2026",
+        "org": "Blackboard Anthology",
+        "role": "Mid-Senior Software Engineer",
+        "current": false,
+        "points": [
+          "Contribuí a más de 50 proyectos de punta a punta en una plataforma educativa global con más de 100M de usuarios en 70 países, siendo dueño del alcance, la planeación y la implementación full-stack en los proyectos que lideré.",
+          "Diseñé y prototipé, por iniciativa propia, una funcionalidad de autoría de evaluaciones con GPT que funciona de punta a punta.",
+          "Me convertí en el referente del equipo en performance y accesibilidad (WCAG, Section 508) e hice de ambas un estándar del día a día.",
+          "Ascendí de Junior a Mid-Senior en el primer año."
+        ]
+      },
+      {
+        "period": "ene 2019 – jul 2020",
+        "org": "Fusepong",
+        "role": "Full-Stack Developer & Project Lead",
+        "current": false,
+        "points": [
+          "Diseñé e implementé la segmentación de clientes con ML (scikit-learn) para Sportlife, una cadena de gimnasios chilena, que alimenta campañas de retención dirigidas.",
+          "Entregué Easymail como único desarrollador: backend, backoffice web y app para iOS y Android.",
+          "Desplegué y administré infraestructura en AWS (EC2, S3) para tres productos en producción."
+        ]
+      }
+    ]
+  },
+  "howIWork": {
+    "title": "Cómo trabajo",
+    "items": [
+      {
+        "title": "Funcionalidades de producto con IA",
+        "body": "Incorporo IA donde crea valor real. Por iniciativa propia prototipé en Blackboard una funcionalidad de autoría con GPT; hoy lanzo asistentes construidos sobre Claude y uso Claude Code desde la especificación hasta la implementación, la revisión y la documentación."
+      },
+      {
+        "title": "Performance a escala",
+        "body": "Cinco años construyendo para una plataforma con más de 100M de usuarios en 70 países. Probé el performance de cada proyecto que entregué y presenté las métricas de degradación en las revisiones de Definition of Done."
+      },
+      {
+        "title": "Accesible desde el diseño",
+        "body": "Me convertí en el referente del equipo en accesibilidad (WCAG, Section 508): probaba las funcionalidades con lectores de pantalla y convertí las buenas prácticas en estándar diario. Este sitio está construido con la misma exigencia."
+      }
+    ],
+    "teamLabel": "Lo que aporto a un equipo",
+    "team": "ownership desde el primer día, un estándar alto de calidad y la iniciativa de proponer lo que sigue, no solo construir lo que se pide."
+  },
+  "stack": {
+    "title": "Stack",
+    "items": ["React", "Vue", "Node.js", "TypeScript", "Java", "Python", "Ruby on Rails", "AWS", "Claude Code"]
+  },
+  "contact": {
+    "title": "Contacto",
+    "body": "Busco un rol senior de ingeniería full-stack o de producto con IA en una empresa remota y orientada a producto, donde pueda ser dueño de un área de punta a punta, idealmente en un producto con impacto real en la vida de las personas.",
+    "emailLabel": "Correo",
+    "email": "nicolas7osorio@gmail.com",
+    "copy": "Copiar correo",
+    "copied": "Correo copiado al portapapeles",
+    "linkedin": "LinkedIn",
+    "linkedinHref": "https://www.linkedin.com/in/nicolas-osorio-arias",
+    "cvTitle": "CV"
+  },
+  "footer": {
+    "outside": "Fuera del código: entreno en el gimnasio, la música y la cocina saludable.",
+    "built": "Hecho con Astro. Estático, rápido y navegable con teclado.",
+    "rights": "© 2026 Nicolás Osorio",
+    "top": "Volver arriba"
+  }
+}

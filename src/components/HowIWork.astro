@@ -1,0 +1,131 @@
+---
+import type { Content } from '../i18n';
+
+interface Props {
+  t: Content;
+}
+
+const { t } = Astro.props;
+const { howIWork } = t;
+---
+
+<section class="section how" id="how-i-work" aria-labelledby="how-title">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <span class="flow-node" aria-hidden="true" data-flow-node></span>
+      <h2 id="how-title">{howIWork.title}</h2>
+    </div>
+
+    <ul class="principles">
+      {
+        howIWork.items.map((item, index) => (
+          <li style={`--reveal-delay: ${index * 110}ms`} data-reveal>
+            <span class="principles__node" aria-hidden="true" />
+            <h3>{item.title}</h3>
+            <p>{item.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p class="team" data-reveal>
+      <span class="team__lead">{howIWork.teamLabel}:</span>
+      {howIWork.team}
+    </p>
+  </div>
+</section>
+
+<style>
+  .principles {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1.5rem, 1rem + 2.5vw, 3.5rem);
+    list-style: none;
+  }
+
+  .principles::before {
+    content: '';
+    position: absolute;
+    top: 6px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent), var(--line) 70%, transparent);
+  }
+
+  .principles li {
+    display: grid;
+    align-content: start;
+    gap: 1rem;
+  }
+
+  .principles__node {
+    width: 13px;
+    height: 13px;
+    border: 1px solid var(--accent);
+    background: var(--night);
+    transform: rotate(45deg);
+    box-shadow: 0 0 0 5px var(--night);
+  }
+
+  .principles h3 {
+    margin-top: 0.75rem;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.25rem);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .principles p {
+    max-width: 38ch;
+  }
+
+  .team {
+    max-width: 24em;
+    margin-top: clamp(4rem, 3rem + 4vw, 6.5rem);
+    color: var(--text);
+    font-size: clamp(1.6rem, 1.1rem + 2.2vw, 2.75rem);
+    font-weight: 600;
+    line-height: 1.18;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  .team__lead {
+    color: var(--text-2);
+  }
+
+  @media (max-width: 860px) {
+    .principles {
+      grid-template-columns: minmax(0, 1fr);
+      padding-left: 34px;
+    }
+
+    .principles::before {
+      top: 8px;
+      bottom: 8px;
+      left: 6px;
+      right: auto;
+      width: 1px;
+      height: auto;
+      background: linear-gradient(180deg, var(--accent), var(--line));
+    }
+
+    .principles li {
+      position: relative;
+    }
+
+    .principles__node {
+      position: absolute;
+      top: 6px;
+      left: -34px;
+    }
+
+    .principles h3 {
+      margin-top: 0;
+    }
+
+  }
+</style>

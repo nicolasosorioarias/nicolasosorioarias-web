@@ -1,0 +1,50 @@
+/* Brand tokens. Values come from docs/PROJECT.md ("Identidad visual"). */
+:root {
+  /* Primitives */
+  --night: #0a1222;
+  --night-raised: #0e1a31;
+  --night-deep: #070d19;
+  --electric: #5b8cff;
+  --electric-light: #a9c4ff;
+  --electric-label: #8ab8ff;
+  --ink: #f4f7fd;
+  --ink-soft: #b8c6e0;
+  --violet: #8c5cff;
+
+  /* Semantic */
+  --bg: var(--night);
+  --surface: var(--night-raised);
+  --text: var(--ink);
+  --text-2: var(--ink-soft);
+  --label: var(--electric-label);
+  --accent: var(--electric);
+  --key: var(--electric-light);
+  --line: rgb(91 140 255 / 0.22);
+  --line-strong: rgb(91 140 255 / 0.45);
+  --halo: rgb(140 92 255 / 0.2);
+  --focus: var(--electric-light);
+
+  /* Type */
+  --font-display: 'Sora Variable', 'Sora Fallback', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Plex Mono Fallback', ui-monospace, monospace;
+
+  --fs-label: 0.8125rem;
+  --fs-small: 0.9375rem;
+  --fs-body: 1.0625rem;
+  --fs-lead: clamp(1.125rem, 0.95rem + 0.8vw, 1.4rem);
+  --fs-h3: clamp(1.25rem, 1.05rem + 0.8vw, 1.6rem);
+  --fs-h2: clamp(2rem, 1.4rem + 2.6vw, 3.25rem);
+  --fs-display: clamp(2.75rem, 1.6rem + 5vw, 5.25rem);
+
+  /* Space */
+  --gutter: clamp(20px, 5vw, 48px);
+  --section-space: clamp(5.5rem, 4rem + 7vw, 10rem);
+  --container: 1160px;
+  --header-h: 64px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 160ms;
+  --dur-base: 320ms;
+  --dur-slow: 900ms;
+}

@@ -1,0 +1,445 @@
+@import './tokens.css';
+
+/* Metric-matched fallbacks so the swap to the web fonts does not shift the layout. */
+@font-face {
+  font-family: 'Sora Fallback';
+  src: local('Arial');
+  size-adjust: 112%;
+}
+
+@font-face {
+  font-family: 'Plex Mono Fallback';
+  src: local('Courier New');
+  size-adjust: 100%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--header-h) + 24px);
+  scrollbar-color: rgb(91 140 255 / 0.4) var(--night-deep);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--bg);
+  /* Very faint dot texture from the banner. */
+  background-image: radial-gradient(rgb(169 196 255 / 0.05) 1px, transparent 1px);
+  background-size: 22px 22px;
+  color: var(--text-2);
+  font-family: var(--font-display);
+  font-size: var(--fs-body);
+  font-weight: 400;
+  line-height: 1.65;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Top light line. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0 0 auto;
+  height: 1px;
+  z-index: 60;
+  background: linear-gradient(90deg, transparent, var(--accent) 30%, var(--key) 50%, var(--accent) 70%, transparent);
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--night);
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  color: var(--text);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+}
+
+img,
+svg,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: var(--key);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  transition: color var(--dur-fast) ease;
+}
+
+a:hover {
+  color: var(--text);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 100;
+  padding: 10px 16px;
+  border-radius: 6px;
+  background: var(--accent);
+  color: var(--night);
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(-160%);
+  transition: transform var(--dur-fast) ease;
+}
+
+.skip-link:focus-visible {
+  transform: none;
+  color: var(--night);
+}
+
+.container {
+  width: 100%;
+  max-width: calc(var(--container) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* Room on the left for the signal line that runs through the page. */
+:root {
+  --flow-pad: calc(var(--gutter) + 18px);
+}
+
+@media (min-width: 1180px) {
+  :root {
+    --flow-pad: 96px;
+  }
+}
+
+.container {
+  padding-inline-start: var(--flow-pad);
+}
+
+.flow {
+  position: relative;
+}
+
+.flow::before,
+.flow__fill {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(max(0px, (100% - (var(--container) + 2 * var(--gutter))) / 2) + var(--flow-pad) / 2);
+  width: 1px;
+  pointer-events: none;
+}
+
+.flow::before {
+  background: var(--line);
+}
+
+.flow__fill {
+  display: block;
+  background: linear-gradient(180deg, var(--accent), var(--key));
+  transform: scaleY(var(--progress, 0));
+  transform-origin: top;
+}
+
+/* A node on the signal line, placed from inside a .container. */
+.flow-node {
+  position: absolute;
+  left: calc(var(--flow-pad) / -2 - 6px);
+  width: 13px;
+  height: 13px;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  background: var(--night);
+  box-shadow: 0 0 0 5px var(--night);
+  transition:
+    background-color var(--dur-base) ease,
+    border-color var(--dur-base) ease,
+    box-shadow var(--dur-base) ease;
+}
+
+.flow-node.is-lit {
+  background: var(--key);
+  border-color: var(--key);
+  box-shadow:
+    0 0 0 5px var(--night),
+    0 0 0 9px rgb(169 196 255 / 0.16);
+}
+
+.section {
+  position: relative;
+  padding-block: var(--section-space);
+}
+
+.section-head {
+  position: relative;
+  display: grid;
+  gap: 1rem;
+  max-width: 44rem;
+  margin-bottom: clamp(2.5rem, 2rem + 2vw, 4rem);
+}
+
+.section-head h2 {
+  font-size: var(--fs-h2);
+}
+
+.section-head > .flow-node {
+  top: calc(var(--fs-h2) * 0.56 - 7px);
+}
+
+.section-head p {
+  font-size: var(--fs-lead);
+  line-height: 1.55;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--label);
+}
+
+/* Small diamond used inline between items. */
+.diamond {
+  display: inline-block;
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border: 1px solid var(--accent);
+  transform: rotate(45deg);
+}
+
+/* Fine corner marks. */
+.corners {
+  position: relative;
+}
+
+.corners::before,
+.corners::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+  border-color: var(--line-strong);
+  border-style: solid;
+}
+
+.corners::before {
+  top: -1px;
+  left: -1px;
+  border-width: 1px 0 0 1px;
+}
+
+.corners::after {
+  right: -1px;
+  bottom: -1px;
+  border-width: 0 1px 1px 0;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 22px;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  font-family: var(--font-display);
+  font-size: 0.9875rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color var(--dur-fast) ease,
+    color var(--dur-fast) ease,
+    border-color var(--dur-fast) ease,
+    transform var(--dur-fast) ease;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--night);
+}
+
+.btn-primary:hover {
+  background: var(--key);
+  border-color: var(--key);
+  color: var(--night);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+}
+
+.btn-ghost:hover {
+  background: rgb(91 140 255 / 0.12);
+  color: var(--text);
+}
+
+.btn svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+/* Split CV control: one label, two downloads. */
+.cv-group {
+  display: inline-flex;
+  align-items: stretch;
+  min-height: 48px;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.cv-group__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px 0 18px;
+  color: var(--text);
+  font-size: 0.9875rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.cv-group__label svg {
+  width: 16px;
+  height: 16px;
+  color: var(--key);
+}
+
+.cv-group a {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 16px;
+  border-left: 1px solid var(--line-strong);
+  color: var(--key);
+  font-family: var(--font-mono);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    background-color var(--dur-fast) ease,
+    color var(--dur-fast) ease;
+}
+
+.cv-group a:hover {
+  background: rgb(91 140 255 / 0.14);
+  color: var(--text);
+}
+
+.cv-group a:focus-visible {
+  outline-offset: -3px;
+  border-radius: 0;
+}
+
+/* Visible gap in the copy, see docs/PROJECT.md. */
+mark.pending {
+  padding: 0.05em 0.35em;
+  border: 1px dashed rgb(169 196 255 / 0.55);
+  border-radius: 4px;
+  background: rgb(91 140 255 / 0.1);
+  color: var(--key);
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  white-space: nowrap;
+}
+
+/* Reveal: content is visible by default; only hidden when motion is allowed and JS runs. */
+html.motion [data-reveal]:not(.is-in) {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: reveal-fallback 0s linear 2.5s forwards;
+}
+
+html.motion [data-reveal] {
+  transition:
+    opacity 700ms var(--ease-out),
+    transform 900ms var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+@keyframes reveal-fallback {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

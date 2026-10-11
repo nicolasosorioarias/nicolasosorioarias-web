@@ -1,0 +1,67 @@
+---
+import Icon from './Icon.astro';
+import type { Content } from '../i18n';
+
+interface Props {
+  t: Content;
+}
+
+const { t } = Astro.props;
+const { footer } = t;
+---
+
+<footer class="footer">
+  <div class="container footer__inner">
+    <p class="footer__outside">{footer.outside}</p>
+    <div class="footer__meta">
+      <p>{footer.rights}</p>
+      <p>{footer.built}</p>
+      <a class="footer__top" href="#top">
+        <Icon name="arrow-up" />
+        {footer.top}
+      </a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding-block: 3rem 3.5rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .footer__inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1.5rem 3rem;
+  }
+
+  .footer__outside {
+    max-width: 40ch;
+    color: var(--text-2);
+  }
+
+  .footer__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.75rem;
+    color: var(--text-2);
+    font-family: var(--font-mono);
+    font-size: var(--fs-label);
+  }
+
+  .footer__top {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    white-space: nowrap;
+  }
+
+  .footer__top :global(svg) {
+    width: 15px;
+    height: 15px;
+  }
+</style>

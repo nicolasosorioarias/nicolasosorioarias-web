@@ -1,0 +1,300 @@
+---
+import type { Content } from '../i18n';
+
+interface Props {
+  t: Content;
+}
+
+const { t } = Astro.props;
+const { nav } = t;
+---
+
+<header class="site-header" data-header>
+  <div class="site-header__inner">
+    <a class="brand" href="#top" aria-label={nav.home}>
+      <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true">
+        <circle cx="16" cy="16" r="11" fill="none" stroke="currentColor" stroke-opacity=".5"></circle>
+        <circle cx="16" cy="16" r="4.5" fill="#A9C4FF"></circle>
+        <circle cx="26" cy="8" r="2" fill="currentColor"></circle>
+        <path d="M19.4 12.6 24.6 9.4" stroke="currentColor"></path>
+      </svg>
+      <span>{t.hero.name}</span>
+    </a>
+
+    <nav class="primary-nav" aria-label={nav.label}>
+      <ul>
+        {nav.items.map((item) => (
+          <li>
+            <a href={`#${item.id}`}>{item.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="site-header__end">
+      <a
+        class="lang"
+        href={nav.language.otherHref}
+        hreflang={nav.language.otherLang}
+        lang={nav.language.otherLang}
+      >
+        <span class="lang__current" aria-hidden="true">{nav.language.current}</span>
+        <span class="lang__sep" aria-hidden="true">/</span>
+        <span class="lang__other">{nav.language.other}</span>
+        <span class="sr-only">, {nav.language.otherName}</span>
+      </a>
+
+      <details class="menu">
+        <summary>
+          <span>{nav.menu}</span>
+          <span class="menu__icon" aria-hidden="true"></span>
+        </summary>
+        <nav class="menu__panel" aria-label={nav.label}>
+          <ul>
+            {nav.items.map((item) => (
+              <li>
+                <a href={`#${item.id}`}>{item.label}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </details>
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    height: var(--header-h);
+    border-bottom: 1px solid transparent;
+    transition:
+      background-color var(--dur-base) ease,
+      border-color var(--dur-base) ease;
+  }
+
+  .site-header:global(.is-scrolled) {
+    background: rgb(10 18 34 / 0.94);
+    border-bottom-color: var(--line);
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    height: 100%;
+    max-width: calc(var(--container) + 2 * var(--gutter) + 96px);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text);
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .brand__mark {
+    width: 26px;
+    height: 26px;
+    color: var(--accent);
+  }
+
+  .primary-nav {
+    margin-inline-start: auto;
+  }
+
+  .primary-nav ul {
+    display: flex;
+    gap: 4px;
+    list-style: none;
+  }
+
+  .primary-nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0 12px;
+    border-radius: 6px;
+    color: var(--text-2);
+    font-size: var(--fs-small);
+    text-decoration: none;
+  }
+
+  .primary-nav a:hover {
+    color: var(--text);
+    background: rgb(91 140 255 / 0.1);
+  }
+
+  .site-header__end {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .lang {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 40px;
+    padding: 0 12px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: var(--fs-label);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+  }
+
+  .lang__current {
+    color: var(--text);
+  }
+
+  .lang__sep {
+    color: var(--line-strong);
+  }
+
+  .lang__other {
+    color: var(--label);
+  }
+
+  .lang:hover {
+    border-color: var(--accent);
+  }
+
+  .lang:hover .lang__other {
+    color: var(--text);
+  }
+
+  .menu {
+    position: relative;
+    display: none;
+  }
+
+  .menu summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 40px;
+    padding: 0 12px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: var(--fs-small);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .menu summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .menu__icon {
+    position: relative;
+    width: 14px;
+    height: 8px;
+    border-block: 1.5px solid var(--key);
+    transition: transform var(--dur-fast) ease;
+  }
+
+  .menu[open] .menu__icon {
+    transform: rotate(90deg);
+  }
+
+  .menu__panel {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    min-width: 220px;
+    padding: 8px;
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    background: var(--night-raised);
+    box-shadow: 0 12px 24px -10px rgb(0 0 0 / 0.55);
+  }
+
+  .menu__panel ul {
+    list-style: none;
+  }
+
+  .menu__panel a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 12px;
+    border-radius: 6px;
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .menu__panel a:hover {
+    background: rgb(91 140 255 / 0.12);
+  }
+
+  @media (max-width: 959px) {
+    .primary-nav {
+      display: none;
+    }
+
+    .site-header__end {
+      margin-inline-start: auto;
+    }
+
+    .menu {
+      display: block;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .brand span {
+      font-size: 0.9375rem;
+    }
+  }
+</style>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const menu = header?.querySelector<HTMLDetailsElement>('.menu');
+
+  if (header) {
+    let ticking = false;
+    const update = () => {
+      header.classList.toggle('is-scrolled', window.scrollY > 24);
+      ticking = false;
+    };
+    update();
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(update);
+        }
+      },
+      { passive: true },
+    );
+  }
+
+  if (menu) {
+    // Close the mobile menu after choosing a section, on Escape, or on an outside click.
+    menu.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => (menu.open = false)));
+    menu.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && menu.open) {
+        menu.open = false;
+        menu.querySelector('summary')?.focus();
+      }
+    });
+    document.addEventListener('click', (event) => {
+      if (menu.open && !menu.contains(event.target as Node)) menu.open = false;
+    });
+  }
+</script>

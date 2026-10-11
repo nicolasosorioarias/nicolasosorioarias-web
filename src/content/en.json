@@ -1,0 +1,203 @@
+{
+  "meta": {
+    "lang": "en",
+    "locale": "en_US",
+    "title": "Nicolás Osorio · Senior Software Engineer, Full-Stack & AI Product",
+    "description": "I take products from idea to production, designing, building and leading them end to end, and I bring AI into them where it creates real value for the business and the people who use it."
+  },
+  "nav": {
+    "skip": "Skip to content",
+    "label": "Sections",
+    "menu": "Menu",
+    "home": "Nicolás Osorio, back to top",
+    "items": [
+      { "id": "numbers", "label": "In numbers" },
+      { "id": "projects", "label": "Projects" },
+      { "id": "experience", "label": "Experience" },
+      { "id": "how-i-work", "label": "How I work" },
+      { "id": "stack", "label": "Stack" },
+      { "id": "contact", "label": "Contact" }
+    ],
+    "railTop": "Top",
+    "language": {
+      "label": "Language",
+      "current": "EN",
+      "other": "ES",
+      "otherHref": "/es/",
+      "otherLang": "es",
+      "otherName": "Leer en español"
+    }
+  },
+  "hero": {
+    "name": "Nicolás Osorio",
+    "role": "Senior Full-Stack & AI Product Engineer",
+    "opening": {
+      "before": "I take products from idea to production, designing, building and leading them end to end, and ",
+      "highlight": "I bring AI into them where it creates real value",
+      "after": " for the business and the people who use it."
+    },
+    "portraitAlt": "Portrait of Nicolás Osorio",
+    "ctaProjects": "View projects",
+    "cvLabel": "Download CV",
+    "cvEn": "EN",
+    "cvEnName": "Download CV in English (PDF)",
+    "cvEs": "ES",
+    "cvEsName": "Download CV in Spanish (PDF)",
+    "ctaContact": "Contact",
+    "differentiatorsLabel": "Differentiators",
+    "differentiators": ["AI product features", "Performance at scale", "Accessible by design"]
+  },
+  "numbers": {
+    "title": "In numbers",
+    "context": "For 5+ years at Blackboard Anthology, I built for a learning platform, contributing to end-to-end projects in assessment and content authoring.",
+    "items": [
+      { "value": 7, "suffix": "+", "label": "years building product" },
+      { "value": 100, "suffix": "M+", "label": "users on the platform" },
+      { "value": 50, "suffix": "+", "label": "end-to-end projects" },
+      { "value": 70, "suffix": "", "label": "countries reached" }
+    ]
+  },
+  "projects": {
+    "title": "Featured projects",
+    "intro": "Proof, not adjectives. Each case in four steps: the problem, what I built, the result and the stack.",
+    "labels": {
+      "problem": "Problem",
+      "built": "What I built",
+      "result": "Result",
+      "stack": "Stack",
+      "external": "opens in a new tab",
+      "private": "Internal demo, no public link"
+    },
+    "items": [
+      {
+        "id": "servicios-informaticos",
+        "title": "AI assistant for Servicios Informáticos",
+        "org": "Freelance",
+        "problem": "A B2B services company needed its website to generate qualified inbound leads.",
+        "built": "End-to-end delivery of the corporate site (discovery, information architecture, design system and development) and an AI assistant built on Claude that answers visitors' questions from the site's own content and pre-drafts their WhatsApp message.",
+        "result": "The assistant is active for every visitor and turns questions into pre-drafted WhatsApp leads, one tap away from contacting the business.",
+        "stack": ["Claude (Anthropic API)", "[PENDING: rest of stack]"],
+        "link": { "href": "https://serviciosinformaticos.com.co", "label": "serviciosinformaticos.com.co" }
+      },
+      {
+        "id": "assessment-ai",
+        "title": "AI-assisted assessment authoring",
+        "org": "Blackboard Anthology · Prototype",
+        "problem": "Instructors needed a faster way to build assessments targeted to a specific topic or class.",
+        "built": "On my own initiative, a working AI feature powered by GPT that helps instructors generate questions from a topic or an existing question bank, improve their texts and get suggested grading feedback.",
+        "result": "A working end-to-end demo inside a platform serving 100M+ users, built on my own initiative.",
+        "stack": ["GPT (OpenAI API)", "[PENDING: rest of stack]"],
+        "link": null
+      },
+      {
+        "id": "rosita-store",
+        "title": "Rosita Store platform",
+        "org": "Freelance",
+        "problem": "The business's original e-commerce site went down, taking its online sales with it.",
+        "built": "A rebuilt e-commerce platform on new infrastructure, plus internal tooling and operational databases that automate the business's commercial processes.",
+        "result": "Restored the business's online sales. Live at rositastore.co.",
+        "stack": ["[PENDING]"],
+        "link": { "href": "https://rositastore.co", "label": "rositastore.co" }
+      },
+      {
+        "id": "sportlife",
+        "title": "ML segmentation for Sportlife",
+        "org": "Fusepong",
+        "problem": "A Chilean gym chain wanted to expand customer retention.",
+        "built": "A client-data-driven segmentation system with ML-based preference prediction, feeding a targeted-campaign system, alongside a full booking module and fingerprint access control.",
+        "result": "ML-based segmentation feeding targeted retention campaigns.",
+        "stack": ["Python", "scikit-learn", "[PENDING: rest of stack]"],
+        "link": null
+      },
+      {
+        "id": "easymail",
+        "title": "Easymail, as the sole developer",
+        "org": "Fusepong",
+        "problem": "A shipping-management platform needed a backend, a web back office and an iOS/Android app.",
+        "built": "All three, as the only developer on the project.",
+        "result": "Shipped in [PENDING: 30 or 70] days.",
+        "stack": ["[PENDING]"],
+        "link": null
+      }
+    ]
+  },
+  "experience": {
+    "title": "Experience",
+    "items": [
+      {
+        "period": "May 2026 – Present",
+        "org": "Freelance",
+        "role": "Full-Stack & AI Developer · Technical Consultant",
+        "current": true,
+        "points": [
+          "Built and shipped an AI assistant (Claude) for the Servicios Informáticos website that answers visitor questions from the site's own content and pre-drafts a WhatsApp message.",
+          "Rebuilt Rosita Store's e-commerce platform on new infrastructure after the original site went down, and built the internal tooling that automates its commercial processes.",
+          "Use agentic AI coding tools (Claude Code) across the full project lifecycle: spec, implementation, review and documentation."
+        ]
+      },
+      {
+        "period": "Dec 2020 – May 2026",
+        "org": "Blackboard Anthology",
+        "role": "Mid-Senior Software Engineer",
+        "current": false,
+        "points": [
+          "Contributed to 50+ end-to-end projects on a global learning platform serving 100M+ users across 70 countries, owning scope, planning and full-stack implementation on the projects I led.",
+          "Designed and prototyped, on my own initiative, a working GPT-powered assessment-authoring feature.",
+          "Became the team's go-to engineer for performance and accessibility (WCAG, Section 508), and turned both into everyday standards.",
+          "Promoted from Junior to Mid-Senior Engineer within the first year."
+        ]
+      },
+      {
+        "period": "Jan 2019 – Jul 2020",
+        "org": "Fusepong",
+        "role": "Full-Stack Developer & Project Lead",
+        "current": false,
+        "points": [
+          "Designed and implemented ML-based customer segmentation (scikit-learn) for Sportlife, a Chilean gym chain, feeding targeted retention campaigns.",
+          "Shipped Easymail as the sole developer: backend, web back office and iOS/Android app.",
+          "Deployed and administered AWS infrastructure (EC2, S3) across three production products."
+        ]
+      }
+    ]
+  },
+  "howIWork": {
+    "title": "How I work",
+    "items": [
+      {
+        "title": "AI product features",
+        "body": "I bring AI into products where it creates real value. On my own initiative I prototyped a GPT-powered authoring feature at Blackboard; today I ship assistants built on Claude, and I use Claude Code from spec to implementation, review and documentation."
+      },
+      {
+        "title": "Performance at scale",
+        "body": "Five years building for a platform serving 100M+ users across 70 countries. I tested the performance of every project I delivered and presented degradation metrics in Definition of Done reviews."
+      },
+      {
+        "title": "Accessible by design",
+        "body": "I became the team's go-to engineer for accessibility (WCAG, Section 508), testing features with screen readers and turning best practices into everyday standards. This site is built to the same bar."
+      }
+    ],
+    "teamLabel": "What I bring to a team",
+    "team": "ownership from day one, a high bar for quality, and the initiative to propose what's next, not just build what's asked."
+  },
+  "stack": {
+    "title": "Stack",
+    "items": ["React", "Vue", "Node.js", "TypeScript", "Java", "Python", "Ruby on Rails", "AWS", "Claude Code"]
+  },
+  "contact": {
+    "title": "Contact",
+    "body": "I'm looking for a senior full-stack or AI product engineering role in a remote, product-driven company where I can own an area end to end, ideally in a product with real impact on people's lives.",
+    "emailLabel": "Email",
+    "email": "nicolas7osorio@gmail.com",
+    "copy": "Copy email",
+    "copied": "Email copied to the clipboard",
+    "linkedin": "LinkedIn",
+    "linkedinHref": "https://www.linkedin.com/in/nicolas-osorio-arias",
+    "cvTitle": "CV"
+  },
+  "footer": {
+    "outside": "Outside of code: training at the gym, music and healthy cooking.",
+    "built": "Built with Astro. Static, fast and keyboard-friendly.",
+    "rights": "© 2026 Nicolás Osorio",
+    "top": "Back to top"
+  }
+}

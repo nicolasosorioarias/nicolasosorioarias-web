@@ -1,0 +1,86 @@
+---
+import type { Content } from '../i18n';
+
+interface Props {
+  t: Content;
+}
+
+const { t } = Astro.props;
+const { stack } = t;
+---
+
+<section class="section stack" id="stack" aria-labelledby="stack-title">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <span class="flow-node" aria-hidden="true" data-flow-node></span>
+      <h2 id="stack-title">{stack.title}</h2>
+    </div>
+
+    <ul class="grid" data-reveal>
+      {
+        stack.items.map((item) => (
+          <li>
+            <span class="grid__node" aria-hidden="true" />
+            {item}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    list-style: none;
+    border-top: 1px solid var(--line);
+    border-left: 1px solid var(--line);
+  }
+
+  .grid li {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-height: clamp(76px, 60px + 3vw, 104px);
+    padding: 0 clamp(16px, 2vw, 28px);
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: clamp(1rem, 0.9rem + 0.5vw, 1.3rem);
+    font-weight: 500;
+    transition: background-color var(--dur-base) ease;
+  }
+
+  .grid li:hover {
+    background: rgb(91 140 255 / 0.06);
+  }
+
+  .grid__node {
+    flex: none;
+    width: 9px;
+    height: 9px;
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    transition:
+      background-color var(--dur-base) ease,
+      border-color var(--dur-base) ease;
+  }
+
+  .grid li:hover .grid__node,
+  .grid li:last-child .grid__node {
+    background: var(--key);
+    border-color: var(--key);
+  }
+
+  @media (max-width: 640px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid li:last-child {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

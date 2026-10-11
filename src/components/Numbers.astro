@@ -1,0 +1,154 @@
+---
+import type { Content } from '../i18n';
+
+interface Props {
+  t: Content;
+}
+
+const { t } = Astro.props;
+const { numbers } = t;
+---
+
+<section class="section numbers" id="numbers" aria-labelledby="numbers-title">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <span class="flow-node" aria-hidden="true" data-flow-node></span>
+      <h2 id="numbers-title">{numbers.title}</h2>
+      <p>{numbers.context}</p>
+    </div>
+
+    <ol class="readout" data-readout>
+      {
+        numbers.items.map((item, index) => (
+          <li style={`--reveal-delay: ${index * 90}ms`} data-reveal>
+            <span class="readout__node" aria-hidden="true" />
+            <span class="readout__value" aria-hidden="true"><span data-count={item.value}>{item.value}</span>{item.suffix}</span>
+            <span class="sr-only">{`${item.value}${item.suffix} ${item.label}`}</span>
+            <span class="readout__label" aria-hidden="true">
+              {item.label}
+            </span>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .readout {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    list-style: none;
+  }
+
+  /* The line the four values sit on. */
+  .readout::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent), var(--line) 85%, transparent);
+  }
+
+  .readout li {
+    position: relative;
+    display: grid;
+    gap: 10px;
+    padding-right: 24px;
+  }
+
+  .readout__node {
+    width: 11px;
+    height: 11px;
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    background: var(--night);
+    box-shadow: 0 0 0 4px var(--night);
+  }
+
+  .readout li:first-child .readout__node {
+    background: var(--key);
+    border-color: var(--key);
+  }
+
+  .readout__value {
+    margin-top: 18px;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: clamp(2.5rem, 1.6rem + 3.2vw, 4.25rem);
+    white-space: nowrap;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .readout__label {
+    color: var(--label);
+    font-family: var(--font-mono);
+    font-size: var(--fs-label);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 760px) {
+    .readout {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      row-gap: 40px;
+    }
+
+    .readout::before {
+      display: none;
+    }
+
+    .readout li {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+
+    .readout__node {
+      position: absolute;
+      top: -6px;
+      left: 0;
+    }
+
+    .readout__value {
+      margin-top: 4px;
+    }
+  }
+</style>
+
+<script>
+  // Count up once when the readout enters the viewport. The final value is already in the DOM.
+  const readout = document.querySelector<HTMLElement>('[data-readout]');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (readout && !reduce && readout.getBoundingClientRect().top > window.innerHeight) {
+    const counters = Array.from(readout.querySelectorAll<HTMLElement>('[data-count]'));
+    // Only count from zero when the readout starts below the fold, so nothing visibly resets.
+    counters.forEach((counter) => (counter.textContent = '0'));
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        observer.disconnect();
+        const start = performance.now();
+        const duration = 1400;
+        const tick = (now: number) => {
+          const p = Math.min(1, (now - start) / duration);
+          const eased = 1 - Math.pow(1 - p, 4);
+          counters.forEach((counter) => {
+            const target = Number(counter.dataset.count);
+            counter.textContent = String(Math.round(target * eased));
+          });
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      },
+      { threshold: 0.4 },
+    );
+    observer.observe(readout);
+  }
+</script>

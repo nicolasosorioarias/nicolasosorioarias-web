@@ -1,0 +1,192 @@
+---
+import Icon from './Icon.astro';
+import { CV_FILES, type Content } from '../i18n';
+
+interface Props {
+  t: Content;
+}
+
+const { t } = Astro.props;
+const { contact, hero } = t;
+const [user, domain] = contact.email.split('@');
+---
+
+<section class="section contact" id="contact" aria-labelledby="contact-title">
+  <div class="container">
+    <div class="close corners" data-reveal>
+      <span class="flow-node flow-node--end" aria-hidden="true" data-flow-node></span>
+      <h2 id="contact-title">{contact.title}</h2>
+      <p class="close__body">{contact.body}</p>
+
+      <div class="close__email">
+        <div class="email-row">
+          <a class="email" href={`mailto:${contact.email}`}>{user}@<wbr />{domain}</a>
+          <button class="copy" type="button" hidden data-copy={contact.email}>
+            <Icon name="copy" class="copy__icon" />
+            <Icon name="check" class="copy__done" />
+            <span>{contact.copy}</span>
+          </button>
+        </div>
+        <p class="sr-only" role="status" aria-live="polite" data-copy-status data-message={contact.copied}></p>
+      </div>
+
+      <div class="close__actions">
+        <a class="btn btn-primary" href={contact.linkedinHref} target="_blank" rel="noopener">
+          <Icon name="linkedin" />
+          {contact.linkedin}
+          <span class="sr-only">({t.projects.labels.external})</span>
+        </a>
+        <div class="cv-group" role="group" aria-label={hero.cvLabel}>
+          <span class="cv-group__label" aria-hidden="true">
+            <Icon name="download" />
+            {hero.cvLabel}
+          </span>
+          <a href={CV_FILES.en} download hreflang="en">{hero.cvEn}<span class="sr-only">, {hero.cvEnName}</span></a>
+          <a href={CV_FILES.es} download hreflang="es">{hero.cvEs}<span class="sr-only">, {hero.cvEsName}</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact {
+    padding-top: calc(var(--section-space) * 0.4);
+  }
+
+  .close {
+    display: grid;
+    justify-items: start;
+    gap: 1.5rem;
+    padding: clamp(1.5rem, 0.75rem + 4vw, 5rem);
+    border: 1px solid var(--line);
+    background:
+      radial-gradient(60% 90% at 100% 0%, rgb(140 92 255 / 0.12), transparent 70%),
+      radial-gradient(50% 80% at 0% 100%, rgb(91 140 255 / 0.1), transparent 70%);
+  }
+
+  .close > .flow-node {
+    top: calc(clamp(1.5rem, 0.75rem + 4vw, 5rem) + var(--fs-h2) * 0.56 - 7px);
+  }
+
+  .close h2 {
+    font-size: var(--fs-h2);
+  }
+
+  .close__body {
+    max-width: 52ch;
+    font-size: var(--fs-lead);
+    line-height: 1.55;
+  }
+
+  .close__email {
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    max-width: 100%;
+  }
+
+  .email-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 20px;
+  }
+
+  .email {
+    color: var(--text);
+    font-size: clamp(1rem, 0.1rem + 4.2vw, 3.25rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    text-decoration-color: var(--accent);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.18em;
+    overflow-wrap: break-word;
+  }
+
+  .email:hover {
+    color: var(--key);
+  }
+
+  .copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 14px;
+    border: 1px solid var(--line-strong);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--key);
+    font: 500 var(--fs-label) / 1 var(--font-mono);
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition:
+      border-color var(--dur-fast) ease,
+      color var(--dur-fast) ease;
+  }
+
+  .copy:hover {
+    border-color: var(--accent);
+    color: var(--text);
+  }
+
+  .copy :global(svg) {
+    width: 16px;
+    height: 16px;
+  }
+
+  .copy :global(.copy__done),
+  .copy:global(.is-copied) :global(.copy__icon) {
+    display: none;
+  }
+
+  .copy:global(.is-copied) :global(.copy__done) {
+    display: block;
+  }
+
+  .close__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 0.5rem;
+  }
+
+  @media (max-width: 560px) {
+    .close__actions {
+      flex-direction: column;
+      align-items: stretch;
+      width: 100%;
+    }
+
+    .cv-group__label {
+      flex: 1;
+      justify-content: center;
+    }
+  }
+</style>
+
+<script>
+  const button = document.querySelector<HTMLButtonElement>('[data-copy]');
+  const status = document.querySelector<HTMLElement>('[data-copy-status]');
+
+  if (button && status && navigator.clipboard) {
+    button.hidden = false;
+    let timer = 0;
+    button.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(button.dataset.copy ?? '');
+        button.classList.add('is-copied');
+        status.textContent = status.dataset.message ?? '';
+        window.clearTimeout(timer);
+        timer = window.setTimeout(() => {
+          button.classList.remove('is-copied');
+          status.textContent = '';
+        }, 2400);
+      } catch {
+        // Clipboard can be blocked; the mailto link still works.
+      }
+    });
+  }
+</script>
