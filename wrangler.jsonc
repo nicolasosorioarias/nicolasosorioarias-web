@@ -1,0 +1,12 @@
+// Cloudflare Worker with static assets: serves the Astro build in ./dist (no Worker script yet).
+// Deploy: npm run build && npx wrangler deploy. See docs/PROJECT.md › Hosting.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "nicolasosorioarias",
+  "compatibility_date": "2026-10-11",
+  "assets": {
+    "directory": "./dist",
+    // Unknown paths get dist/404.html with a 404 status.
+    "not_found_handling": "404-page"
+  }
+}
