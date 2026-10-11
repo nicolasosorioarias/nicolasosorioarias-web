@@ -7,7 +7,7 @@ import Projects from './Projects.astro';
 import Experience from './Experience.astro';
 import HowIWork from './HowIWork.astro';
 import Stack from './Stack.astro';
-import Contact from './Contact.astro';
+import Closing from './Closing.astro';
 import Footer from './Footer.astro';
 import { getContent, type Locale } from '../i18n';
 
@@ -31,7 +31,7 @@ const t = getContent(locale);
       <Experience t={t} />
       <HowIWork t={t} />
       <Stack t={t} />
-      <Contact t={t} />
+      <Closing t={t} />
     </div>
   </main>
   <Footer t={t} />
@@ -44,6 +44,10 @@ const t = getContent(locale);
 </style>
 
 <script>
+  import { initMagnetic } from '../scripts/pointer';
+
+  initMagnetic();
+
   // Reveal sections once as they enter the viewport. Without motion or JS, content is simply visible.
   if (document.documentElement.classList.contains('motion')) {
     const targets = document.querySelectorAll<HTMLElement>('[data-reveal]');

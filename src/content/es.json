@@ -103,13 +103,13 @@
       {
         "value": 70,
         "suffix": "",
-        "label": "países"
+        "label": "países atendidos"
       }
     ]
   },
   "projects": {
     "title": "Proyectos destacados",
-    "intro": "Pruebas, no adjetivos. Cada caso en tres pasos: el problema, qué construí y el resultado.",
+    "intro": "Cinco proyectos, cada uno contado como el problema, qué construí y el resultado.",
     "labels": {
       "problem": "Problema",
       "built": "Qué construí",
@@ -124,12 +124,19 @@
         "title": "Asistente de IA para Servicios Informáticos",
         "org": "Freelance",
         "problem": "Una empresa de servicios B2B necesitaba que su sitio web generara contactos calificados.",
-        "built": "El sitio corporativo de punta a punta (descubrimiento, arquitectura de información, sistema de diseño y desarrollo) y un asistente de IA construido sobre Claude que responde las preguntas de los visitantes con el contenido del propio sitio y les deja redactado su mensaje de WhatsApp.",
+        "built": "Lideré la entrega de punta a punta del sitio corporativo (descubrimiento, arquitectura de información, sistema de diseño y desarrollo) y de un asistente de IA construido sobre Claude que responde las preguntas de los visitantes con el contenido del propio sitio y les deja redactado su mensaje de WhatsApp.",
         "result": "El asistente atiende a cada visitante y convierte sus preguntas en contactos de WhatsApp ya redactados, a un toque de escribirle al negocio.",
         "stack": [],
         "link": {
           "href": "https://serviciosinformaticos.com.co",
           "label": "serviciosinformaticos.com.co"
+        },
+        "period": "2026",
+        "image": {
+          "src": "/assets/projects/servicios-informaticos",
+          "width": 960,
+          "height": 2400,
+          "alt": "Página de inicio de serviciosinformaticos.com.co, el sitio con el asistente de IA"
         }
       },
       {
@@ -138,9 +145,11 @@
         "org": "Blackboard Anthology · Prototipo",
         "problem": "Los docentes necesitaban una forma más rápida de crear evaluaciones enfocadas en un tema o una clase específica.",
         "built": "Por iniciativa propia, una funcionalidad de IA con GPT que ayuda a los docentes a generar preguntas a partir de un tema o de un banco de preguntas, mejorar sus textos y obtener sugerencias de retroalimentación para calificar.",
-        "result": "Una demo funcional de punta a punta dentro de una plataforma con más de 100M de usuarios, construida por iniciativa propia.",
+        "result": "Una demo funcional de punta a punta dentro de una plataforma con más de 100M de usuarios.",
         "stack": [],
-        "link": null
+        "link": null,
+        "period": "2020–2026",
+        "image": null
       },
       {
         "id": "rosita-store",
@@ -148,12 +157,14 @@
         "org": "Freelance",
         "problem": "El sitio de e-commerce original del negocio se cayó y con él sus ventas en línea.",
         "built": "Una plataforma de e-commerce reconstruida sobre nueva infraestructura, más herramientas internas y bases de datos operativas que automatizan los procesos comerciales del negocio.",
-        "result": "Recuperó las ventas en línea del negocio. En producción en rositastore.co.",
+        "result": "Recuperó las ventas en línea del negocio.",
         "stack": [],
         "link": {
           "href": "https://rositastore.co",
           "label": "rositastore.co"
-        }
+        },
+        "period": "2026",
+        "image": null
       },
       {
         "id": "sportlife",
@@ -161,19 +172,23 @@
         "org": "Fusepong",
         "problem": "Una cadena de gimnasios chilena quería aumentar la retención de clientes.",
         "built": "Un sistema de segmentación basado en datos de clientes, con predicción de preferencias por ML, que alimenta un sistema de campañas dirigidas, junto con un módulo completo de reservas y control de acceso por huella.",
-        "result": "Segmentación con ML que alimenta campañas de retención dirigidas.",
+        "result": "Campañas de retención dirigidas según las preferencias de los clientes que predice el modelo de ML.",
         "stack": [],
-        "link": null
+        "link": null,
+        "period": "2019–2020",
+        "image": null
       },
       {
         "id": "easymail",
         "title": "Easymail, como único desarrollador",
         "org": "Fusepong",
         "problem": "Una plataforma de gestión de envíos necesitaba backend, backoffice web y app para iOS y Android.",
-        "built": "Las tres piezas, como único desarrollador del proyecto.",
+        "built": "Las tres piezas, como único desarrollador, junto con Fusecurity, una plataforma de monitoreo de puestos de vigilancia con notificaciones push y geolocalización.",
         "result": "Entregada en 30 días.",
         "stack": [],
-        "link": null
+        "link": null,
+        "period": "2019–2020",
+        "image": null
       }
     ]
   },
@@ -188,7 +203,7 @@
         "points": [
           "Construí y lancé un asistente de IA (Claude) para el sitio de Servicios Informáticos que responde con el contenido del propio sitio y deja redactado el mensaje de WhatsApp.",
           "Reconstruí la plataforma de e-commerce de Rosita Store sobre nueva infraestructura tras la caída del sitio original, y construí las herramientas internas que automatizan sus procesos comerciales.",
-          "Uso herramientas agénticas de programación con IA (Claude Code) en todo el ciclo del proyecto: especificación, implementación, revisión y documentación."
+          "Incorporé herramientas agénticas de programación con IA (Claude Code) en todo el ciclo de los proyectos, acortando los tiempos de entrega frente a un flujo tradicional."
         ]
       },
       {
@@ -199,6 +214,7 @@
         "points": [
           "Contribuí a más de 50 proyectos de punta a punta en una plataforma educativa global con más de 100M de usuarios en 70 países, siendo dueño del alcance, la planeación y la implementación full-stack en los proyectos que lideré.",
           "Diseñé y prototipé, por iniciativa propia, una funcionalidad de autoría de evaluaciones con GPT que funciona de punta a punta.",
+          "Participé en las principales mejoras al editor de texto enriquecido de la plataforma, el componente central de autoría que usan todos los estudiantes e instructores.",
           "Me convertí en el referente del equipo en performance y accesibilidad (WCAG, Section 508) e hice de ambas un estándar del día a día.",
           "Ascendí de Junior a Mid-Senior en el primer año."
         ]
@@ -229,7 +245,7 @@
       },
       {
         "title": "Accesible desde el diseño",
-        "body": "Me convertí en el referente del equipo en accesibilidad (WCAG, Section 508): probaba las funcionalidades con lectores de pantalla y convertí las buenas prácticas en estándar diario. Este sitio está construido con la misma exigencia."
+        "body": "Me convertí en el referente del equipo en accesibilidad (WCAG, Section 508): probaba las funcionalidades con lectores de pantalla y convertí las buenas prácticas en estándar diario. Este sitio obtiene 100 en accesibilidad en Lighthouse."
       }
     ],
     "teamLabel": "Lo que aporto a un equipo",
@@ -250,7 +266,7 @@
     ]
   },
   "contact": {
-    "title": "Contacto",
+    "title": "Construyamos algo que importe.",
     "body": "Busco un rol senior de ingeniería full-stack o de producto con IA en una empresa remota y orientada a producto, donde pueda ser dueño de un área de punta a punta, idealmente en un producto con impacto real en la vida de las personas.",
     "emailLabel": "Correo",
     "email": "nicolas7osorio@gmail.com",
@@ -258,11 +274,15 @@
     "copied": "Correo copiado al portapapeles",
     "linkedin": "LinkedIn",
     "linkedinHref": "https://www.linkedin.com/in/nicolas-osorio-arias",
-    "cvTitle": "CV"
+    "cvTitle": "CV",
+    "linkedinDisplay": "linkedin.com/in/nicolas-osorio-arias",
+    "cvDownload": "Descargar",
+    "timeLabel": "Hora local en Bogotá",
+    "timeZoneLabel": "UTC−5"
   },
   "footer": {
     "outside": "Fuera del código: entreno en el gimnasio, la música y la cocina saludable.",
-    "built": "Hecho con Astro. Estático, rápido y navegable con teclado.",
+    "built": "Hecho con Astro · Alojado en Cloudflare · Lighthouse 100 en accesibilidad",
     "rights": "© 2026 Nicolás Osorio",
     "top": "Volver arriba"
   }

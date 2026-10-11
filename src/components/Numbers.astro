@@ -69,6 +69,21 @@ const { numbers } = t;
     box-shadow: 0 0 0 4px var(--night);
   }
 
+  .readout__node {
+    transition:
+      background-color 300ms ease,
+      border-color 300ms ease,
+      box-shadow 300ms ease;
+  }
+
+  .readout li:hover .readout__node {
+    background: var(--key);
+    border-color: var(--key);
+    box-shadow:
+      0 0 0 4px var(--night),
+      0 0 0 8px rgb(169 196 255 / 0.18);
+  }
+
   .readout li:first-child .readout__node {
     background: var(--key);
     border-color: var(--key);
@@ -122,6 +137,8 @@ const { numbers } = t;
 </style>
 
 <script>
+  import { canFollowPointer } from '../scripts/pointer';
+
   // Count up once when the readout enters the viewport. The final value is already in the DOM.
   const readout = document.querySelector<HTMLElement>('[data-readout]');
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -150,5 +167,36 @@ const { numbers } = t;
       { threshold: 0.4 },
     );
     observer.observe(readout);
+  }
+
+  // Hover: the digits scramble and resolve back to the real value (the value is always in the DOM for assistive tech).
+  if (readout && canFollowPointer()) {
+    readout.querySelectorAll<HTMLElement>('li').forEach((item) => {
+      const counter = item.querySelector<HTMLElement>('[data-count]');
+      if (!counter) return;
+      const target = counter.dataset.count ?? '';
+      let running = false;
+      item.addEventListener('pointerenter', () => {
+        if (running) return;
+        running = true;
+        const start = performance.now();
+        const duration = 450;
+        const tick = (now: number) => {
+          const p = (now - start) / duration;
+          if (p >= 1) {
+            counter.textContent = target;
+            running = false;
+            return;
+          }
+          const settled = Math.floor(p * target.length);
+          counter.textContent = target
+            .split('')
+            .map((digit, index) => (index < settled ? digit : String(Math.floor(Math.random() * 10))))
+            .join('');
+          requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      });
+    });
   }
 </script>

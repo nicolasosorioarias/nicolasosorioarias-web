@@ -19,7 +19,12 @@ const steps = (project: Project) => [
   { key: 'result', label: labels.result, text: project.result },
 ];
 const hasStack = (project: Project) => project.stack.length > 0;
-const isEnd = (project: Project, index: number) => !hasStack(project) && index === steps(project).length - 1;
+
+// Share of the screenshot that scrolls past the 4:3 frame on hover.
+const frameScroll = (image: NonNullable<Project['image']>) => {
+  const visible = (image.width * 0.75) / image.height;
+  return `${(-(1 - visible) * 100).toFixed(2)}%`;
+};
 ---
 
 <section class="section projects" id="projects" aria-labelledby="projects-title">
@@ -30,61 +35,92 @@ const isEnd = (project: Project, index: number) => !hasStack(project) && index =
       <p>{projects.intro}</p>
     </div>
 
-    <article class="case case--lead corners" aria-labelledby={`case-${lead.id}`} data-reveal>
-      <header class="case__head">
-        <h3 id={`case-${lead.id}`}>{lead.title}</h3>
-        <p class="case__org label">{lead.org}</p>
-        {
-          lead.link && (
-            <a class="case__link" href={lead.link.href} target="_blank" rel="noopener">
-              {lead.link.label}
-              <Icon name="arrow-up-right" />
-              <span class="sr-only">({labels.external})</span>
-            </a>
-          )
-        }
-      </header>
+    <article class="case case--lead corners" aria-labelledby={`case-${lead.id}`} data-spotlight data-case data-reveal>
+      <span class="spot" aria-hidden="true"><span class="spot__glow"></span></span>
 
-      <ol class="trace trace--row">
-        {
-          steps(lead).map((step, index) => (
-            <li>
-              <span class:list={['trace__node', { 'trace__node--end': isEnd(lead, index) }]} aria-hidden="true" />
-              <h4 class="label">{step.label}</h4>
-              <p>
-                <Copy text={step.text} />
-              </p>
-            </li>
-          ))
-        }
-        {
-          hasStack(lead) && (
-            <li>
-              <span class="trace__node trace__node--end" aria-hidden="true" />
-              <h4 class="label">{labels.stack}</h4>
-              <ul class="stack-list">
-                {lead.stack.map((item) => (
-                  <li>
-                    <Copy text={item} />
-                  </li>
-                ))}
-              </ul>
-            </li>
-          )
-        }
-      </ol>
+      <div class="case__copy">
+        <header class="case__head">
+          <h3 id={`case-${lead.id}`}>{lead.title}</h3>
+          <p class="case__meta">{lead.org} · {lead.period}</p>
+          {
+            lead.link && (
+              <a class="case__link" href={lead.link.href} target="_blank" rel="noopener">
+                <span class="signal-link">{lead.link.label}</span>
+                <Icon name="arrow-up-right" />
+                <span class="sr-only">({labels.external})</span>
+              </a>
+            )
+          }
+        </header>
+
+        <ol class="steps">
+          {
+            steps(lead).map((step, index) => (
+              <li class="step" style={`--i: ${index}`}>
+                <span class="step__node" aria-hidden="true" />
+                <h4 class="label">{step.label}</h4>
+                <p>
+                  <Copy text={step.text} />
+                </p>
+              </li>
+            ))
+          }
+          {
+            hasStack(lead) && (
+              <li class="step" style="--i: 3">
+                <span class="step__node" aria-hidden="true" />
+                <h4 class="label">{labels.stack}</h4>
+                <p class="stack-line">{lead.stack.join(' · ')}</p>
+              </li>
+            )
+          }
+        </ol>
+      </div>
+
+      {
+        lead.image && (
+          <figure class="frame" data-tilt style={`--scroll: ${frameScroll(lead.image)}`}>
+            <div class="frame__bar" aria-hidden="true">
+              <span class="frame__dots">
+                <span />
+                <span />
+                <span />
+              </span>
+              <span class="frame__url">{lead.link?.label}</span>
+            </div>
+            <div class="frame__view">
+              <picture>
+                <source type="image/avif" srcset={`${lead.image.src}.avif`} />
+                <img
+                  src={`${lead.image.src}.webp`}
+                  width={lead.image.width}
+                  height={lead.image.height}
+                  alt={lead.image.alt}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
+            </div>
+          </figure>
+        )
+      }
     </article>
 
     <div class="cases">
       {
         rest.map((project) => (
-          <article class="case" aria-labelledby={`case-${project.id}`} data-reveal>
-            <header class="case__head">
+          <article class="case" aria-labelledby={`case-${project.id}`} data-spotlight data-case data-reveal>
+            <span class="spot" aria-hidden="true">
+              <span class="spot__glow" />
+            </span>
+            <header class="case__head case__head--sticky">
               <h3 id={`case-${project.id}`}>{project.title}</h3>
-              <p class="case__org label">{project.org}</p>
+              <p class="case__meta">
+                {project.org} · {project.period}
+              </p>
               {project.link ? (
                 <a class="case__link" href={project.link.href} target="_blank" rel="noopener">
-                  {project.link.label}
+                  <span class="signal-link">{project.link.label}</span>
                   <Icon name="arrow-up-right" />
                   <span class="sr-only">({labels.external})</span>
                 </a>
@@ -93,10 +129,10 @@ const isEnd = (project: Project, index: number) => !hasStack(project) && index =
               )}
             </header>
 
-            <ol class="trace trace--column">
+            <ol class="steps">
               {steps(project).map((step, index) => (
-                <li>
-                  <span class:list={['trace__node', { 'trace__node--end': isEnd(project, index) }]} aria-hidden="true" />
+                <li class="step" style={`--i: ${index}`}>
+                  <span class="step__node" aria-hidden="true" />
                   <h4 class="label">{step.label}</h4>
                   <p>
                     <Copy text={step.text} />
@@ -104,16 +140,10 @@ const isEnd = (project: Project, index: number) => !hasStack(project) && index =
                 </li>
               ))}
               {hasStack(project) && (
-                <li>
-                  <span class="trace__node trace__node--end" aria-hidden="true" />
+                <li class="step" style="--i: 3">
+                  <span class="step__node" aria-hidden="true" />
                   <h4 class="label">{labels.stack}</h4>
-                  <ul class="stack-list">
-                    {project.stack.map((item) => (
-                      <li>
-                        <Copy text={item} />
-                      </li>
-                    ))}
-                  </ul>
+                  <p class="stack-line">{project.stack.join(' · ')}</p>
                 </li>
               )}
             </ol>
@@ -125,6 +155,16 @@ const isEnd = (project: Project, index: number) => !hasStack(project) && index =
 </section>
 
 <style>
+  .case {
+    position: relative;
+  }
+
+  /* Content sits above the cursor spotlight. */
+  .case > :not(.spot):not(.case__head--sticky) {
+    position: relative;
+    z-index: 1;
+  }
+
   .case h3 {
     font-size: var(--fs-h3);
   }
@@ -136,22 +176,35 @@ const isEnd = (project: Project, index: number) => !hasStack(project) && index =
     gap: 0.75rem;
   }
 
-  .case__org {
+  .case__meta {
+    color: var(--label);
+    font-family: var(--font-mono);
     font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
   }
 
   .case__link {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     min-height: 44px;
+    color: var(--key);
     font-family: var(--font-mono);
     font-size: var(--fs-small);
+    text-decoration: none;
   }
 
   .case__link :global(svg) {
     width: 16px;
     height: 16px;
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+
+  .case__link:hover :global(svg),
+  .case__link:focus-visible :global(svg) {
+    transform: translate(2px, -2px);
   }
 
   .case__note {
@@ -160,96 +213,168 @@ const isEnd = (project: Project, index: number) => !hasStack(project) && index =
     font-size: var(--fs-label);
   }
 
-  /* Lead case: framed, steps run horizontally along one signal line. */
-  .case--lead {
+  /* ---------- Steps: a vertical trace that fills like a signal ---------- */
+  .steps {
+    position: relative;
     display: grid;
-    gap: clamp(2rem, 1.5rem + 2vw, 3rem);
-    padding: clamp(1.5rem, 1rem + 2.5vw, 3rem);
-    border: 1px solid var(--line);
-    background: linear-gradient(160deg, rgb(91 140 255 / 0.07), transparent 55%);
-  }
-
-  .case--lead h3 {
-    font-size: clamp(1.6rem, 1.2rem + 1.8vw, 2.5rem);
-  }
-
-  .trace {
+    gap: 1.6rem;
+    padding-left: 30px;
     list-style: none;
   }
 
-  .trace > li {
-    position: relative;
-    display: grid;
-    gap: 0.6rem;
-    align-content: start;
+  .steps::before,
+  .steps::after {
+    content: '';
+    position: absolute;
+    top: 8px;
+    bottom: 8px;
+    left: 5px;
+    width: 1px;
   }
 
-  .trace h4 {
+  .steps::before {
+    background: var(--line);
+  }
+
+  .steps::after {
+    background: linear-gradient(180deg, var(--accent), var(--key));
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 900ms var(--ease-out);
+  }
+
+  .step {
+    position: relative;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .step h4 {
     margin: 0;
     font-size: 0.75rem;
   }
 
-  .trace p {
+  .step p {
     color: var(--text-2);
     overflow-wrap: break-word;
   }
 
-  .trace__node {
+  .step__node {
+    position: absolute;
+    top: 3px;
+    left: -30px;
     width: 11px;
     height: 11px;
     border: 1px solid var(--accent);
     border-radius: 50%;
     background: var(--night);
+    transition:
+      background-color 300ms ease,
+      border-color 300ms ease,
+      box-shadow 300ms ease;
+    transition-delay: calc(var(--i) * 180ms);
   }
 
-  .trace__node--end {
-    border-color: var(--key);
+  .stack-line {
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: var(--fs-small);
+  }
+
+  /* Hover, keyboard focus inside the card, or the card being read (scroll) all light the trace. */
+  .case:hover .steps::after,
+  .case:focus-within .steps::after,
+  .case:global(.is-current) .steps::after {
+    transform: scaleY(1);
+  }
+
+  .case:hover .step__node,
+  .case:focus-within .step__node,
+  .case:global(.is-current) .step__node {
     background: var(--key);
+    border-color: var(--key);
+    box-shadow: 0 0 0 4px rgb(169 196 255 / 0.16);
   }
 
-  .trace--row {
-    --row-gap: clamp(1.5rem, 1rem + 1.5vw, 2.5rem);
-    position: relative;
+  /* ---------- Lead case: copy + live screenshot ---------- */
+  .case--lead {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 2.5rem var(--row-gap);
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: clamp(2rem, 1.5rem + 3vw, 4.5rem);
+    align-items: center;
+    padding: clamp(1.5rem, 1rem + 2.5vw, 3.25rem);
+    border: 1px solid var(--line);
+    background: linear-gradient(160deg, rgb(91 140 255 / 0.08), transparent 55%);
   }
 
-  .trace--row > li::before {
-    content: '';
-    position: absolute;
-    top: 5px;
-    left: 0;
-    right: calc(-1 * var(--row-gap));
-    height: 1px;
-    background: linear-gradient(90deg, var(--accent), rgb(91 140 255 / 0.25));
+  .case--lead h3 {
+    font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.4rem);
   }
 
-  .trace--row > li:nth-child(2n)::before {
-    right: 0;
+  .case__copy {
+    display: grid;
+    gap: 2.25rem;
   }
 
-  @media (min-width: 1360px) {
-    .trace--row {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-
-    .trace--row > li:nth-child(2n)::before {
-      right: calc(-1 * var(--row-gap));
-    }
-
-    .trace--row > li:last-child::before {
-      right: 0;
-    }
+  .frame {
+    margin: 0;
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--night-deep);
+    box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.8);
+    transform: perspective(1200px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    transition: transform 500ms var(--ease-out);
   }
 
-  .trace--row .trace__node {
-    position: relative;
-    margin-bottom: 0.6rem;
-    box-shadow: 0 0 0 5px var(--night);
+  .frame__bar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    height: 34px;
+    padding: 0 14px;
+    border-bottom: 1px solid var(--line);
+    background: var(--night-raised);
   }
 
-  /* Other cases: title column and a vertical trace. */
+  .frame__dots {
+    display: inline-flex;
+    gap: 6px;
+  }
+
+  .frame__dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgb(184 198 224 / 0.3);
+  }
+
+  .frame__url {
+    color: var(--text-2);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+
+  .frame__view {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+  }
+
+  .frame__view img {
+    width: 100%;
+    height: auto;
+    transform: translateY(0);
+    transition: transform 1.4s var(--ease-out);
+  }
+
+  /* The screenshot scrolls through the live site while the card is hovered or focused. */
+  .case--lead:hover .frame__view img,
+  .case--lead:focus-within .frame__view img {
+    transform: translateY(var(--scroll));
+    transition: transform 7s cubic-bezier(0.45, 0, 0.55, 1);
+  }
+
+  /* ---------- Other cases: sticky title column ---------- */
   .cases {
     margin-top: clamp(1rem, 0.5rem + 2vw, 2rem);
   }
@@ -258,75 +383,68 @@ const isEnd = (project: Project, index: number) => !hasStack(project) && index =
     display: grid;
     grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
     gap: clamp(1.5rem, 1rem + 3vw, 4.5rem);
-    padding-block: clamp(2.5rem, 2rem + 2vw, 3.5rem);
+    padding: clamp(2.25rem, 2rem + 1.5vw, 3.25rem) clamp(0px, 1.5vw, 24px);
     border-bottom: 1px solid var(--line);
   }
 
-  .trace--column {
-    position: relative;
-    display: grid;
-    gap: 1.6rem;
-    padding-left: 30px;
+  .case__head--sticky {
+    position: sticky;
+    z-index: 1;
+    top: calc(var(--header-h) + 32px);
+    align-self: start;
   }
 
-  .trace--column::before {
-    content: '';
-    position: absolute;
-    top: 6px;
-    bottom: 6px;
-    left: 5px;
-    width: 1px;
-    background: linear-gradient(180deg, var(--accent), var(--line));
-  }
-
-  .trace--column .trace__node {
-    position: absolute;
-    top: 3px;
-    left: -30px;
-  }
-
-  .stack-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px 18px;
-    list-style: none;
-    color: var(--text);
-    font-family: var(--font-mono);
-    font-size: var(--fs-small);
+  @media (max-width: 1000px) {
+    .case--lead {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
 
   @media (max-width: 900px) {
     .cases .case {
       grid-template-columns: minmax(0, 1fr);
     }
+
+    .case__head--sticky {
+      position: static;
+    }
   }
 
-  @media (max-width: 560px) {
-    .trace--row {
-      grid-template-columns: minmax(0, 1fr);
-      padding-left: 30px;
-    }
-
-    .trace--row > li::before,
-    .trace--row > li:nth-child(2n)::before {
-      top: 14px;
-      bottom: -2.5rem;
-      left: -25px;
-      right: auto;
-      width: 1px;
-      height: auto;
-      background: var(--accent);
-    }
-
-    .trace--row > li:last-child::before {
-      display: none;
-    }
-
-    .trace--row .trace__node {
-      position: absolute;
-      top: 3px;
-      left: -30px;
-      margin: 0;
+  @media (prefers-reduced-motion: reduce) {
+    .frame,
+    .frame__view img {
+      transform: none !important;
     }
   }
 </style>
+
+<script>
+  import { initSpotlights, trackPointer } from '../scripts/pointer';
+
+  const section = document.getElementById('projects');
+  if (section) {
+    initSpotlights(section);
+
+    section.querySelectorAll<HTMLElement>('[data-case]').forEach((card) => {
+      // Subtle tilt on the screenshot frame only (an image, never the text).
+      const frame = card.querySelector<HTMLElement>('[data-tilt]');
+      if (frame) {
+        trackPointer(card, {
+          move: ({ x, y, width, height }) => {
+            frame.style.setProperty('--ry', `${((x / width - 0.5) * 6).toFixed(2)}deg`);
+            frame.style.setProperty('--rx', `${((0.5 - y / height) * 4).toFixed(2)}deg`);
+          },
+          leave: () => {
+            frame.style.setProperty('--rx', '0deg');
+            frame.style.setProperty('--ry', '0deg');
+          },
+        });
+      }
+
+      // Without hover (touch, keyboard reading), the card in the middle of the viewport lights its trace.
+      new IntersectionObserver(([entry]) => card.classList.toggle('is-current', entry.isIntersecting), {
+        rootMargin: '-42% 0px -42% 0px',
+      }).observe(card);
+    });
+  }
+</script>

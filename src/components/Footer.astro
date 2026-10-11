@@ -1,4 +1,6 @@
 ---
+// Colophon under the closing section: local time in Bogotá, a human note, the build line
+// and a back-to-top that sends a pulse up the Trace line.
 import Icon from './Icon.astro';
 import type { Content } from '../i18n';
 
@@ -7,61 +9,178 @@ interface Props {
 }
 
 const { t } = Astro.props;
-const { footer } = t;
+const { footer, contact, meta } = t;
 ---
 
-<footer class="footer">
-  <div class="container footer__inner">
-    <p class="footer__outside">{footer.outside}</p>
-    <div class="footer__meta">
-      <p>{footer.rights}</p>
+<footer class="colophon">
+  <div class="container colophon__inner">
+    <p class="clock">
+      <span class="label">{contact.timeLabel}</span>
+      <span class="clock__value">
+        <time data-clock data-locale={meta.lang} hidden></time>
+        <span class="clock__zone">{contact.timeZoneLabel}</span>
+      </span>
+    </p>
+    <p class="colophon__outside">{footer.outside}</p>
+    <div class="colophon__meta">
       <p>{footer.built}</p>
-      <a class="footer__top" href="#top">
+      <p>{footer.rights}</p>
+      <a class="colophon__top" href="#top" data-to-top>
         <Icon name="arrow-up" />
-        {footer.top}
+        <span class="signal-link">{footer.top}</span>
       </a>
     </div>
   </div>
 </footer>
 
 <style>
-  .footer {
-    padding-block: 3rem 3.5rem;
+  .colophon {
+    padding-block: 2.5rem 3rem;
     border-top: 1px solid var(--line);
   }
 
-  .footer__inner {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+  .colophon__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
     gap: 1.5rem 3rem;
+    align-items: start;
   }
 
-  .footer__outside {
-    max-width: 40ch;
+  .clock {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .clock .label {
+    font-size: 0.75rem;
+  }
+
+  .clock__value {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 10px;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .clock__zone {
+    color: var(--text-2);
+    font-size: var(--fs-label);
+  }
+
+  .colophon__outside {
+    max-width: 34em;
     color: var(--text-2);
   }
 
-  .footer__meta {
+  .colophon__meta {
+    grid-column: 1 / -1;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 0.5rem 1.75rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
     color: var(--text-2);
     font-family: var(--font-mono);
     font-size: var(--fs-label);
   }
 
-  .footer__top {
+  .colophon__top {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     min-height: 44px;
+    margin-inline-start: auto;
+    color: var(--key);
+    text-decoration: none;
     white-space: nowrap;
   }
 
-  .footer__top :global(svg) {
+  .colophon__top :global(svg) {
     width: 15px;
     height: 15px;
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+
+  .colophon__top:hover :global(svg),
+  .colophon__top:focus-visible :global(svg) {
+    transform: translateY(-3px);
+  }
+
+  @media (max-width: 760px) {
+    .colophon__inner {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .colophon__top {
+      margin-inline-start: 0;
+    }
   }
 </style>
+
+<script>
+  import { motionAllowed } from '../scripts/pointer';
+
+  // Live local time in Bogotá (no live region: it would announce every minute).
+  const clock = document.querySelector<HTMLTimeElement>('[data-clock]');
+  if (clock) {
+    const format = new Intl.DateTimeFormat(clock.dataset.locale === 'es' ? 'es-CO' : 'en-US', {
+      timeZone: 'America/Bogota',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    });
+    const tick = () => {
+      const now = new Date();
+      clock.textContent = format.format(now);
+      clock.dateTime = now.toISOString();
+    };
+    tick();
+    clock.hidden = false;
+    window.setTimeout(
+      () => {
+        tick();
+        window.setInterval(tick, 60_000);
+      },
+      60_000 - (Date.now() % 60_000),
+    );
+  }
+
+  // Back to top: a pulse travels up the Trace line while the page scrolls home.
+  const toTop = document.querySelector<HTMLAnchorElement>('[data-to-top]');
+  const flow = document.querySelector<HTMLElement>('[data-flow]');
+  if (toTop) {
+    toTop.addEventListener('click', (event) => {
+      event.preventDefault();
+      const main = document.getElementById('main');
+      if (motionAllowed() && flow) {
+        const pulse = document.createElement('span');
+        pulse.className = 'flow__pulse';
+        pulse.setAttribute('aria-hidden', 'true');
+        flow.append(pulse);
+        const travel = flow.offsetHeight;
+        pulse
+          .animate(
+            [
+              { transform: `translateY(${travel}px)`, opacity: 0 },
+              { transform: `translateY(${travel * 0.85}px)`, opacity: 1, offset: 0.1 },
+              { transform: 'translateY(0px)', opacity: 1, offset: 0.9 },
+              { transform: 'translateY(0px)', opacity: 0 },
+            ],
+            { duration: 1100, easing: 'cubic-bezier(0.65, 0, 0.35, 1)' },
+          )
+          .finished.finally(() => pulse.remove());
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        window.scrollTo({ top: 0 });
+      }
+      // Keep keyboard users at the start of the content, without a second jump.
+      main?.focus({ preventScroll: true });
+      history.replaceState(null, '', '#top');
+    });
+  }
+</script>

@@ -1,0 +1,401 @@
+---
+// The closing node of the Trace line: one call to action and the three ways to reach Nicolás.
+// Replaces the separate Contact section; the #contact anchor and nav item are unchanged.
+import Icon from './Icon.astro';
+import { CV_FILES, type Content } from '../i18n';
+
+interface Props {
+  t: Content;
+}
+
+const { t } = Astro.props;
+const { contact, hero, projects } = t;
+const [user, domain] = contact.email.split('@');
+// Let the profile URL break after "/in/" instead of mid-word on narrow screens.
+const splitAt = contact.linkedinDisplay.lastIndexOf('/') + 1;
+const linkedinHead = contact.linkedinDisplay.slice(0, splitAt);
+const linkedinTail = contact.linkedinDisplay.slice(splitAt);
+---
+
+<section class="section closing" id="contact" aria-labelledby="contact-title" data-closing>
+  <canvas class="closing__sky" aria-hidden="true" data-sky></canvas>
+
+  <div class="container closing__inner">
+    <span class="flow-node closing__node" aria-hidden="true" data-flow-node></span>
+    <h2 id="contact-title" class="closing__title" data-reveal>{contact.title}</h2>
+    <p class="closing__body" data-reveal>{contact.body}</p>
+
+    <dl class="closing__links" data-reveal>
+      <div class="row">
+        <dt class="label">{contact.emailLabel}</dt>
+        <dd>
+          <a class="big signal-link" href={`mailto:${contact.email}`}>{user}@<wbr />{domain}</a>
+          <button class="copy" type="button" hidden data-copy={contact.email}>
+            <Icon name="copy" class="copy__icon" />
+            <Icon name="check" class="copy__done" />
+            <span>{contact.copy}</span>
+          </button>
+          <p class="sr-only" role="status" aria-live="polite" data-copy-status data-message={contact.copied}></p>
+        </dd>
+      </div>
+      <div class="row">
+        <dt class="label">{contact.linkedin}</dt>
+        <dd>
+          <a class="big signal-link" href={contact.linkedinHref} target="_blank" rel="noopener">
+            {linkedinHead}<wbr />{linkedinTail}<Icon name="arrow-up-right" class="big__arrow" /><span class="sr-only"> ({projects.labels.external})</span>
+          </a>
+        </dd>
+      </div>
+      <div class="row">
+        <dt class="label">{contact.cvTitle}</dt>
+        <dd class="cv">
+          <a class="big signal-link" href={CV_FILES.en} download hreflang="en">
+            {contact.cvDownload} EN<span class="sr-only">, {hero.cvEnName}</span>
+          </a>
+          <span class="cv__sep" aria-hidden="true"></span>
+          <a class="big signal-link" href={CV_FILES.es} download hreflang="es">
+            {contact.cvDownload} ES<span class="sr-only">, {hero.cvEsName}</span>
+          </a>
+        </dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<style>
+  .closing {
+    position: relative;
+    isolation: isolate;
+    padding-top: calc(var(--section-space) * 0.6);
+    padding-bottom: clamp(4rem, 3rem + 4vw, 7rem);
+    overflow: hidden;
+  }
+
+  .closing__sky {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .closing__inner {
+    position: relative;
+  }
+
+  /* The last node of the Trace line, larger and pulsing. */
+  .closing__node {
+    top: calc(var(--fs-display) * 0.5 - 9px);
+    width: 19px;
+    height: 19px;
+    left: calc(var(--flow-pad) / 2 - 9px);
+    background: var(--key);
+    border-color: var(--key);
+  }
+
+  .closing__node::after {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border: 1px solid var(--key);
+    border-radius: 50%;
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .closing__node::after {
+      animation: closing-pulse 2.8s var(--ease-out) infinite;
+    }
+  }
+
+  @keyframes closing-pulse {
+    0% {
+      opacity: 0.7;
+      transform: scale(0.6);
+    }
+    80%,
+    100% {
+      opacity: 0;
+      transform: scale(1.6);
+    }
+  }
+
+  .closing__title {
+    max-width: 14em;
+    font-size: var(--fs-display);
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  .closing__body {
+    max-width: 34em;
+    margin-top: 1.75rem;
+    font-size: var(--fs-lead);
+    line-height: 1.55;
+  }
+
+  .closing__links {
+    margin: clamp(2.5rem, 2rem + 2vw, 4rem) 0 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 9rem minmax(0, 1fr);
+    align-items: center;
+    gap: 0.5rem 1.5rem;
+    padding-block: clamp(1rem, 0.8rem + 0.8vw, 1.5rem);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .row dt {
+    font-size: 0.75rem;
+  }
+
+  .row dd {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 20px;
+    margin: 0;
+  }
+
+  .big {
+    color: var(--text);
+    font-size: clamp(1.15rem, 0.7rem + 2.3vw, 2.5rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    overflow-wrap: break-word;
+  }
+
+  .big:hover,
+  .big:focus-visible {
+    color: var(--key);
+  }
+
+  .row :global(.big__arrow) {
+    display: inline-block;
+    width: 0.8em;
+    height: 0.8em;
+    margin-left: 0.25em;
+    vertical-align: -0.05em;
+    color: var(--key);
+  }
+
+  .cv__sep {
+    width: 7px;
+    height: 7px;
+    border: 1px solid var(--accent);
+    transform: rotate(45deg);
+  }
+
+  .copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 14px;
+    border: 1px solid var(--line-strong);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--key);
+    font: 500 var(--fs-label) / 1 var(--font-mono);
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition:
+      border-color var(--dur-fast) ease,
+      color var(--dur-fast) ease;
+  }
+
+  .copy:hover {
+    border-color: var(--accent);
+    color: var(--text);
+  }
+
+  .copy :global(svg) {
+    width: 16px;
+    height: 16px;
+  }
+
+  .copy :global(.copy__done),
+  .copy:global(.is-copied) :global(.copy__icon) {
+    display: none;
+  }
+
+  .copy:global(.is-copied) :global(.copy__done) {
+    display: block;
+  }
+
+  @media (max-width: 640px) {
+    .row {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>
+
+<script>
+  import { canFollowPointer, motionAllowed, trackPointer, whenVisible } from '../scripts/pointer';
+
+  // Copy email.
+  const button = document.querySelector<HTMLButtonElement>('[data-closing] [data-copy]');
+  const status = document.querySelector<HTMLElement>('[data-closing] [data-copy-status]');
+  if (button && status && navigator.clipboard) {
+    button.hidden = false;
+    let timer = 0;
+    button.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(button.dataset.copy ?? '');
+        button.classList.add('is-copied');
+        status.textContent = status.dataset.message ?? '';
+        window.clearTimeout(timer);
+        timer = window.setTimeout(() => {
+          button.classList.remove('is-copied');
+          status.textContent = '';
+        }, 2400);
+      } catch {
+        // Clipboard can be blocked; the mailto link still works.
+      }
+    });
+  }
+
+  // Node constellation behind the closing: nodes drift, the cursor gathers the nearest ones.
+  const section = document.querySelector<HTMLElement>('[data-closing]');
+  const canvas = section?.querySelector<HTMLCanvasElement>('[data-sky]');
+  const ctx = canvas?.getContext('2d');
+  if (section && canvas && ctx) {
+    type Star = { bx: number; by: number; x: number; y: number; vx: number; vy: number; phase: number; r: number };
+    let stars: Star[] = [];
+    let width = 0;
+    let height = 0;
+    let pointer: { x: number; y: number } | null = null;
+    let running = false;
+    let visible = false;
+    let frame = 0;
+    const animate = motionAllowed();
+
+    const seeded = (seed: number) => () => {
+      seed = (seed * 16807) % 2147483647;
+      return seed / 2147483647;
+    };
+
+    const layout = () => {
+      const box = section.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = box.width;
+      height = box.height;
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const random = seeded(11);
+      const count = width < 700 ? 18 : 44;
+      // Weighted to the right so the text column stays calm.
+      const minX = width < 700 ? 0.05 : 0.42;
+      stars = Array.from({ length: count }, () => {
+        const bx = (minX + random() * (0.98 - minX)) * width;
+        const by = (0.06 + random() * 0.88) * height;
+        return { bx, by, x: bx, y: by, vx: 0, vy: 0, phase: random() * Math.PI * 2, r: random() < 0.2 ? 2.4 : 1.5 };
+      });
+    };
+
+    const draw = () => {
+      ctx.clearRect(0, 0, width, height);
+      const link = width < 700 ? 110 : 150;
+      ctx.lineWidth = 1;
+      for (let i = 0; i < stars.length; i++) {
+        for (let j = i + 1; j < stars.length; j++) {
+          const a = stars[i];
+          const b = stars[j];
+          const d = Math.hypot(a.x - b.x, a.y - b.y);
+          if (d < link) {
+            ctx.strokeStyle = `rgba(91, 140, 255, ${(0.2 * (1 - d / link)).toFixed(3)})`;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.stroke();
+          }
+        }
+      }
+      if (pointer) {
+        const nearest = [...stars]
+          .map((star) => ({ star, d: Math.hypot(star.x - pointer!.x, star.y - pointer!.y) }))
+          .sort((a, b) => a.d - b.d)
+          .slice(0, 3);
+        for (const { star, d } of nearest) {
+          if (d > 260) continue;
+          ctx.strokeStyle = `rgba(169, 196, 255, ${(0.55 * (1 - d / 260)).toFixed(3)})`;
+          ctx.beginPath();
+          ctx.moveTo(pointer.x, pointer.y);
+          ctx.lineTo(star.x, star.y);
+          ctx.stroke();
+        }
+      }
+      for (const star of stars) {
+        ctx.fillStyle = star.r > 2 ? 'rgba(169, 196, 255, 0.85)' : 'rgba(91, 140, 255, 0.6)';
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    };
+
+    const step = (time: number) => {
+      for (const star of stars) {
+        let tx = star.bx + Math.sin(time * 0.0004 + star.phase) * 4;
+        let ty = star.by + Math.cos(time * 0.00035 + star.phase) * 4;
+        if (pointer) {
+          const dx = pointer.x - star.bx;
+          const dy = pointer.y - star.by;
+          const d = Math.hypot(dx, dy);
+          if (d < 180) {
+            const pull = (1 - d / 180) * 22;
+            tx += (dx / (d || 1)) * pull;
+            ty += (dy / (d || 1)) * pull;
+          }
+        }
+        star.vx = (star.vx + (tx - star.x) * 0.06) * 0.78;
+        star.vy = (star.vy + (ty - star.y) * 0.06) * 0.78;
+        star.x += star.vx;
+        star.y += star.vy;
+      }
+      draw();
+      frame = requestAnimationFrame(loop);
+    };
+
+    const loop = (time: number) => {
+      if (!running) return;
+      step(time);
+    };
+
+    const setRunning = () => {
+      const next = animate && visible && document.visibilityState === 'visible';
+      if (next === running) return;
+      running = next;
+      if (running) frame = requestAnimationFrame(loop);
+      else cancelAnimationFrame(frame);
+    };
+
+    layout();
+    draw();
+    whenVisible(section, (isVisible) => {
+      visible = isVisible;
+      setRunning();
+    });
+    document.addEventListener('visibilitychange', setRunning);
+    let resizeFrame = 0;
+    new ResizeObserver(() => {
+      cancelAnimationFrame(resizeFrame);
+      resizeFrame = requestAnimationFrame(() => {
+        layout();
+        if (!running) draw();
+      });
+    }).observe(section);
+
+    if (canFollowPointer()) {
+      trackPointer(section, {
+        move: ({ x, y }) => (pointer = { x, y }),
+        leave: () => (pointer = null),
+      });
+    }
+  }
+</script>

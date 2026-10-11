@@ -103,13 +103,13 @@
       {
         "value": 70,
         "suffix": "",
-        "label": "countries reached"
+        "label": "countries served"
       }
     ]
   },
   "projects": {
     "title": "Featured projects",
-    "intro": "Proof, not adjectives. Each case in three steps: the problem, what I built and the result.",
+    "intro": "Five projects, each told as the problem, what I built and the result.",
     "labels": {
       "problem": "Problem",
       "built": "What I built",
@@ -124,12 +124,19 @@
         "title": "AI assistant for Servicios Informáticos",
         "org": "Freelance",
         "problem": "A B2B services company needed its website to generate qualified inbound leads.",
-        "built": "End-to-end delivery of the corporate site (discovery, information architecture, design system and development) and an AI assistant built on Claude that answers visitors' questions from the site's own content and pre-drafts their WhatsApp message.",
+        "built": "Led end-to-end delivery of the corporate site (discovery, information architecture, design system and development) and an AI assistant built on Claude that answers visitors' questions from the site's own content and pre-drafts their WhatsApp message.",
         "result": "The assistant is active for every visitor and turns questions into pre-drafted WhatsApp leads, one tap away from contacting the business.",
         "stack": [],
         "link": {
           "href": "https://serviciosinformaticos.com.co",
           "label": "serviciosinformaticos.com.co"
+        },
+        "period": "2026",
+        "image": {
+          "src": "/assets/projects/servicios-informaticos",
+          "width": 960,
+          "height": 2400,
+          "alt": "Homepage of serviciosinformaticos.com.co, the site with the AI assistant"
         }
       },
       {
@@ -138,9 +145,11 @@
         "org": "Blackboard Anthology · Prototype",
         "problem": "Instructors needed a faster way to build assessments targeted to a specific topic or class.",
         "built": "On my own initiative, a working AI feature powered by GPT that helps instructors generate questions from a topic or an existing question bank, improve their texts and get suggested grading feedback.",
-        "result": "A working end-to-end demo inside a platform serving 100M+ users, built on my own initiative.",
+        "result": "A working end-to-end demo inside a platform serving 100M+ users.",
         "stack": [],
-        "link": null
+        "link": null,
+        "period": "2020–2026",
+        "image": null
       },
       {
         "id": "rosita-store",
@@ -148,12 +157,14 @@
         "org": "Freelance",
         "problem": "The business's original e-commerce site went down, taking its online sales with it.",
         "built": "A rebuilt e-commerce platform on new infrastructure, plus internal tooling and operational databases that automate the business's commercial processes.",
-        "result": "Restored the business's online sales. Live at rositastore.co.",
+        "result": "Restored the business's online sales.",
         "stack": [],
         "link": {
           "href": "https://rositastore.co",
           "label": "rositastore.co"
-        }
+        },
+        "period": "2026",
+        "image": null
       },
       {
         "id": "sportlife",
@@ -161,19 +172,23 @@
         "org": "Fusepong",
         "problem": "A Chilean gym chain wanted to expand customer retention.",
         "built": "A client-data-driven segmentation system with ML-based preference prediction, feeding a targeted-campaign system, alongside a full booking module and fingerprint access control.",
-        "result": "ML-based segmentation feeding targeted retention campaigns.",
+        "result": "Retention campaigns targeted by ML-predicted customer preferences.",
         "stack": [],
-        "link": null
+        "link": null,
+        "period": "2019–2020",
+        "image": null
       },
       {
         "id": "easymail",
         "title": "Easymail, as the sole developer",
         "org": "Fusepong",
         "problem": "A shipping-management platform needed a backend, a web back office and an iOS/Android app.",
-        "built": "All three, as the only developer on the project.",
+        "built": "All three, as the only developer, alongside Fusecurity, a guard-post monitoring platform with push notifications and geolocation.",
         "result": "Shipped in 30 days.",
         "stack": [],
-        "link": null
+        "link": null,
+        "period": "2019–2020",
+        "image": null
       }
     ]
   },
@@ -188,7 +203,7 @@
         "points": [
           "Built and shipped an AI assistant (Claude) for the Servicios Informáticos website that answers visitor questions from the site's own content and pre-drafts a WhatsApp message.",
           "Rebuilt Rosita Store's e-commerce platform on new infrastructure after the original site went down, and built the internal tooling that automates its commercial processes.",
-          "Use agentic AI coding tools (Claude Code) across the full project lifecycle: spec, implementation, review and documentation."
+          "Embedded agentic AI coding tools (Claude Code) across the full project lifecycle, cutting delivery time versus a traditional workflow."
         ]
       },
       {
@@ -199,6 +214,7 @@
         "points": [
           "Contributed to 50+ end-to-end projects on a global learning platform serving 100M+ users across 70 countries, owning scope, planning and full-stack implementation on the projects I led.",
           "Designed and prototyped, on my own initiative, a working GPT-powered assessment-authoring feature.",
+          "Contributed to major improvements to the platform's Rich Text Editor, the core authoring component used by every student and instructor.",
           "Became the team's go-to engineer for performance and accessibility (WCAG, Section 508), and turned both into everyday standards.",
           "Promoted from Junior to Mid-Senior Engineer within the first year."
         ]
@@ -229,7 +245,7 @@
       },
       {
         "title": "Accessible by design",
-        "body": "I became the team's go-to engineer for accessibility (WCAG, Section 508), testing features with screen readers and turning best practices into everyday standards. This site is built to the same bar."
+        "body": "I became the team's go-to engineer for accessibility (WCAG, Section 508), testing features with screen readers and turning best practices into everyday standards. This site scores 100 on Lighthouse accessibility."
       }
     ],
     "teamLabel": "What I bring to a team",
@@ -250,7 +266,7 @@
     ]
   },
   "contact": {
-    "title": "Contact",
+    "title": "Let's build something that matters.",
     "body": "I'm looking for a senior full-stack or AI product engineering role in a remote, product-driven company where I can own an area end to end, ideally in a product with real impact on people's lives.",
     "emailLabel": "Email",
     "email": "nicolas7osorio@gmail.com",
@@ -258,11 +274,15 @@
     "copied": "Email copied to the clipboard",
     "linkedin": "LinkedIn",
     "linkedinHref": "https://www.linkedin.com/in/nicolas-osorio-arias",
-    "cvTitle": "CV"
+    "cvTitle": "CV",
+    "linkedinDisplay": "linkedin.com/in/nicolas-osorio-arias",
+    "cvDownload": "Download",
+    "timeLabel": "Local time in Bogotá",
+    "timeZoneLabel": "UTC−5"
   },
   "footer": {
     "outside": "Outside of code: training at the gym, music and healthy cooking.",
-    "built": "Built with Astro. Static, fast and keyboard-friendly.",
+    "built": "Built with Astro · Hosted on Cloudflare · Lighthouse 100 accessibility",
     "rights": "© 2026 Nicolás Osorio",
     "top": "Back to top"
   }

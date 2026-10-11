@@ -50,7 +50,7 @@ const poster = (variant: typeof desktop) =>
           {heroV2.headline.before}<span class="key">{heroV2.headline.highlight.split(' ').map((word, index) => (<>{index > 0 && ' '}<span class="nowrap">{word}</span></>))}</span>{heroV2.headline.after}
         </p>
         <div class="hs__actions">
-          <a class="btn btn-primary" href="#projects">
+          <a class="btn btn-primary" href="#projects" data-magnetic>
             {hero.ctaProjects}
             <Icon name="arrow-down" />
           </a>
@@ -62,7 +62,7 @@ const poster = (variant: typeof desktop) =>
             <a href={CV_FILES.en} download hreflang="en">{hero.cvEn}<span class="sr-only">, {hero.cvEnName}</span></a>
             <a href={CV_FILES.es} download hreflang="es">{hero.cvEs}<span class="sr-only">, {hero.cvEsName}</span></a>
           </div>
-          <a class="btn btn-ghost" href="#contact">{hero.ctaContact}</a>
+          <a class="btn btn-ghost" href="#contact" data-magnetic>{hero.ctaContact}</a>
         </div>
       </div>
 

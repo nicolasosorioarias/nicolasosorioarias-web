@@ -17,9 +17,10 @@ const { experience } = t;
     </div>
 
     <ol class="timeline" data-timeline>
+      <span class="timeline__signal" aria-hidden="true"></span>
       {
         experience.items.map((item, index) => (
-          <li class:list={['timeline__item', { 'is-current': item.current }]} style={`--reveal-delay: ${index * 120}ms`} data-reveal>
+          <li class:list={['timeline__item', { 'is-current': item.current }]} style={`--reveal-delay: ${index * 120}ms`} data-reveal data-role>
             <p class="timeline__period">{item.period}</p>
             <span class="timeline__node" aria-hidden="true" />
             <div class="timeline__body">
@@ -69,7 +70,38 @@ const { experience } = t;
     transform: none;
   }
 
+  /* A brighter signal that travels to the role being explored. */
+  .timeline__signal {
+    position: absolute;
+    top: 8px;
+    left: calc(var(--period) + var(--rail) / 2 - 1px);
+    width: 3px;
+    height: calc(100% - 16px);
+    border-radius: 2px;
+    background: linear-gradient(180deg, transparent, var(--key));
+    transform: scaleY(var(--reach, 0));
+    transform-origin: top;
+    opacity: var(--reach-on, 0);
+    transition:
+      transform 700ms var(--ease-out),
+      opacity 300ms ease;
+    pointer-events: none;
+  }
+
+  .timeline:global(.is-exploring) .timeline__item:not(:global(.is-explored)) {
+    opacity: 0.7;
+  }
+
+  .timeline__item:global(.is-explored) .timeline__node {
+    background: var(--key);
+    border-color: var(--key);
+    box-shadow:
+      0 0 0 5px var(--night),
+      0 0 0 9px rgb(169 196 255 / 0.2);
+  }
+
   .timeline__item {
+    transition: opacity 300ms ease;
     position: relative;
     display: grid;
     grid-template-columns: var(--period) var(--rail) minmax(0, 1fr);
@@ -173,6 +205,10 @@ const { experience } = t;
       left: calc(var(--rail) / 2);
     }
 
+    .timeline__signal {
+      left: calc(var(--rail) / 2 - 1px);
+    }
+
     .timeline__item {
       grid-template-columns: var(--rail) minmax(0, 1fr);
       grid-template-areas:
@@ -209,5 +245,50 @@ const { experience } = t;
       { threshold: 0.15 },
     );
     observer.observe(timeline);
+
+    // Explore a role: hover (fine pointers) or keyboard focus inside it sends the signal to its node.
+    const signal = timeline.querySelector<HTMLElement>('.timeline__signal');
+    const roles = Array.from(timeline.querySelectorAll<HTMLElement>('[data-role]'));
+    const explore = (role: HTMLElement | null) => {
+      roles.forEach((item) => item.classList.toggle('is-explored', item === role));
+      timeline.classList.toggle('is-exploring', role !== null);
+      if (!signal) return;
+      if (!role) {
+        signal.style.setProperty('--reach-on', '0');
+        return;
+      }
+      const node = role.querySelector<HTMLElement>('.timeline__node');
+      const lineTop = 8;
+      const lineHeight = timeline.offsetHeight - 16;
+      const nodeCenter = node ? node.offsetTop + role.offsetTop + node.offsetHeight / 2 : role.offsetTop;
+      signal.style.setProperty('--reach', String(Math.min(1, Math.max(0, (nodeCenter - lineTop) / lineHeight))));
+      signal.style.setProperty('--reach-on', '1');
+    };
+    // Roles hold no controls, so keyboard and touch readers get the same signal from scrolling:
+    // the role in the middle of the viewport is explored unless the pointer is on another one.
+    const hover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    let hovered: HTMLElement | null = null;
+    let centered: HTMLElement | null = null;
+    const update = () => explore(hovered ?? centered);
+    roles.forEach((role) => {
+      if (hover) {
+        role.addEventListener('pointerenter', () => {
+          hovered = role;
+          update();
+        });
+        role.addEventListener('pointerleave', () => {
+          hovered = null;
+          update();
+        });
+      }
+      new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) centered = role;
+          else if (centered === role) centered = null;
+          update();
+        },
+        { rootMargin: '-45% 0px -45% 0px' },
+      ).observe(role);
+    });
   }
 </script>

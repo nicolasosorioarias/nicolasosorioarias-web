@@ -1,4 +1,6 @@
 ---
+// Stack as a small constellation: every technology is a node, related ones are wired.
+// The cursor wakes up the nodes and links near it. Readable as a plain list without CSS or JS.
 import type { Content } from '../i18n';
 
 interface Props {
@@ -7,6 +9,40 @@ interface Props {
 
 const { t } = Astro.props;
 const { stack } = t;
+
+// Node positions on a 100 × 56 canvas (desktop). Unknown items fall back to a row at the bottom.
+const LAYOUT: Record<string, [number, number]> = {
+  React: [12, 20],
+  Vue: [10, 72],
+  TypeScript: [32, 44],
+  'Node.js': [52, 16],
+  'Claude Code': [50, 80],
+  Python: [70, 60],
+  AWS: [74, 26],
+  Java: [91, 12],
+  'Ruby on Rails': [89, 82],
+};
+const EDGES: [string, string][] = [
+  ['React', 'TypeScript'],
+  ['Vue', 'TypeScript'],
+  ['React', 'Vue'],
+  ['TypeScript', 'Node.js'],
+  ['Node.js', 'AWS'],
+  ['Python', 'AWS'],
+  ['Java', 'AWS'],
+  ['Ruby on Rails', 'AWS'],
+  ['Ruby on Rails', 'Python'],
+  ['Claude Code', 'TypeScript'],
+  ['Claude Code', 'Python'],
+  ['Node.js', 'Claude Code'],
+];
+
+const nodes = stack.items.map((name, index) => {
+  const [x, y] = LAYOUT[name] ?? [10 + index * 10, 96];
+  return { name, x, y };
+});
+const index = new Map(nodes.map((node, i) => [node.name, i]));
+const edges = EDGES.filter(([a, b]) => index.has(a) && index.has(b)).map(([a, b]) => [index.get(a)!, index.get(b)!]);
 ---
 
 <section class="section stack" id="stack" aria-labelledby="stack-title">
@@ -16,71 +52,194 @@ const { stack } = t;
       <h2 id="stack-title">{stack.title}</h2>
     </div>
 
-    <ul class="grid" data-reveal>
-      {
-        stack.items.map((item) => (
-          <li>
-            <span class="grid__node" aria-hidden="true" />
-            {item}
-          </li>
-        ))
-      }
-    </ul>
+    <div class="constellation" data-constellation data-reveal>
+      <svg class="constellation__links" viewBox="0 0 100 56" preserveAspectRatio="none" aria-hidden="true">
+        {
+          edges.map(([a, b]) => (
+            <line
+              x1={nodes[a].x}
+              y1={(nodes[a].y * 56) / 100}
+              x2={nodes[b].x}
+              y2={(nodes[b].y * 56) / 100}
+              data-a={a}
+              data-b={b}
+              vector-effect="non-scaling-stroke"
+            />
+          ))
+        }
+      </svg>
+      <ul class="constellation__nodes">
+        {
+          nodes.map((node, i) => (
+            <li style={`--x: ${node.x}%; --y: ${node.y}%`} data-node={i}>
+              <span class="dot" aria-hidden="true" />
+              {node.name}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
   </div>
 </section>
 
 <style>
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    list-style: none;
+  .constellation {
+    position: relative;
+    aspect-ratio: 100 / 56;
     border-top: 1px solid var(--line);
-    border-left: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
   }
 
-  .grid li {
-    display: flex;
+  .constellation__links {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .constellation__links line {
+    stroke: rgb(91 140 255 / 0.22);
+    stroke-width: 1;
+    transition:
+      stroke 300ms ease,
+      stroke-width 300ms ease;
+  }
+
+  .constellation__links line:global(.is-near) {
+    stroke: var(--key);
+    stroke-width: 1.6;
+  }
+
+  .constellation__nodes {
+    list-style: none;
+  }
+
+  .constellation__nodes li {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    display: inline-flex;
     align-items: center;
-    gap: 16px;
-    min-height: clamp(76px, 60px + 3vw, 104px);
-    padding: 0 clamp(16px, 2vw, 28px);
-    border-right: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
+    gap: 12px;
+    padding: 10px 16px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--night);
     color: var(--text);
     font-family: var(--font-mono);
-    font-size: clamp(1rem, 0.9rem + 0.5vw, 1.3rem);
+    font-size: clamp(0.9375rem, 0.85rem + 0.35vw, 1.125rem);
     font-weight: 500;
-    transition: background-color var(--dur-base) ease;
+    white-space: nowrap;
+    transform: translate(calc(-50% + var(--px, 0px)), calc(-50% + var(--py, 0px)));
+    transition:
+      transform 500ms var(--ease-out),
+      border-color 300ms ease,
+      color 300ms ease;
   }
 
-  .grid li:hover {
-    background: rgb(91 140 255 / 0.06);
-  }
-
-  .grid__node {
-    flex: none;
+  .dot {
     width: 9px;
     height: 9px;
     border: 1px solid var(--accent);
     border-radius: 50%;
     transition:
-      background-color var(--dur-base) ease,
-      border-color var(--dur-base) ease;
+      background-color 300ms ease,
+      border-color 300ms ease,
+      box-shadow 300ms ease;
   }
 
-  .grid li:hover .grid__node,
-  .grid li:last-child .grid__node {
+  .constellation__nodes li:global(.is-near) {
+    border-color: var(--accent);
+  }
+
+  .constellation__nodes li:global(.is-near) .dot {
     background: var(--key);
     border-color: var(--key);
+    box-shadow: 0 0 0 4px rgb(169 196 255 / 0.18);
   }
 
-  @media (max-width: 640px) {
-    .grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* Phones and narrow tablets: the same nodes as a two-column list. */
+  @media (max-width: 760px) {
+    .constellation {
+      aspect-ratio: auto;
+      padding-block: 1rem;
     }
 
-    .grid li:last-child {
-      grid-column: 1 / -1;
+    .constellation__links {
+      display: none;
+    }
+
+    .constellation__nodes {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .constellation__nodes li {
+      position: static;
+      transform: none;
+      white-space: normal;
     }
   }
 </style>
+
+<script>
+  import { canFollowPointer, trackPointer } from '../scripts/pointer';
+
+  const constellation = document.querySelector<HTMLElement>('[data-constellation]');
+  if (constellation && canFollowPointer()) {
+    const items = Array.from(constellation.querySelectorAll<HTMLElement>('[data-node]'));
+    const lines = Array.from(constellation.querySelectorAll<SVGLineElement>('line'));
+    const RADIUS = 190;
+    const PULL = 6;
+    let centers: { x: number; y: number }[] = [];
+
+    const measure = () => {
+      const box = constellation.getBoundingClientRect();
+      centers = items.map((item) => {
+        const r = item.getBoundingClientRect();
+        return { x: r.left - box.left + r.width / 2, y: r.top - box.top + r.height / 2 };
+      });
+    };
+
+    const reset = () => {
+      items.forEach((item) => {
+        item.classList.remove('is-near');
+        item.style.setProperty('--px', '0px');
+        item.style.setProperty('--py', '0px');
+      });
+      lines.forEach((line) => line.classList.remove('is-near'));
+    };
+
+    trackPointer(constellation, {
+      enter: measure,
+      leave: reset,
+      move: ({ x, y }) => {
+        const near = new Set<number>();
+        centers.forEach((center, i) => {
+          const dx = x - center.x;
+          const dy = y - center.y;
+          const distance = Math.hypot(dx, dy);
+          const item = items[i];
+          if (distance < RADIUS) {
+            near.add(i);
+            const strength = (1 - distance / RADIUS) * PULL;
+            item.style.setProperty('--px', `${((dx / (distance || 1)) * strength).toFixed(1)}px`);
+            item.style.setProperty('--py', `${((dy / (distance || 1)) * strength).toFixed(1)}px`);
+          } else {
+            item.style.setProperty('--px', '0px');
+            item.style.setProperty('--py', '0px');
+          }
+          item.classList.toggle('is-near', near.has(i));
+        });
+        lines.forEach((line) => {
+          const a = Number(line.dataset.a);
+          const b = Number(line.dataset.b);
+          line.classList.toggle('is-near', near.has(a) || near.has(b));
+        });
+      },
+    });
+    window.addEventListener('resize', measure, { passive: true });
+  }
+</script>

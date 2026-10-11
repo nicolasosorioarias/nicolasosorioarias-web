@@ -19,8 +19,13 @@ const { howIWork } = t;
     <ul class="principles">
       {
         howIWork.items.map((item, index) => (
-          <li style={`--reveal-delay: ${index * 110}ms`} data-reveal>
-            <span class="principles__node" aria-hidden="true" />
+          <li style={`--reveal-delay: ${index * 110}ms`} data-reveal data-spotlight data-principle>
+            <span class="spot" aria-hidden="true">
+              <span class="spot__glow" />
+            </span>
+            <span class="principles__node" aria-hidden="true">
+              <span class="principles__dot" />
+            </span>
             <h3>{item.title}</h3>
             <p>{item.body}</p>
           </li>
@@ -55,18 +60,55 @@ const { howIWork } = t;
   }
 
   .principles li {
+    position: relative;
     display: grid;
     align-content: start;
     gap: 1rem;
+    padding: 0 0 0.5rem;
   }
 
+  .principles li > :not(.spot):not(.principles__node) {
+    position: relative;
+    z-index: 1;
+  }
+
+  .principles li .spot {
+    inset: -24px -16px -16px;
+  }
+
+  /* The diamond turns into a lit node when the principle is explored. */
   .principles__node {
+    position: relative;
+    z-index: 1;
     width: 13px;
     height: 13px;
     border: 1px solid var(--accent);
     background: var(--night);
     transform: rotate(45deg);
     box-shadow: 0 0 0 5px var(--night);
+    transition:
+      transform 600ms var(--ease-out),
+      border-color 300ms ease;
+  }
+
+  .principles__dot {
+    position: absolute;
+    inset: 2px;
+    border-radius: 50%;
+    background: var(--key);
+    transform: scale(0) rotate(-45deg);
+    transition: transform 500ms var(--ease-out);
+  }
+
+  .principles li:hover .principles__node,
+  .principles li:global(.is-current) .principles__node {
+    transform: rotate(225deg);
+    border-color: var(--key);
+  }
+
+  .principles li:hover .principles__dot,
+  .principles li:global(.is-current) .principles__dot {
+    transform: scale(1) rotate(-45deg);
   }
 
   .principles h3 {
@@ -129,3 +171,18 @@ const { howIWork } = t;
 
   }
 </style>
+
+<script>
+  import { initSpotlights } from '../scripts/pointer';
+
+  const how = document.getElementById('how-i-work');
+  if (how) {
+    initSpotlights(how);
+    // Readers without a hover (touch, keyboard) see each principle light up as it crosses the middle of the viewport.
+    how.querySelectorAll<HTMLElement>('[data-principle]').forEach((item) => {
+      new IntersectionObserver(([entry]) => item.classList.toggle('is-current', entry.isIntersecting), {
+        rootMargin: '-40% 0px -40% 0px',
+      }).observe(item);
+    });
+  }
+</script>
